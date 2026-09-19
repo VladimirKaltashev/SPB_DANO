@@ -4,6 +4,8 @@ import argparse
 import json
 import logging
 import math
+import re
+import textwrap
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -46,6 +48,14 @@ DEFAULT_FINES = "fines_2026.csv"
 DEFAULT_FUEL = "fuel_transaction.csv"
 DEFAULT_CRISIS_START = "2026-06-01"
 DEFAULT_ANALYSIS_END = "2026-09-01"
+OPTIONAL_2025_DETAIL_FILES = ("fines_2025_detail.csv", "fines_2025.csv")
+OBSOLETE_GRAPH_FILES = (
+    "cluster_change_heatmap.png",
+    "cluster_fines_2025_vs_2026.png",
+    "cluster_monthly_trends.png",
+    "cluster_new_patterns.png",
+    "cluster_pre_post_comparison.png",
+)
 
 BASELINE_FINE_COLUMNS = [
     "april_2025_fines",
@@ -108,6 +118,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--demographics", default=DEFAULT_DEMOGRAPHICS)
     parser.add_argument("--fines", default=DEFAULT_FINES)
+    parser.add_argument(
+        "--fines-2025-detail",
+        type=Path,
+        default=None,
+        help=(
+            "Необязательный детальный CSV штрафов за 2025 год с client_id, "
+            "bill_id, offence_short_statement и bill_offence_date."
+        ),
+    )
     parser.add_argument("--fuel", default=DEFAULT_FUEL)
     parser.add_argument(
         "--clusters-file",
@@ -225,6 +244,34 @@ def load_data(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, pd.
     fuel = fuel.loc[(fuel["order_fuel_volume"] > 0) & (fuel["order_fuel_price_1liter"] > 0)].copy()
     fines = fines.loc[fines["total_fine_amount"] >= 0].copy()
     return clients, fines, fuel
+
+
+def load_optional_fines_2025(args: argparse.Namespace) -> tuple[pd.DataFrame | None, Path | None]:
+    """Загружает детализацию 2025 года, если пользователь её предоставил."""
+    data_dir = args.data_dir.resolve()
+    requested = getattr(args, "fines_2025_detail", None)
+    explicit = requested is not None
+    candidates: list[Path]
+    if explicit:
+        requested_path = Path(requested)
+        candidates = [requested_path if requested_path.is_absolute() else data_dir / requested_path]
+    else:
+        candidates = [data_dir / name for name in OPTIONAL_2025_DETAIL_FILES]
+    path = next((candidate for candidate in candidates if candidate.exists()), None)
+    if path is None:
+        if explicit:
+            raise FileNotFoundError(f"Файл детальных штрафов 2025 не найден: {candidates[0]}")
+        return None, None
+
+    fines = read_csv(
+        path,
+        ["client_id", "bill_id", "offence_short_statement", "bill_offence_date"],
+    )
+    fines["bill_offence_date"] = pd.to_datetime(fines["bill_offence_date"], errors="coerce")
+    fines = fines.dropna(
+        subset=["client_id", "bill_id", "offence_short_statement", "bill_offence_date"]
+    ).copy()
+    return fines, path.resolve()
 
 
 def detect_crisis_date(
@@ -908,6 +955,202 @@ def summarize_year_over_year_fines(
     return client_comparison, summary
 
 
+def _normalize_offence_names(series: pd.Series) -> pd.Series:
+    return (
+        series.astype("string")
+        .str.strip()
+        .str.replace(r"\s+", " ", regex=True)
+        .fillna("Не указан тип нарушения")
+    )
+
+
+def _aggregate_offence_types(
+    fines: pd.DataFrame,
+    mapping: pd.DataFrame,
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+    suffix: str,
+) -> pd.DataFrame:
+    subset = fines.loc[
+        period_mask(fines["bill_offence_date"], start, end),
+        ["client_id", "bill_id", "offence_short_statement"],
+    ].copy()
+    subset["offence_short_statement"] = _normalize_offence_names(subset["offence_short_statement"])
+    subset = subset.merge(mapping, on="client_id", how="inner")
+    return (
+        subset.groupby(
+            ["cluster", "cluster_id", "cluster_label", "offence_short_statement"],
+            dropna=False,
+        )
+        .agg(
+            **{
+                f"fine_count_{suffix}": ("bill_id", "nunique"),
+                f"clients_with_offence_{suffix}": ("client_id", "nunique"),
+            }
+        )
+        .reset_index()
+    )
+
+
+def build_offence_type_analysis(
+    baseline: pd.DataFrame,
+    fines_2026: pd.DataFrame,
+    fines_2025: pd.DataFrame | None,
+    crisis: pd.Timestamp,
+    analysis_end: pd.Timestamp,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Детализация типов штрафов без предположений о числе кластеров."""
+    mapping = baseline[["client_id", "cluster", "cluster_id", "cluster_label"]].drop_duplicates(
+        "client_id"
+    )
+    cluster_sizes = (
+        mapping.groupby(["cluster", "cluster_id", "cluster_label"], dropna=False)["client_id"]
+        .nunique()
+        .rename("cluster_clients")
+        .reset_index()
+    )
+
+    start_2026 = pd.Timestamp("2026-04-01")
+    end_2026 = min(pd.Timestamp("2026-09-01"), analysis_end)
+    detail_2026 = _aggregate_offence_types(fines_2026, mapping, start_2026, end_2026, "2026")
+    offence_names = set(detail_2026["offence_short_statement"].astype(str))
+
+    detail_2025: pd.DataFrame | None = None
+    if fines_2025 is not None:
+        detail_2025 = _aggregate_offence_types(
+            fines_2025,
+            mapping,
+            pd.Timestamp("2025-04-01"),
+            pd.Timestamp("2025-09-01"),
+            "2025",
+        )
+        offence_names.update(detail_2025["offence_short_statement"].astype(str))
+
+    offences = pd.DataFrame({"offence_short_statement": sorted(offence_names, key=str.casefold)})
+    year_table = cluster_sizes.merge(offences, how="cross")
+    keys = ["cluster", "cluster_id", "cluster_label", "offence_short_statement"]
+    year_table = year_table.merge(detail_2026, on=keys, how="left")
+    for column in ("fine_count_2026", "clients_with_offence_2026"):
+        year_table[column] = year_table[column].fillna(0).astype(int)
+
+    if detail_2025 is None:
+        year_table["fine_count_2025"] = pd.Series(pd.NA, index=year_table.index, dtype="Int64")
+        year_table["clients_with_offence_2025"] = pd.Series(
+            pd.NA, index=year_table.index, dtype="Int64"
+        )
+        year_table["detail_2025_available"] = False
+    else:
+        year_table = year_table.merge(detail_2025, on=keys, how="left")
+        for column in ("fine_count_2025", "clients_with_offence_2025"):
+            year_table[column] = year_table[column].fillna(0).astype(int)
+        year_table["detail_2025_available"] = True
+
+    for year in ("2025", "2026"):
+        count = year_table[f"fine_count_{year}"].astype("Float64")
+        year_table[f"fines_per_1000_clients_{year}"] = (
+            count / year_table["cluster_clients"] * 1000.0
+        )
+        totals = count.groupby(year_table["cluster"]).transform("sum")
+        year_table[f"fine_share_{year}"] = count.div(totals.where(totals > 0))
+
+    overall_2026 = year_table.groupby("offence_short_statement")["fine_count_2026"].transform("sum")
+    overall_total_2026 = float(year_table["fine_count_2026"].sum())
+    overall_share_2026 = overall_2026 / overall_total_2026 if overall_total_2026 else np.nan
+    year_table["overrepresentation_index_2026"] = year_table["fine_share_2026"].div(
+        overall_share_2026.replace(0, np.nan)
+    )
+    year_table["is_overrepresented_2026"] = year_table["fine_count_2026"].ge(10) & year_table[
+        "overrepresentation_index_2026"
+    ].ge(1.5)
+    year_table["rank_in_cluster_2026"] = (
+        year_table.groupby("cluster")["fine_count_2026"]
+        .rank(method="dense", ascending=False)
+        .astype(int)
+    )
+
+    pre_start = fines_2026["bill_offence_date"].min().normalize()
+    post_end = min(
+        analysis_end, fines_2026["bill_offence_date"].max().normalize() + pd.Timedelta(days=1)
+    )
+    pre_detail = _aggregate_offence_types(fines_2026, mapping, pre_start, crisis, "pre_crisis_2026")
+    post_detail = _aggregate_offence_types(
+        fines_2026, mapping, crisis, post_end, "post_crisis_2026"
+    )
+    prepost = year_table[keys + ["cluster_clients"]].merge(pre_detail, on=keys, how="left")
+    prepost = prepost.merge(post_detail, on=keys, how="left")
+    count_columns = [
+        "fine_count_pre_crisis_2026",
+        "clients_with_offence_pre_crisis_2026",
+        "fine_count_post_crisis_2026",
+        "clients_with_offence_post_crisis_2026",
+    ]
+    prepost[count_columns] = prepost[count_columns].fillna(0).astype(int)
+    pre_days = max(1, (crisis - pre_start).days)
+    post_days = max(1, (post_end - crisis).days)
+    prepost["fines_per_1000_clients_30d_pre"] = (
+        prepost["fine_count_pre_crisis_2026"]
+        / prepost["cluster_clients"]
+        * 1000.0
+        * 30.0
+        / pre_days
+    )
+    prepost["fines_per_1000_clients_30d_post"] = (
+        prepost["fine_count_post_crisis_2026"]
+        / prepost["cluster_clients"]
+        * 1000.0
+        * 30.0
+        / post_days
+    )
+    prepost["rate_change_per_1000_clients_30d"] = (
+        prepost["fines_per_1000_clients_30d_post"] - prepost["fines_per_1000_clients_30d_pre"]
+    )
+    prepost["rate_ratio_post_vs_pre"] = prepost["fines_per_1000_clients_30d_post"].div(
+        prepost["fines_per_1000_clients_30d_pre"].replace(0, np.nan)
+    )
+    enough_events = (
+        prepost["fine_count_pre_crisis_2026"] + prepost["fine_count_post_crisis_2026"]
+    ).ge(10)
+    material_ratio = prepost["rate_ratio_post_vs_pre"].ge(1.5) | prepost[
+        "rate_ratio_post_vs_pre"
+    ].le(2.0 / 3.0)
+    new_after_crisis = prepost["fine_count_pre_crisis_2026"].eq(0) & prepost[
+        "fine_count_post_crisis_2026"
+    ].ge(10)
+    prepost["is_strong_pre_post_change"] = enough_events & (material_ratio | new_after_crisis)
+
+    anomalies = year_table[
+        keys
+        + [
+            "cluster_clients",
+            "fine_count_2026",
+            "fines_per_1000_clients_2026",
+            "fine_share_2026",
+            "overrepresentation_index_2026",
+            "is_overrepresented_2026",
+        ]
+    ].merge(
+        prepost[
+            keys
+            + [
+                "fines_per_1000_clients_30d_pre",
+                "fines_per_1000_clients_30d_post",
+                "rate_change_per_1000_clients_30d",
+                "rate_ratio_post_vs_pre",
+                "is_strong_pre_post_change",
+            ]
+        ],
+        on=keys,
+        how="left",
+    )
+    anomalies = anomalies.loc[
+        anomalies["is_overrepresented_2026"] | anomalies["is_strong_pre_post_change"]
+    ].sort_values(
+        ["cluster", "is_overrepresented_2026", "fine_count_2026"],
+        ascending=[True, False, False],
+    )
+    return year_table, prepost, anomalies
+
+
 def build_monthly_cluster_trends(
     baseline: pd.DataFrame,
     fines: pd.DataFrame,
@@ -1170,6 +1413,218 @@ def save_year_over_year_plot(summary: pd.DataFrame, output_dir: Path) -> None:
     plt.close(fig)
 
 
+def save_offence_type_outputs(
+    year_table: pd.DataFrame,
+    prepost_table: pd.DataFrame,
+    change_summary: pd.DataFrame,
+    year_summary: pd.DataFrame,
+    output_dir: Path,
+) -> pd.DataFrame:
+    """Сохраняет таблицу и единый аналитический график каждого кластера."""
+    detail_dir = output_dir / "offence_types"
+    detail_dir.mkdir(parents=True, exist_ok=True)
+    for pattern in (
+        "cluster_*_offence_types.csv",
+        "cluster_*_offence_types.png",
+        "cluster_*_analysis.png",
+    ):
+        for stale in detail_dir.glob(pattern):
+            stale.unlink()
+
+    keys = ["cluster", "cluster_id", "cluster_label", "offence_short_statement"]
+    combined = year_table.merge(
+        prepost_table.drop(columns=["cluster_clients"]), on=keys, how="left"
+    )
+    manifest_rows: list[dict[str, object]] = []
+    for pair in _ordered_cluster_pairs(combined).itertuples(index=False):
+        cluster = str(pair.cluster)
+        label = str(pair.cluster_label)
+        part = combined.loc[combined["cluster"].astype(str).eq(cluster)].copy()
+        part["_sort_total"] = part["fine_count_2026"] + part["fine_count_2025"].astype(
+            "Float64"
+        ).fillna(0)
+        part = part.sort_values(
+            ["_sort_total", "offence_short_statement"], ascending=[True, False]
+        ).drop(columns="_sort_total")
+        safe_cluster = re.sub(r"[^0-9A-Za-z_-]+", "_", cluster).strip("_") or "unknown"
+        table_name = f"cluster_{safe_cluster}_offence_types.csv"
+        chart_name = f"cluster_{safe_cluster}_analysis.png"
+        part.to_csv(detail_dir / table_name, index=False, encoding="utf-8-sig")
+
+        if plt is not None:
+            count = len(part)
+            y = np.arange(count)
+            figure_height = max(16.0, 0.43 * count + 7.0)
+            fig = plt.figure(figsize=(22, figure_height), constrained_layout=True)
+            grid = fig.add_gridspec(2, 2, height_ratios=[1.0, 3.2])
+            change_ax = fig.add_subplot(grid[0, 0])
+            year_ax = fig.add_subplot(grid[0, 1])
+            types_ax = fig.add_subplot(grid[1, 0])
+            prepost_ax = fig.add_subplot(grid[1, 1], sharey=types_ax)
+
+            cluster_changes = change_summary.loc[
+                change_summary["cluster"].astype(str).eq(cluster)
+            ].copy()
+            cluster_changes = cluster_changes.reindex(
+                cluster_changes["paired_effect_size"].abs().sort_values(ascending=True).index
+            )
+            change_colors = np.where(
+                cluster_changes["paired_effect_size"].ge(0), "#2A9D8F", "#E76F51"
+            )
+            change_ax.barh(
+                cluster_changes["metric_label"],
+                cluster_changes["paired_effect_size"],
+                color=change_colors,
+            )
+            change_ax.axvline(0, color="#333333", linewidth=0.8)
+            change_ax.set_title("Изменения поведения после начала кризиса")
+            change_ax.set_xlabel("Размер изменения: влево — снижение, вправо — рост")
+            change_ax.grid(axis="x", alpha=0.2)
+
+            cluster_year = year_summary.loc[year_summary["cluster"].astype(str).eq(cluster)].iloc[0]
+            year_bars = year_ax.bar(
+                ["апрель–август 2025", "апрель–август 2026"],
+                [
+                    cluster_year["fine_count_30d_2025"],
+                    cluster_year["fine_count_30d_2026"],
+                ],
+                color=["#4C78A8", "#F2B705"],
+                width=0.6,
+            )
+            year_ax.bar_label(year_bars, fmt="%.2f", padding=3)
+            year_ax.set_title("Общая частота штрафов за одинаковые месяцы")
+            year_ax.set_ylabel("Штрафов на клиента за 30 дней")
+            year_ax.grid(axis="y", alpha=0.2)
+            has_2025 = bool(part["detail_2025_available"].iloc[0])
+            if has_2025:
+                height = 0.38
+                types_ax.barh(
+                    y - height / 2,
+                    part["fine_count_2025"].astype(float),
+                    height,
+                    label="апрель–август 2025",
+                    color="#4C78A8",
+                )
+                types_ax.barh(
+                    y + height / 2,
+                    part["fine_count_2026"],
+                    height,
+                    label="апрель–август 2026",
+                    color="#F2B705",
+                )
+            else:
+                colors = np.where(part["is_overrepresented_2026"], "#E76F51", "#F2B705")
+                types_ax.barh(y, part["fine_count_2026"], color=colors)
+                types_ax.text(
+                    0.99,
+                    0.01,
+                    "За 2025 год типы нарушений отсутствуют в исходных данных",
+                    transform=types_ax.transAxes,
+                    ha="right",
+                    va="bottom",
+                    fontsize=8,
+                    color="#555555",
+                )
+            types_ax.set_title("Количество штрафов по типам")
+            types_ax.set_xlabel("Штрафов (логарифмическая шкала)")
+            types_ax.set_xscale("symlog", linthresh=5)
+            if has_2025:
+                types_ax.legend()
+            else:
+                types_ax.text(
+                    0.99,
+                    0.05,
+                    "Красный: доля типа в 1.5+ раза выше, чем по всей выборке",
+                    transform=types_ax.transAxes,
+                    ha="right",
+                    va="bottom",
+                    fontsize=8,
+                    color="#555555",
+                )
+
+            height = 0.38
+            prepost_ax.barh(
+                y - height / 2,
+                part["fines_per_1000_clients_30d_pre"],
+                height,
+                label="до кризиса",
+                color="#4C78A8",
+            )
+            prepost_ax.barh(
+                y + height / 2,
+                part["fines_per_1000_clients_30d_post"],
+                height,
+                label="после начала кризиса",
+                color="#F2B705",
+            )
+            prepost_ax.set_title("Частота типов штрафов до и после начала кризиса")
+            prepost_ax.set_xlabel("Штрафов на 1000 клиентов за 30 дней (логарифмическая шкала)")
+            prepost_ax.set_xscale("symlog", linthresh=0.5)
+            prepost_ax.legend()
+            types_ax.set_yticks(y, part["offence_short_statement"], fontsize=8)
+            prepost_ax.tick_params(axis="y", labelleft=False)
+            for axis in (types_ax, prepost_ax):
+                axis.grid(axis="x", alpha=0.2)
+            fig.suptitle(
+                f"{label} · {int(part['cluster_clients'].iloc[0]):,} клиентов",
+                fontsize=16,
+            )
+            fig.savefig(detail_dir / chart_name, dpi=170, bbox_inches="tight")
+            plt.close(fig)
+
+        manifest_rows.append(
+            {
+                "cluster": cluster,
+                "cluster_id": cluster,
+                "cluster_label": label,
+                "cluster_clients": int(part["cluster_clients"].iloc[0]),
+                "offence_types": int(part["offence_short_statement"].nunique()),
+                "table_file": f"offence_types/{table_name}",
+                "chart_file": f"offence_types/{chart_name}",
+            }
+        )
+    return pd.DataFrame(manifest_rows)
+
+
+def save_offence_type_heatmap(year_table: pd.DataFrame, output_dir: Path) -> None:
+    if plt is None or year_table.empty:
+        return
+    matrix = year_table.pivot(
+        index="cluster_label",
+        columns="offence_short_statement",
+        values="overrepresentation_index_2026",
+    )
+    matrix = matrix.reindex(_ordered_cluster_labels(year_table)).astype(float)
+    short_labels = _short_cluster_labels(year_table)
+    width = max(18, 0.8 * len(matrix.columns))
+    height = max(8, 0.9 * len(matrix.index))
+    fig, ax = plt.subplots(figsize=(width, height), constrained_layout=True)
+    image = ax.imshow(matrix, cmap="RdYlBu_r", aspect="auto", vmin=0, vmax=3)
+    short_offence_labels = [
+        textwrap.shorten(str(label), width=34, placeholder="…") for label in matrix.columns
+    ]
+    ax.set_xticks(
+        np.arange(len(matrix.columns)),
+        short_offence_labels,
+        rotation=55,
+        ha="right",
+        fontsize=8,
+    )
+    ax.set_yticks(np.arange(len(matrix.index)), short_labels)
+    for row in range(len(matrix.index)):
+        for column in range(len(matrix.columns)):
+            value = matrix.iat[row, column]
+            if pd.notna(value) and value >= 1.5:
+                ax.text(column, row, f"{value:.1f}", ha="center", va="center", fontsize=7)
+    ax.set_title(
+        "Относительная представленность типов штрафов в кластерах, 2026\n"
+        "Значение выше 1.5 означает заметно большую долю, чем по всей выборке"
+    )
+    fig.colorbar(image, ax=ax, label="Индекс представленности")
+    fig.savefig(output_dir / "cluster_offence_type_heatmap.png", dpi=180)
+    plt.close(fig)
+
+
 def save_change_plot(summary: pd.DataFrame, output_dir: Path) -> None:
     if plt is None:
         LOGGER.warning("Matplotlib недоступен: график изменений пропущен.")
@@ -1236,6 +1691,8 @@ def write_summary_markdown(
     path: Path,
     summary: pd.DataFrame,
     year_summary: pd.DataFrame,
+    offence_year: pd.DataFrame,
+    offence_anomalies: pd.DataFrame,
     novelty: pd.DataFrame,
     metadata: dict[str, object],
 ) -> None:
@@ -1276,6 +1733,55 @@ def write_summary_markdown(
             f"{row.fine_count_30d_2026:.2f} штрафа на клиента за 30 дней; "
             f"изменение {row.mean_change:+.2f}, q={row.q_value:.3g}."
         )
+    lines.extend(["", "## Типы штрафов по кластерам", ""])
+    if not metadata["offence_type_detail_2025_available"]:
+        lines.append(
+            "В исходных данных 2025 года нет типа нарушения. "
+            "Поэтому по типам показан 2026 год, а для 2025 оставлено "
+            "явное отсутствие данных."
+        )
+        lines.append("")
+    for pair in _ordered_cluster_pairs(offence_year).itertuples(index=False):
+        cluster_rows = offence_year.loc[offence_year["cluster"].astype(str).eq(str(pair.cluster))]
+        top = cluster_rows.nlargest(5, "fine_count_2026")
+        total = int(cluster_rows["fine_count_2026"].sum())
+        lines.append(f"### {pair.cluster_label}")
+        lines.append("")
+        lines.append(f"Всего в апреле–августе 2026: **{total}** штрафов.")
+        if total:
+            top_text = "; ".join(
+                f"{row.offence_short_statement} — {int(row.fine_count_2026)} "
+                f"({row.fine_share_2026:.1%})"
+                for row in top.itertuples()
+            )
+            lines.append(f"Самые частые типы: {top_text}.")
+        cluster_anomalies = offence_anomalies.loc[
+            offence_anomalies["cluster"].astype(str).eq(str(pair.cluster))
+        ]
+        overrepresented = cluster_anomalies.loc[
+            cluster_anomalies["is_overrepresented_2026"]
+        ].nlargest(5, "overrepresentation_index_2026")
+        if not overrepresented.empty:
+            anomaly_text = "; ".join(
+                f"{row.offence_short_statement} ×{row.overrepresentation_index_2026:.1f}"
+                for row in overrepresented.itertuples()
+            )
+            lines.append("Повышенная доля относительно всей выборки: " + anomaly_text + ".")
+        changed = cluster_anomalies.loc[cluster_anomalies["is_strong_pre_post_change"]].copy()
+        changed["_abs_change"] = changed["rate_change_per_1000_clients_30d"].abs()
+        changed = changed.nlargest(5, "_abs_change")
+        if not changed.empty:
+            change_text = "; ".join(
+                f"{row.offence_short_statement} "
+                f"{row.fines_per_1000_clients_30d_pre:.1f}→"
+                f"{row.fines_per_1000_clients_30d_post:.1f}"
+                for row in changed.itertuples()
+            )
+            lines.append(
+                "Заметные сдвиги до/после кризиса "
+                "(штрафов на 1000 клиентов за 30 дней): " + change_text + "."
+            )
+        lines.append("")
     novel_count = int(novelty["is_novel_client_pattern"].sum()) if not novelty.empty else 0
     lines.extend(
         [
@@ -1290,6 +1796,8 @@ def write_summary_markdown(
             "- Статистическая связь не доказывает, что кризис вызвал изменение.",
             "- Кластеры построены по докризисному поведению. Изменения тех же показателей "
             "могут частично отражать отбор и возврат к среднему.",
+            "- Детальное сравнение типов штрафов 2025 и 2026 возможно "
+            "только при наличии детального файла за 2025 год.",
             "- Флаги клиентов нужны для анализа, а не для автоматических санкций или отказов в обслуживании.",
         ]
     )
@@ -1298,6 +1806,7 @@ def write_summary_markdown(
 
 def run(args: argparse.Namespace) -> Path:
     clients, fines, fuel = load_data(args)
+    fines_2025_detail, fines_2025_path = load_optional_fines_2025(args)
     crisis, crisis_source, price_daily = validate_crisis_date(args.crisis_start, fuel, fines)
     analysis_end = pd.Timestamp(args.analysis_end).normalize()
     price_daily = price_daily.loc[price_daily["date"].lt(analysis_end)].copy()
@@ -1323,9 +1832,20 @@ def run(args: argparse.Namespace) -> Path:
     profiles = make_cluster_profiles(baseline)
     year_clients, year_summary = summarize_year_over_year_fines(baseline, fines, args.min_clients)
     monthly_trends = build_monthly_cluster_trends(baseline, fines, fuel, analysis_end)
+    offence_year, offence_prepost, offence_anomalies = build_offence_type_analysis(
+        baseline,
+        fines,
+        fines_2025_detail,
+        crisis,
+        analysis_end,
+    )
 
     output_dir = (args.output_dir or (args.data_dir / "outputs" / "cluster_analysis")).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    for filename in OBSOLETE_GRAPH_FILES:
+        obsolete = output_dir / filename
+        if obsolete.exists():
+            obsolete.unlink()
 
     baseline.to_csv(output_dir / "client_clusters.csv", index=False, encoding="utf-8-sig")
     profiles.to_csv(output_dir / "cluster_profiles_2025.csv", index=False, encoding="utf-8-sig")
@@ -1344,8 +1864,35 @@ def run(args: argparse.Namespace) -> Path:
     monthly_trends.to_csv(
         output_dir / "cluster_monthly_trends.csv", index=False, encoding="utf-8-sig"
     )
+    offence_year.to_csv(
+        output_dir / "cluster_offence_types_2025_vs_2026.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
+    offence_prepost.to_csv(
+        output_dir / "cluster_offence_types_pre_post_2026.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
+    offence_anomalies.to_csv(
+        output_dir / "cluster_offence_type_anomalies_2026.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
     novelty.to_csv(output_dir / "client_new_patterns.csv", index=False, encoding="utf-8-sig")
     price_daily.to_csv(output_dir / "daily_fuel_price.csv", index=False, encoding="utf-8-sig")
+    offence_manifest = save_offence_type_outputs(
+        offence_year,
+        offence_prepost,
+        summary,
+        year_summary,
+        output_dir,
+    )
+    offence_manifest.to_csv(
+        output_dir / "cluster_offence_type_files.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
 
     metadata: dict[str, object] = {
         "crisis_start": str(crisis.date()),
@@ -1353,6 +1900,15 @@ def run(args: argparse.Namespace) -> Path:
         "cluster_source": cluster_source,
         "cluster_count": int(baseline["cluster"].nunique()),
         "cluster_ids": sorted(baseline["cluster"].astype(str).unique().tolist()),
+        "offence_type_detail_2025_available": fines_2025_detail is not None,
+        "offence_type_detail_2025_source": (
+            str(fines_2025_path) if fines_2025_path is not None else None
+        ),
+        "offence_type_count_2026": int(
+            offence_year.loc[
+                offence_year["fine_count_2026"].gt(0), "offence_short_statement"
+            ].nunique()
+        ),
         "fuel_period": [
             str(window.fuel_start.date()),
             str((window.fuel_end - pd.Timedelta(days=1)).date()),
@@ -1376,15 +1932,13 @@ def run(args: argparse.Namespace) -> Path:
         output_dir / "analysis_summary.md",
         summary,
         year_summary,
+        offence_year,
+        offence_anomalies,
         novelty,
         metadata,
     )
     save_price_plot(price_daily, crisis, output_dir)
-    save_cluster_comparison_plot(summary, output_dir)
-    save_effect_heatmap(summary, output_dir)
-    save_monthly_trends_plot(monthly_trends, crisis, output_dir)
-    save_year_over_year_plot(year_summary, output_dir)
-    save_change_plot(summary, output_dir)
+    save_offence_type_heatmap(offence_year, output_dir)
 
     LOGGER.info("Готово. Отчёты: %s", output_dir)
     return output_dir
