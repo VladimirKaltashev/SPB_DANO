@@ -16,6 +16,7 @@ from cluster_analys import (
 from cluster_analys import (
     run as run_cluster_analysis,
 )
+from behavior_clusters import run_behavior_clustering
 from spb_clustering import locate_data_dir, run_pipeline
 
 
@@ -42,6 +43,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--alpha", type=float, default=0.05)
     parser.add_argument("--min-effect", type=float, default=0.20)
     parser.add_argument("--anomaly-rate", type=float, default=0.03)
+    parser.add_argument(
+        "--skip-behavior-analysis",
+        action="store_true",
+        help="Построить новые поведенческие кластеры, но не сравнивать их после кризиса.",
+    )
     parser.add_argument("--log-level", default="INFO")
     return parser.parse_args()
 
@@ -92,6 +98,27 @@ def main() -> None:
     )
     analysis_dir = run_cluster_analysis(analysis_args)
     print(f"Анализ кластеров и графики: {analysis_dir}")
+
+    behavior_dir = project_root / "outputs" / "behavior_clustering"
+    behavior_features_file = clustering_dir / "tables" / "client_features_precrisis.csv"
+    behavior_clients, behavior_summary = run_behavior_clustering(
+        data_dir=data_dir,
+        features_file=behavior_features_file,
+        output_dir=behavior_dir,
+    )
+    print(
+        f"Новая поведенческая схема: {len(behavior_summary)} групп, "
+        f"{len(behavior_clients):,} клиентов."
+    )
+
+    if not args.skip_behavior_analysis:
+        behavior_analysis_args = argparse.Namespace(**vars(analysis_args))
+        behavior_analysis_args.output_dir = project_root / "outputs" / "behavior_cluster_analysis"
+        behavior_analysis_args.clusters_file = behavior_dir / "tables" / "client_clusters.csv"
+        behavior_analysis_args.cluster_column = "cluster_id"
+        behavior_analysis_args.n_clusters = len(behavior_summary)
+        behavior_analysis_dir = run_cluster_analysis(behavior_analysis_args)
+        print(f"Анализ новых групп после кризиса: {behavior_analysis_dir}")
 
 
 if __name__ == "__main__":
