@@ -646,10 +646,17 @@ def fit_clustering(features: pd.DataFrame, requested_k: int | None = None) -> Cl
     if not np.isfinite(transformed).all():
         raise ValueError("После подготовки признаков остались NaN или бесконечности.")
 
-    diagnostics = evaluate_cluster_counts(transformed)
+    candidate_counts = list(range(3, 9))
+    if requested_k is not None:
+        if requested_k < 2:
+            raise ValueError("Число кластеров должно быть не меньше 2.")
+        if requested_k >= len(features):
+            raise ValueError(
+                "Число кластеров должно быть меньше числа клиентов."
+            )
+        candidate_counts.append(requested_k)
+    diagnostics = evaluate_cluster_counts(transformed, sorted(set(candidate_counts)))
     selected_k = requested_k or select_cluster_count(diagnostics)
-    if selected_k not in diagnostics["k"].tolist():
-        raise ValueError("Число кластеров должно быть от 3 до 8.")
     diagnostics["selected"] = diagnostics["k"].eq(selected_k)
 
     model = KMeans(
@@ -688,7 +695,9 @@ def fit_clustering(features: pd.DataFrame, requested_k: int | None = None) -> Cl
 
 
 def save_plots(result: ClusterResult, output_dir: Path) -> None:
-    cache_dir = output_dir.parent.parent / ".cache" / "matplotlib"
+    cache_dir = Path(
+        os.environ.get("MPLCONFIGDIR", output_dir / ".cache" / "matplotlib")
+    )
     cache_dir.mkdir(parents=True, exist_ok=True)
     os.environ.setdefault("MPLCONFIGDIR", str(cache_dir))
     import matplotlib
@@ -974,7 +983,10 @@ def parse_args() -> argparse.Namespace:
         "--clusters",
         type=int,
         default=None,
-        help="Фиксированное число кластеров от 3 до 8; без параметра выбирается автоматически.",
+        help=(
+            "Фиксированное число кластеров (2 и больше); "
+            "без параметра выбирается автоматически среди 3–8."
+        ),
     )
     return parser.parse_args()
 

@@ -1,0 +1,45 @@
+{
+  "crisis_start": "2026-06-01",
+  "crisis_date_source": "manual",
+  "cluster_source": "supplied",
+  "cluster_count": 4,
+  "cluster_ids": [
+    "0",
+    "1",
+    "2",
+    "3"
+  ],
+  "fuel_period": [
+    "2026-03-20",
+    "2026-08-31"
+  ],
+  "fines_period": [
+    "2026-03-20",
+    "2026-08-31"
+  ],
+  "thresholds": {
+    "alpha": 0.05,
+    "min_effect": 0.2,
+    "min_clients": 40,
+    "anomaly_rate": 0.03
+  },
+  "quality": {
+    "rows": {
+      "demographics": 28237,
+      "fines": 77978,
+      "fuel_transactions": 378199
+    },
+    "unique_clients": {
+      "demographics": 25675,
+      "fines": 15503,
+      "fuel_transactions": 25675
+    },
+    "comparison_eligible_clients": 23301,
+    "future_or_late_subscriptions_excluded": 2374,
+    "duplicate_full_rows": {
+      "demographics": 0,
+      "fines": 0,
+      "fuel_transactions": 0
+    }
+  }
+}
