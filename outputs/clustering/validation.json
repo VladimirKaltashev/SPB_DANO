@@ -1,0 +1,11 @@
+{
+  "demographics_rows": 28237,
+  "fines_rows": 77978,
+  "fuel_rows": 379699,
+  "clients": 25675,
+  "clients_with_multiple_cars": 2262,
+  "duplicate_client_car_rows": 47,
+  "negative_fuel_transactions": 1500,
+  "pre_crisis_start": "2026-03-20",
+  "pre_crisis_end": "2026-05-31"
+}
