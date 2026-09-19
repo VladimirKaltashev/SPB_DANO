@@ -1,22 +1,29 @@
 """Правиловая сегментация клиентов по нарушениям ПДД до топливного кризиса.
 
 Сегментация намеренно не использует характеристики автомобиля для назначения
-основного кластера. Автомобили, заправки и старая кластеризация добавляются в
+основного кластера. Автомобили и заправки добавляются в
 профиль результата и в независимые теги.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-
-PRE_START = pd.Timestamp("2026-03-20")
-CRISIS_START = pd.Timestamp("2026-06-01")
+from data_sources import DataSources, read_csv_detected, resolve_data_sources
+from plotting import plt
+from spb_clustering import (
+    CRISIS_START,
+    PRE_START,
+    build_client_features,
+    load_sources,
+    validate_sources,
+)
 
 CLUSTER_LABELS = {
     0: "Без недавних нарушений",
@@ -28,40 +35,54 @@ CLUSTER_LABELS = {
     6: "Опасные нарушения",
 }
 
-DANGEROUS_PATTERN = (
-    r"40-60|60-80|более чем на 80|красный сигнал|встречного движения"
-)
+DANGEROUS_PATTERN = r"40-60|60-80|более чем на 80|красный сигнал|встречного движения"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir", type=Path, default=Path("."))
+    parser.add_argument("--data-dir", type=Path, default=None)
+    parser.add_argument(
+        "--source",
+        choices=("auto", "processed", "raw"),
+        default="auto",
+        help="auto предпочитает очищенные таблицы из data/processed.",
+    )
+    parser.add_argument(
+        "--fines",
+        default=None,
+        help="Имя файла штрафов; обычно определяется автоматически.",
+    )
     parser.add_argument(
         "--features-file",
         type=Path,
-        default=Path("outputs/clustering/tables/client_features_precrisis.csv"),
+        default=None,
+        help="Необязательная готовая витрина. По умолчанию строится из исходных CSV.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("outputs/behavior_clustering"),
+        default=None,
     )
     parser.add_argument("--log-level", default="INFO")
     return parser.parse_args()
 
 
-def load_inputs(data_dir: Path, features_file: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
-    fines_path = data_dir / "fines_2026.csv"
+def load_inputs(
+    data_dir: Path,
+    features_file: Path,
+    fines_file: str = "fines_2026.csv",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    fines_path = data_dir / fines_file
     if not fines_path.exists():
         raise FileNotFoundError(f"Не найден файл штрафов: {fines_path}")
     if not features_file.exists():
         raise FileNotFoundError(
             f"Не найдена докризисная витрина: {features_file}. "
-            "Сначала запустите spb_clustering.py."
+            "Уберите --features-file, чтобы построить витрину из исходных CSV."
         )
 
-    fines = pd.read_csv(fines_path, sep=";", decimal=",", encoding="utf-8-sig")
-    features = pd.read_csv(features_file, encoding="utf-8-sig")
+    fines = read_csv_detected(fines_path)
+    features = read_csv_detected(features_file)
     required_fines = {
         "client_id",
         "bill_id",
@@ -85,9 +106,7 @@ def load_inputs(data_dir: Path, features_file: Path) -> tuple[pd.DataFrame, pd.D
         if missing:
             raise ValueError(f"В {name} отсутствуют столбцы: {missing}")
 
-    fines["bill_offence_date"] = pd.to_datetime(
-        fines["bill_offence_date"], errors="coerce"
-    )
+    fines["bill_offence_date"] = pd.to_datetime(fines["bill_offence_date"], errors="coerce")
     features["first_subscription_date"] = pd.to_datetime(
         features["first_subscription_date"], errors="coerce"
     )
@@ -97,28 +116,19 @@ def load_inputs(data_dir: Path, features_file: Path) -> tuple[pd.DataFrame, pd.D
 def build_fine_behavior(fines: pd.DataFrame) -> pd.DataFrame:
     """Агрегировать нарушения в доступном докризисном окне."""
     pre = fines.loc[
-        fines["bill_offence_date"].ge(PRE_START)
-        & fines["bill_offence_date"].lt(CRISIS_START)
+        fines["bill_offence_date"].ge(PRE_START) & fines["bill_offence_date"].lt(CRISIS_START)
     ].copy()
     statement = pre["offence_short_statement"].fillna("").astype(str)
-    pre["is_speeding"] = statement.str.contains(
-        "Превышение скорости", case=False, regex=False
-    )
-    pre["is_dangerous"] = statement.str.contains(
-        DANGEROUS_PATTERN, case=False, regex=True
-    )
+    pre["is_speeding"] = statement.str.contains("Превышение скорости", case=False, regex=False)
+    pre["is_dangerous"] = statement.str.contains(DANGEROUS_PATTERN, case=False, regex=True)
     pre["is_high_speed"] = statement.str.contains(
         r"40-60|60-80|более чем на 80", case=False, regex=True
     )
-    pre["is_red_light"] = statement.str.contains(
-        "красный сигнал", case=False, regex=False
+    pre["is_red_light"] = statement.str.contains("красный сигнал", case=False, regex=False)
+    pre["is_oncoming"] = statement.str.contains("встречного движения", case=False, regex=False)
+    pre["fine_amount_rub"] = (
+        pd.to_numeric(pre["total_fine_amount"], errors="coerce").fillna(0) / 100
     )
-    pre["is_oncoming"] = statement.str.contains(
-        "встречного движения", case=False, regex=False
-    )
-    pre["fine_amount_rub"] = pd.to_numeric(
-        pre["total_fine_amount"], errors="coerce"
-    ).fillna(0) / 100
 
     result = pre.groupby("client_id", sort=False).agg(
         fines_pre=("bill_id", "nunique"),
@@ -133,9 +143,7 @@ def build_fine_behavior(fines: pd.DataFrame) -> pd.DataFrame:
         red_light_events_pre=("is_red_light", "sum"),
         oncoming_events_pre=("is_oncoming", "sum"),
     )
-    result["speeding_share_pre"] = (
-        result["speeding_events_pre"] / result["fines_pre"]
-    ).fillna(0)
+    result["speeding_share_pre"] = (result["speeding_events_pre"] / result["fines_pre"]).fillna(0)
     return result.reset_index()
 
 
@@ -187,7 +195,7 @@ def assign_behavior_clusters(
     cluster[no_recent & history.le(2)] = 0
 
     speed_regular = data["fines_pre"].ge(2) & data["speeding_share_pre"].ge(0.75)
-    chronic = history.ge(chronic_history_threshold) | data["fines_pre"].ge(10)
+    chronic = (history.gt(0) & history.ge(chronic_history_threshold)) | data["fines_pre"].ge(10)
     diverse = data["offence_types_pre"].ge(3)
     dangerous = data["dangerous_events_pre"].ge(1)
 
@@ -202,24 +210,31 @@ def assign_behavior_clusters(
     data["behavior_cluster_id"] = data["cluster_id"]
     data["behavior_cluster_label"] = data["cluster_label"]
 
-    car_value_q75 = float(data["car_value_total"].quantile(0.75)) if "car_value_total" in data else 0
+    car_value_q75 = (
+        float(data["car_value_total"].quantile(0.75)) if "car_value_total" in data else 0
+    )
     horsepower_q75 = float(data["horsepower_max"].quantile(0.75)) if "horsepower_max" in data else 0
     data["tag_speed_dominant"] = data["speeding_share_pre"].ge(0.75) & data["fines_pre"].gt(0)
     data["tag_chronic"] = chronic
     data["tag_diverse"] = diverse
     data["tag_dangerous"] = dangerous
     data["tag_multi_region"] = data["fine_regions_pre"].ge(3)
-    data["tag_high_fine_amount"] = data["fine_amount_pre"].ge(high_amount_threshold) & data["fine_amount_pre"].gt(0)
+    data["tag_high_fine_amount"] = data["fine_amount_pre"].ge(high_amount_threshold) & data[
+        "fine_amount_pre"
+    ].gt(0)
     data["tag_multi_car"] = data["cars_count"].gt(1)
-    data["tag_expensive_fleet"] = (
-        data.get("car_value_total", pd.Series(0, index=data.index)).ge(car_value_q75)
+    data["tag_expensive_fleet"] = data.get(
+        "car_value_total", pd.Series(np.nan, index=data.index)
+    ).ge(car_value_q75)
+    data["tag_powerful_car"] = data.get("horsepower_max", pd.Series(np.nan, index=data.index)).ge(
+        horsepower_q75
     )
-    data["tag_powerful_car"] = (
-        data.get("horsepower_max", pd.Series(0, index=data.index)).ge(horsepower_q75)
-    )
-    data["tag_insufficient_observation"] = data["first_subscription_date"].ge(PRE_START)
+    data["tag_insufficient_observation"] = data["first_subscription_date"].isna() | data[
+        "first_subscription_date"
+    ].ge(PRE_START)
 
     tag_columns = [column for column in data.columns if column.startswith("tag_")]
+    data[tag_columns] = data[tag_columns].fillna(False).astype(bool)
     tag_names = {column: column.removeprefix("tag_") for column in tag_columns}
     data["behavior_tags"] = data[tag_columns].apply(
         lambda row: ";".join(tag_names[col] for col in tag_columns if bool(row[col])),
@@ -236,19 +251,23 @@ def assign_behavior_clusters(
 
 
 def build_summary(data: pd.DataFrame) -> pd.DataFrame:
-    summary = data.groupby(["cluster_id", "cluster_label"], observed=True).agg(
-        clients=("client_id", "nunique"),
-        fines_pre_mean=("fines_pre", "mean"),
-        fines_pre_median=("fines_pre", "median"),
-        historical_fines_12m_median=("fines_last_12m_total", "median"),
-        fine_amount_pre_median=("fine_amount_pre", "median"),
-        speeding_share_pre_mean=("speeding_share_pre", "mean"),
-        dangerous_client_share=("tag_dangerous", "mean"),
-        offence_types_pre_median=("offence_types_pre", "median"),
-        fine_regions_pre_median=("fine_regions_pre", "median"),
-        cars_count_mean=("cars_count", "mean"),
-        insufficient_observation_share=("tag_insufficient_observation", "mean"),
-    ).reset_index()
+    summary = (
+        data.groupby(["cluster_id", "cluster_label"], observed=True)
+        .agg(
+            clients=("client_id", "nunique"),
+            fines_pre_mean=("fines_pre", "mean"),
+            fines_pre_median=("fines_pre", "median"),
+            historical_fines_12m_median=("fines_last_12m_total", "median"),
+            fine_amount_pre_median=("fine_amount_pre", "median"),
+            speeding_share_pre_mean=("speeding_share_pre", "mean"),
+            dangerous_client_share=("tag_dangerous", "mean"),
+            offence_types_pre_median=("offence_types_pre", "median"),
+            fine_regions_pre_median=("fine_regions_pre", "median"),
+            cars_count_mean=("cars_count", "mean"),
+            insufficient_observation_share=("tag_insufficient_observation", "mean"),
+        )
+        .reset_index()
+    )
     optional = {
         "car_value_total": "car_value_total_median",
         "horsepower_max": "horsepower_max_median",
@@ -260,28 +279,6 @@ def build_summary(data: pd.DataFrame) -> pd.DataFrame:
             summary[target] = summary["cluster_id"].map(values)
     summary["share_pct"] = summary["clients"] / summary["clients"].sum() * 100
     return summary.sort_values("cluster_id").reset_index(drop=True)
-
-
-def build_old_cluster_crosswalk(data: pd.DataFrame) -> pd.DataFrame:
-    old_id = "cluster_id_old" if "cluster_id_old" in data else None
-    old_label = "cluster_label_old" if "cluster_label_old" in data else None
-    if old_id is None:
-        # При merge суффикс не появляется, если правая таблица не содержала cluster_id.
-        candidates = [c for c in ("cluster_id_x", "old_cluster_id") if c in data]
-        old_id = candidates[0] if candidates else None
-    if old_label is None:
-        candidates = [c for c in ("cluster_label_x", "old_cluster_label") if c in data]
-        old_label = candidates[0] if candidates else None
-    if old_id is None:
-        return pd.DataFrame()
-    columns = [old_id, "cluster_id", "cluster_label"]
-    if old_label:
-        columns.insert(1, old_label)
-    cross = data[columns].groupby(columns, dropna=False).size().rename("clients").reset_index()
-    cross = cross.rename(columns={old_id: "old_cluster_id", old_label: "old_cluster_label"} if old_label else {old_id: "old_cluster_id"})
-    totals = cross.groupby("old_cluster_id")["clients"].transform("sum")
-    cross["share_within_old_cluster_pct"] = cross["clients"] / totals * 100
-    return cross
 
 
 def markdown_table(frame: pd.DataFrame, columns: list[str]) -> list[str]:
@@ -368,7 +365,9 @@ def write_report(
         "## Ограничения",
         "",
         "- В таблицах нет статуса оплаты, поэтому выделять «злостных неплательщиков» нельзя. Вместо этого используется высокая штрафная нагрузка.",
-        f"- У {partial:,} клиентов подписка началась не раньше 20 марта 2026 года; у {after_cutoff:,} — уже после отсечки. Их кластер нужно трактовать осторожно, для этого есть тег `insufficient_observation`.".replace(",", " "),
+        f"- У {partial:,} клиентов подписка началась не раньше 20 марта 2026 года; у {after_cutoff:,} — уже после отсечки. Их кластер нужно трактовать осторожно, для этого есть тег `insufficient_observation`.".replace(
+            ",", " "
+        ),
         "- Название «без недавних нарушений» не означает абсолютную законопослушность: допускается до двух исторических штрафов.",
         "- Автомобильные признаки полезны для описания групп, но намеренно не определяют основную поведенческую категорию.",
         "",
@@ -377,27 +376,97 @@ def write_report(
         "- `tables/client_behavior_clusters.csv` — клиент, новая группа, признаки и теги;",
         "- `tables/client_clusters.csv` — компактный файл для повторного анализа после кризиса;",
         "- `tables/behavior_cluster_summary.csv` — профиль новых групп;",
-        "- `tables/behavior_by_old_cluster.csv` — связь новой и старой схем.",
+        "- `figures/behavior_cluster_sizes.png` — размеры групп;",
+        "- `figures/behavior_cluster_profiles.png` — профили поведения.",
     ]
     (output_dir / "behavior_cluster_report.md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8"
     )
 
 
+def save_behavior_plots(clients: pd.DataFrame, summary: pd.DataFrame, output_dir: Path) -> None:
+    figures = output_dir / "figures"
+    figures.mkdir(parents=True, exist_ok=True)
+    labels = [f"{row.cluster_id}. {row.cluster_label}" for row in summary.itertuples()]
+    fig, ax = plt.subplots(figsize=(12, max(4, len(summary) * 0.7)), layout="constrained")
+    bars = ax.barh(labels, summary["clients"], color="#4C78A8")
+    ax.bar_label(
+        bars,
+        labels=[f"{row.clients:,} ({row.share_pct:.1f}%)" for row in summary.itertuples()],
+        padding=5,
+    )
+    ax.invert_yaxis()
+    ax.margins(x=0.22)
+    ax.set(title="Размеры поведенческих групп", xlabel="Клиентов")
+    fig.savefig(figures / "behavior_cluster_sizes.png", dpi=160)
+    plt.close(fig)
+
+    columns = {
+        "fines_pre": "Штрафы до кризиса",
+        "fines_last_12m_total": "Исторические штрафы",
+        "speeding_share_pre": "Доля скорости",
+        "dangerous_events_pre": "Опасные нарушения",
+        "offence_types_pre": "Типы нарушений",
+    }
+    values = clients[list(columns)]
+    matrix = (
+        (clients.groupby("cluster_id")[list(columns)].mean() - values.mean())
+        .div(values.std().replace(0, np.nan))
+        .reindex(summary["cluster_id"])
+        .fillna(0)
+    )
+    fig, ax = plt.subplots(figsize=(12, max(4, len(summary) * 0.7)), layout="constrained")
+    heatmap = ax.imshow(matrix, cmap="RdYlBu_r", aspect="auto", vmin=-3, vmax=3)
+    ax.set_xticks(range(len(columns)), columns.values(), rotation=20, ha="right")
+    ax.set_yticks(range(len(labels)), labels)
+    ax.set_title("Поведенческие профили: отклонение от среднего")
+    for row in range(len(matrix)):
+        for col in range(len(columns)):
+            ax.text(col, row, f"{matrix.iloc[row, col]:+.1f}", ha="center", va="center")
+    fig.colorbar(heatmap, ax=ax, label="Стандартные отклонения")
+    fig.savefig(figures / "behavior_cluster_profiles.png", dpi=160)
+    plt.close(fig)
+
+
 def run_behavior_clustering(
     data_dir: Path,
-    features_file: Path,
-    output_dir: Path,
+    features_file: Path | None = None,
+    output_dir: Path | None = None,
+    fines_file: str = "fines_2026.csv",
+    sources: DataSources | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    fines, features = load_inputs(data_dir, features_file)
-    # Сохраняем старую схему под явными именами до добавления новых cluster_id.
-    features = features.rename(
-        columns={"cluster_id": "old_cluster_id", "cluster_label": "old_cluster_label"}
+    output_dir = output_dir or Path(__file__).resolve().parent / "outputs" / "behavior_clustering"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    if features_file is None:
+        logging.info("Подготовка докризисной витрины из %s", data_dir)
+        sources = sources or resolve_data_sources(data_dir, Path(__file__).resolve().parent)
+        demographics, fines, fuel = load_sources(data_dir, sources=sources)
+        validation = validate_sources(demographics, fines, fuel)
+        validation["source_mode"] = sources.mode
+        features = build_client_features(demographics, fines, fuel)
+        (output_dir / "validation.json").write_text(
+            json.dumps(validation, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+    else:
+        fines, features = load_inputs(
+            data_dir,
+            features_file,
+            fines_file=fines_file,
+        )
+    features = features.drop(
+        columns=[
+            "cluster_id",
+            "cluster_label",
+            "old_cluster_id",
+            "old_cluster_label",
+            "behavior_cluster_id",
+            "behavior_cluster_label",
+        ],
+        errors="ignore",
     )
     fine_behavior = build_fine_behavior(fines)
     clients, thresholds = assign_behavior_clusters(features, fine_behavior)
     summary = build_summary(clients)
-    crosswalk = build_old_cluster_crosswalk(clients)
 
     tables_dir = output_dir / "tables"
     tables_dir.mkdir(parents=True, exist_ok=True)
@@ -416,8 +485,6 @@ def run_behavior_clustering(
         "speeding_share_pre",
         "dangerous_events_pre",
         "fines_last_12m_total",
-        "old_cluster_id",
-        "old_cluster_label",
     ]
     client_columns += [c for c in clients.columns if c.startswith("tag_")]
     existing = [c for c in client_columns if c in clients]
@@ -427,15 +494,12 @@ def run_behavior_clustering(
     clients[["client_id", "cluster_id", "cluster_label"]].to_csv(
         tables_dir / "client_clusters.csv", index=False, encoding="utf-8-sig"
     )
-    summary.to_csv(
-        tables_dir / "behavior_cluster_summary.csv", index=False, encoding="utf-8-sig"
-    )
-    crosswalk.to_csv(
-        tables_dir / "behavior_by_old_cluster.csv", index=False, encoding="utf-8-sig"
-    )
+    summary.to_csv(tables_dir / "behavior_cluster_summary.csv", index=False, encoding="utf-8-sig")
+    features.to_csv(tables_dir / "client_features_precrisis.csv", index=False, encoding="utf-8-sig")
     pd.DataFrame([thresholds]).to_csv(
         tables_dir / "behavior_thresholds.csv", index=False, encoding="utf-8-sig"
     )
+    save_behavior_plots(clients, summary, output_dir)
     write_report(clients, summary, thresholds, output_dir)
     logging.info("Поведенческие кластеры сохранены в %s", output_dir)
     return clients, summary
@@ -447,10 +511,14 @@ def main() -> None:
         level=getattr(logging, args.log_level.upper(), logging.INFO),
         format="%(levelname)s: %(message)s",
     )
+    project_root = Path(__file__).resolve().parent
+    sources = resolve_data_sources(args.data_dir, project_root, source=args.source)
     clients, summary = run_behavior_clustering(
-        args.data_dir.resolve(),
-        args.features_file.resolve(),
-        args.output_dir.resolve(),
+        sources.directory,
+        args.features_file.resolve() if args.features_file else None,
+        args.output_dir.resolve() if args.output_dir else None,
+        fines_file=args.fines or sources.fines,
+        sources=sources,
     )
     print(f"Поведенческая кластеризация: {len(summary)} групп, {len(clients):,} клиентов.")
     print(summary[["cluster_id", "cluster_label", "clients", "share_pct"]].to_string(index=False))

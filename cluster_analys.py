@@ -6,20 +6,16 @@ import logging
 import math
 import re
 import textwrap
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 import numpy as np
 import pandas as pd
 
-try:
-    import matplotlib
-
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-except ImportError:  # графики не обязательны для расчётов
-    plt = None
+from data_sources import resolve_data_sources
+from plotting import plt
+from report_gallery import write_gallery
 
 try:
     from scipy.stats import ttest_1samp
@@ -27,17 +23,9 @@ except ImportError:  # используется асимптотическая �
     ttest_1samp = None
 
 try:
-    from sklearn.cluster import MiniBatchKMeans
     from sklearn.ensemble import IsolationForest
-    from sklearn.impute import SimpleImputer
-    from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import RobustScaler
 except ImportError:  # есть встроенные numpy-варианты
-    MiniBatchKMeans = None
     IsolationForest = None
-    SimpleImputer = None
-    Pipeline = None
-    RobustScaler = None
 
 
 LOGGER = logging.getLogger("fuel_behavior_analysis")
@@ -49,14 +37,6 @@ DEFAULT_FUEL = "fuel_transaction.csv"
 DEFAULT_CRISIS_START = "2026-06-01"
 DEFAULT_ANALYSIS_END = "2026-09-01"
 OPTIONAL_2025_DETAIL_FILES = ("fines_2025_detail.csv", "fines_2025.csv")
-OBSOLETE_GRAPH_FILES = (
-    "cluster_change_heatmap.png",
-    "cluster_fines_2025_vs_2026.png",
-    "cluster_monthly_trends.png",
-    "cluster_new_patterns.png",
-    "cluster_pre_post_comparison.png",
-)
-
 BASELINE_FINE_COLUMNS = [
     "april_2025_fines",
     "may_2025_fines",
@@ -114,10 +94,11 @@ def parse_args() -> argparse.Namespace:
             "топливного кризиса и находит новые устойчивые паттерны."
         )
     )
-    parser.add_argument("--data-dir", type=Path, default=Path.cwd())
+    parser.add_argument("--data-dir", type=Path, default=None)
+    parser.add_argument("--source", choices=["auto", "processed", "raw"], default="auto")
     parser.add_argument("--output-dir", type=Path, default=None)
-    parser.add_argument("--demographics", default=DEFAULT_DEMOGRAPHICS)
-    parser.add_argument("--fines", default=DEFAULT_FINES)
+    parser.add_argument("--demographics", default=None)
+    parser.add_argument("--fines", default=None)
     parser.add_argument(
         "--fines-2025-detail",
         type=Path,
@@ -127,14 +108,14 @@ def parse_args() -> argparse.Namespace:
             "bill_id, offence_short_statement и bill_offence_date."
         ),
     )
-    parser.add_argument("--fuel", default=DEFAULT_FUEL)
+    parser.add_argument("--fuel", default=None)
     parser.add_argument(
         "--clusters-file",
         type=Path,
         default=None,
         help=(
             "CSV с client_id и cluster_id/cluster. По умолчанию используется "
-            "outputs/clustering/tables/client_clusters.csv."
+            "outputs/behavior_clustering/tables/client_clusters.csv."
         ),
     )
     parser.add_argument(
@@ -158,7 +139,6 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_ANALYSIS_END,
         help="Исключающая правая граница анализа. По умолчанию 2026-09-01.",
     )
-    parser.add_argument("--n-clusters", type=int, default=5)
     parser.add_argument("--min-clients", type=int, default=40)
     parser.add_argument("--alpha", type=float, default=0.05)
     parser.add_argument("--min-effect", type=float, default=0.20)
@@ -179,7 +159,7 @@ def read_csv(path: Path, required: Iterable[str]) -> pd.DataFrame:
     frame = pd.read_csv(
         path,
         sep=_detect_separator(path),
-        decimal=",",
+        decimal="," if _detect_separator(path) == ";" else ".",
         low_memory=False,
         encoding="utf-8-sig",
     )
@@ -189,7 +169,9 @@ def read_csv(path: Path, required: Iterable[str]) -> pd.DataFrame:
     return frame
 
 
-def load_data(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_data(
+    args: argparse.Namespace,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     data_dir = args.data_dir.resolve()
     clients = read_csv(
         data_dir / args.demographics,
@@ -227,6 +209,12 @@ def load_data(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, pd.
         clients[column] = pd.to_numeric(clients[column], errors="coerce")
     fines["total_fine_amount"] = pd.to_numeric(fines["total_fine_amount"], errors="coerce") / 100.0
     fuel["order_fuel_volume"] = pd.to_numeric(fuel["order_fuel_volume"], errors="coerce")
+    # В очищенной таблице эта колонка уже учитывает полные и частичные
+    # возвраты. Все дальнейшие расчёты используют фактически отпущенный объём.
+    if "physical_fuel_volume_main" in fuel:
+        fuel["order_fuel_volume"] = pd.to_numeric(
+            fuel["physical_fuel_volume_main"], errors="coerce"
+        )
     fuel["order_fuel_price_1liter"] = pd.to_numeric(
         fuel["order_fuel_price_1liter"], errors="coerce"
     )
@@ -246,7 +234,9 @@ def load_data(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, pd.
     return clients, fines, fuel
 
 
-def load_optional_fines_2025(args: argparse.Namespace) -> tuple[pd.DataFrame | None, Path | None]:
+def load_optional_fines_2025(
+    args: argparse.Namespace,
+) -> tuple[pd.DataFrame | None, Path | None]:
     """Загружает детализацию 2025 года, если пользователь её предоставил."""
     data_dir = args.data_dir.resolve()
     requested = getattr(args, "fines_2025_detail", None)
@@ -422,54 +412,9 @@ def make_client_baseline(clients: pd.DataFrame) -> pd.DataFrame:
     return baseline
 
 
-def numpy_kmeans_labels(matrix: pd.DataFrame, n_clusters: int, max_iter: int = 100) -> np.ndarray:
-    """Small deterministic k-means fallback used when scikit-learn is absent."""
-    values = matrix.to_numpy(dtype=float)
-    medians = np.nanmedian(values, axis=0)
-    medians = np.where(np.isfinite(medians), medians, 0.0)
-    missing_rows, missing_cols = np.where(~np.isfinite(values))
-    values[missing_rows, missing_cols] = medians[missing_cols]
-    center = np.median(values, axis=0)
-    q25, q75 = np.percentile(values, [25, 75], axis=0)
-    scale = q75 - q25
-    std = values.std(axis=0)
-    scale = np.where(scale > 1e-9, scale, np.where(std > 1e-9, std, 1.0))
-    values = (values - center) / scale
-
-    rng = np.random.default_rng(RANDOM_STATE)
-    centers = [values[rng.integers(0, len(values))]]
-    for _ in range(1, n_clusters):
-        distance_sq = np.min(np.stack([np.sum((values - c) ** 2, axis=1) for c in centers]), axis=0)
-        if distance_sq.sum() <= 0:
-            centers.append(values[rng.integers(0, len(values))])
-        else:
-            centers.append(values[rng.choice(len(values), p=distance_sq / distance_sq.sum())])
-    centers_array = np.asarray(centers)
-
-    labels = np.zeros(len(values), dtype=int)
-    for _ in range(max_iter):
-        distances = np.sum(
-            (values[:, np.newaxis, :] - centers_array[np.newaxis, :, :]) ** 2,
-            axis=2,
-        )
-        new_labels = distances.argmin(axis=1)
-        if np.array_equal(labels, new_labels):
-            break
-        labels = new_labels
-        for cluster in range(n_clusters):
-            members = values[labels == cluster]
-            if len(members):
-                centers_array[cluster] = members.mean(axis=0)
-            else:
-                farthest = np.max(distances, axis=1).argmax()
-                centers_array[cluster] = values[farthest]
-    return labels
-
-
-def load_or_build_clusters(
+def load_clusters(
     baseline: pd.DataFrame,
     clusters_file: Path | None,
-    n_clusters: int,
     cluster_column: str | None = None,
 ) -> tuple[pd.DataFrame, str]:
     if clusters_file is not None:
@@ -528,45 +473,10 @@ def load_or_build_clusters(
             baseline["cluster_label"] = "Кластер " + baseline["cluster"]
         return baseline, "demographics_column"
 
-    if not 2 <= n_clusters <= 20:
-        raise ValueError("--n-clusters должен быть от 2 до 20.")
-
-    cluster_features = [
-        *BASELINE_FINE_COLUMNS,
-        "fines_apr_aug_2025",
-        "fines_recent_monthly_2025",
-        "fines_long_monthly_2025",
-        "fine_recent_vs_long_2025",
-    ]
-    cluster_features = [column for column in cluster_features if column in baseline]
-    matrix = baseline[cluster_features].replace([np.inf, -np.inf], np.nan)
-    # Штрафы имеют длинный хвост. Signed log не даёт единичным
-    # экстремальным значениям создать отдельный кластер из одного клиента.
-    matrix = np.sign(matrix) * np.log1p(matrix.abs())
-    baseline = baseline.copy()
-    if MiniBatchKMeans is not None:
-        pipeline = Pipeline(
-            steps=[
-                ("imputer", SimpleImputer(strategy="median")),
-                ("scaler", RobustScaler()),
-                (
-                    "model",
-                    MiniBatchKMeans(
-                        n_clusters=n_clusters,
-                        random_state=RANDOM_STATE,
-                        n_init=10,
-                        batch_size=2048,
-                    ),
-                ),
-            ]
-        )
-        labels = pipeline.fit_predict(matrix)
-    else:
-        labels = numpy_kmeans_labels(matrix, n_clusters)
-    baseline["cluster"] = labels.astype(str)
-    baseline["cluster_id"] = baseline["cluster"]
-    baseline["cluster_label"] = "Кластер " + baseline["cluster"]
-    return baseline, "fallback_2025_behavior"
+    raise FileNotFoundError(
+        "Поведенческие группы не найдены. Сначала запустите main.py "
+        "или передайте --clusters-file. Анализ не создаёт другую схему автоматически."
+    )
 
 
 def period_mask(series: pd.Series, start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
@@ -731,8 +641,9 @@ def summarize_cluster_changes(
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     eligible = features.loc[features["eligible_comparison"]].copy()
-    for cluster, group in eligible.groupby("cluster", dropna=False):
-        cluster_label = group["cluster_label"].iloc[0]
+    for cluster, members in features.groupby("cluster", dropna=False):
+        group = eligible.loc[eligible["cluster"].eq(cluster)]
+        cluster_label = members["cluster_label"].iloc[0]
         for metric in METRICS:
             pre_col, post_col = f"{metric}_pre", f"{metric}_post"
             paired = group[[pre_col, post_col]].dropna()
@@ -748,7 +659,7 @@ def summarize_cluster_changes(
                     p_value = float(math.erfc(z_value / math.sqrt(2.0)))
             else:
                 p_value = np.nan
-                effect_size = 0.0 if n else np.nan
+                effect_size = np.nan
 
             pre_mean = float(paired[pre_col].mean()) if n else np.nan
             post_mean = float(paired[post_col].mean()) if n else np.nan
@@ -1070,7 +981,8 @@ def build_offence_type_analysis(
 
     pre_start = fines_2026["bill_offence_date"].min().normalize()
     post_end = min(
-        analysis_end, fines_2026["bill_offence_date"].max().normalize() + pd.Timedelta(days=1)
+        analysis_end,
+        fines_2026["bill_offence_date"].max().normalize() + pd.Timedelta(days=1),
     )
     pre_detail = _aggregate_offence_types(fines_2026, mapping, pre_start, crisis, "pre_crisis_2026")
     post_detail = _aggregate_offence_types(
@@ -1650,7 +1562,11 @@ def save_change_plot(summary: pd.DataFrame, output_dir: Path) -> None:
     labels = [f"{row.cluster_label}: {row.metric_label}" for row in significant.itertuples()]
     colors = np.where(significant["paired_effect_size"] >= 0, "#2A9D8F", "#E76F51")
     fig, ax = plt.subplots(figsize=(12, max(5, 0.42 * len(significant))))
-    ax.barh(labels[::-1], significant["paired_effect_size"].to_numpy()[::-1], color=colors[::-1])
+    ax.barh(
+        labels[::-1],
+        significant["paired_effect_size"].to_numpy()[::-1],
+        color=colors[::-1],
+    )
     ax.axvline(0, color="#333333", linewidth=0.8)
     ax.set_xlabel("Размер изменения внутри клиентов")
     ax.set_title("Самые заметные новые паттерны после начала кризиса")
@@ -1668,9 +1584,9 @@ def data_quality_report(
 ) -> dict[str, object]:
     return {
         "rows": {
-            "demographics": int(len(clients)),
-            "fines": int(len(fines)),
-            "fuel_transactions": int(len(fuel)),
+            "demographics": len(clients),
+            "fines": len(fines),
+            "fuel_transactions": len(fuel),
         },
         "unique_clients": {
             "demographics": int(clients["client_id"].nunique()),
@@ -1704,6 +1620,8 @@ def write_summary_markdown(
         f"**Источник даты:** {metadata['crisis_date_source']}",
         f"**Метод кластеров:** {metadata['cluster_source']}",
         f"**Число кластеров:** {metadata['cluster_count']}",
+        "",
+        "[Все графики и расшифровка групп](index.html)",
         "",
         "## Найденные изменения кластеров",
         "",
@@ -1805,6 +1723,22 @@ def write_summary_markdown(
 
 
 def run(args: argparse.Namespace) -> Path:
+    project_root = Path(__file__).resolve().parent
+    sources = resolve_data_sources(
+        args.data_dir, project_root, source=getattr(args, "source", "auto")
+    )
+    args.data_dir = sources.directory
+    args.demographics = args.demographics or sources.demographics
+    args.fines = args.fines or sources.fines
+    args.fuel = args.fuel or sources.fuel
+    clusters_file = args.clusters_file or (
+        project_root / "outputs" / "behavior_clustering" / "tables" / "client_clusters.csv"
+    )
+    if not clusters_file.is_file():
+        raise FileNotFoundError(
+            f"Нет поведенческих групп: {clusters_file}. Сначала запустите main.py."
+        )
+    LOGGER.info("Загрузка данных для анализа")
     clients, fines, fuel = load_data(args)
     fines_2025_detail, fines_2025_path = load_optional_fines_2025(args)
     crisis, crisis_source, price_daily = validate_crisis_date(args.crisis_start, fuel, fines)
@@ -1813,19 +1747,12 @@ def run(args: argparse.Namespace) -> Path:
     LOGGER.info("Дата разделения периодов: %s (%s)", crisis.date(), crisis_source)
 
     baseline = make_client_baseline(clients)
-    clusters_file = args.clusters_file
-    if clusters_file is None:
-        default_clusters = (
-            args.data_dir / "outputs" / "clustering" / "tables" / "client_clusters.csv"
-        )
-        if default_clusters.exists():
-            clusters_file = default_clusters
-    baseline, cluster_source = load_or_build_clusters(
+    baseline, cluster_source = load_clusters(
         baseline,
         clusters_file,
-        args.n_clusters,
         cluster_column=args.cluster_column,
     )
+    LOGGER.info("Сравнение поведения %s клиентов", len(baseline))
     features, window = build_behavior_features(baseline, fines, fuel, crisis, analysis_end)
     summary = summarize_cluster_changes(features, args.min_clients, args.alpha, args.min_effect)
     novelty = find_client_novelty(features, args.anomaly_rate)
@@ -1840,12 +1767,10 @@ def run(args: argparse.Namespace) -> Path:
         analysis_end,
     )
 
-    output_dir = (args.output_dir or (args.data_dir / "outputs" / "cluster_analysis")).resolve()
+    output_dir = (
+        args.output_dir or (project_root / "outputs" / "behavior_cluster_analysis")
+    ).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    for filename in OBSOLETE_GRAPH_FILES:
-        obsolete = output_dir / filename
-        if obsolete.exists():
-            obsolete.unlink()
 
     baseline.to_csv(output_dir / "client_clusters.csv", index=False, encoding="utf-8-sig")
     profiles.to_csv(output_dir / "cluster_profiles_2025.csv", index=False, encoding="utf-8-sig")
@@ -1881,6 +1806,7 @@ def run(args: argparse.Namespace) -> Path:
     )
     novelty.to_csv(output_dir / "client_new_patterns.csv", index=False, encoding="utf-8-sig")
     price_daily.to_csv(output_dir / "daily_fuel_price.csv", index=False, encoding="utf-8-sig")
+    LOGGER.info("Создание графиков по каждой группе")
     offence_manifest = save_offence_type_outputs(
         offence_year,
         offence_prepost,
@@ -1900,6 +1826,11 @@ def run(args: argparse.Namespace) -> Path:
         "cluster_source": cluster_source,
         "cluster_count": int(baseline["cluster"].nunique()),
         "cluster_ids": sorted(baseline["cluster"].astype(str).unique().tolist()),
+        "source_files": {
+            "demographics": str(args.data_dir / args.demographics),
+            "fines": str(args.data_dir / args.fines),
+            "fuel": str(args.data_dir / args.fuel),
+        },
         "offence_type_detail_2025_available": fines_2025_detail is not None,
         "offence_type_detail_2025_source": (
             str(fines_2025_path) if fines_2025_path is not None else None
@@ -1937,8 +1868,26 @@ def run(args: argparse.Namespace) -> Path:
         novelty,
         metadata,
     )
+    LOGGER.info("Создание общих графиков")
     save_price_plot(price_daily, crisis, output_dir)
     save_offence_type_heatmap(offence_year, output_dir)
+    save_cluster_comparison_plot(summary, output_dir)
+    save_effect_heatmap(summary, output_dir)
+    save_monthly_trends_plot(monthly_trends, crisis, output_dir)
+    save_year_over_year_plot(year_summary, output_dir)
+    save_change_plot(summary, output_dir)
+    chart_files = write_gallery(output_dir, baseline, offence_manifest, summary)
+    metadata["chart_files"] = chart_files
+    metadata["chart_count"] = len(chart_files)
+    metadata["clusters_file"] = str(clusters_file.resolve())
+    (output_dir / "analysis_metadata.json").write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    LOGGER.info(
+        "Проверено графиков: %s. Откройте %s",
+        len(chart_files),
+        output_dir / "index.html",
+    )
 
     LOGGER.info("Готово. Отчёты: %s", output_dir)
     return output_dir
