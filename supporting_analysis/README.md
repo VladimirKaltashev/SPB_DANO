@@ -1,5 +1,57 @@
 # Штрафы по месяцам и категориям
 
+## Presentation-first графики слайдов 5–7 (v2)
+
+Основные графики для выступления собираются отдельно от подробных технических
+версий:
+
+```bash
+uv run python -m supporting_analysis.presentation_charts_v2
+```
+
+Новые PNG/SVG сохраняются в `presentation_charts/v2/`. Предыдущие scatter,
+heatmap и dumbbell автоматически копируются в
+`presentation_charts/technical_backup/` и остаются доступны для appendix.
+В `validation_v2.json` записаны исходные таблицы, значения, периоды, формулы
+нормализации, причины выбора профилей и ограничения упрощения.
+
+## Финальные presentation-ready графики слайдов 5–7
+
+Версии, которые повторяют метрики и фильтры технического анализа, собираются
+отдельно от основного пайплайна:
+
+```bash
+uv run python -m supporting_analysis.presentation_charts
+```
+
+Файлы `slide_05_chart`, `slide_06_chart`, `slide_07_chart` сохраняются в
+корневую папку `presentation_charts/` в PNG (300 dpi) и SVG. Там же создаются
+`validation.json` и `validation.md` с числами, периодами, фильтрами и результатом
+сверки с техническими источниками.
+
+## Графики для Figma Slides
+
+Три графика из слайдов 5–7 собираются из уже рассчитанных таблиц проекта:
+
+```bash
+uv run python -m supporting_analysis.figma_charts
+```
+
+Результат сохраняется в `outputs/figma_charts/` одновременно в PNG и SVG:
+
+- `01_price_and_fuel_volume` — индекс цены и купленного объёма топлива;
+- `02_precrisis_behavior_groups_with_points` — карта докризисных групп с точками;
+- `02_precrisis_behavior_groups_without_points` — версия той же карты без точек;
+- `03_offence_structure_pre_post` — состав типов нарушений до и после кризиса.
+
+Для вставки в Figma предпочтителен SVG. Цвета взяты из шаблона презентации:
+`#1E0833`, `#BF8ED5`, `#D1ABE3`, `#AB5998`. Группы 0–1 не включаются в
+сравнение структуры нарушений: отсутствие штрафов до кризиса входит в само
+правило их определения.
+
+Проверка исходных точек и ограничения интерпретации описаны в
+[`FIGMA_CHART_FACTCHECK.md`](FIGMA_CHART_FACTCHECK.md).
+
 Помесячный отчёт входит в полный запуск `uv run python main.py`. Отдельный запуск:
 
 ```bash
