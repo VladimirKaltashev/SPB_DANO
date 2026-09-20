@@ -1,0 +1,24 @@
+{
+  "font": "DejaVu Sans",
+  "palette": {
+    "ink": "#1E0833",
+    "slide": "#BF8ED5",
+    "panel": "#D1ABE3",
+    "accent": "#AB5998"
+  },
+  "charts": {
+    "price_and_volume": [
+      "outputs/figma_charts/01_price_and_fuel_volume.png",
+      "outputs/figma_charts/01_price_and_fuel_volume.svg"
+    ],
+    "behavior_groups": [
+      "outputs/figma_charts/02_precrisis_behavior_groups_with_points.png",
+      "outputs/figma_charts/02_precrisis_behavior_groups_with_points.svg"
+    ],
+    "offence_structure": [
+      "outputs/figma_charts/03_offence_structure_pre_post.png",
+      "outputs/figma_charts/03_offence_structure_pre_post.svg"
+    ]
+  },
+  "figma_note": "Use SVG for the deck. PNG files are previews. Groups 0 and 1 are\nintentionally excluded from the offence-composition comparison\nbecause their zero pre-crisis count is part of the group rule."
+}

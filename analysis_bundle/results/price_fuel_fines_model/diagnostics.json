@@ -1,0 +1,19 @@
+{
+  "n_clients": 23467,
+  "pre_weeks": [
+    8
+  ],
+  "post_weeks": [
+    13
+  ],
+  "mean_fuel_rate_30d_pre": 114.4482766833669,
+  "mean_fuel_rate_30d_post": 83.97033079418983,
+  "aggregate_fuel_post_pre_ratio": 0.7336967687726965,
+  "aggregate_fuel_relative_change": -0.2663032312273035,
+  "mean_fine_rate_30d_pre": 0.5647976794160797,
+  "mean_fine_rate_30d_post": 0.5774814949400537,
+  "equivalence_margin_fines_per_30d": 0.05,
+  "alpha": 0.05,
+  "all_prespecified_conditions_supported": true,
+  "interpretation": "association with the post-2026-06-01 period, not a causal effect"
+}

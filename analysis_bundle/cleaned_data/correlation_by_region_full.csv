@@ -1,0 +1,1025 @@
+region_name,variable_x,variable_y,correlation,observations
+Республика Башкортостан,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Республика Башкортостан,sold_volume_liters,weighted_price_rub_per_liter,-0.6747071105325322,5
+Республика Башкортостан,fuel_sale_count,weighted_price_rub_per_liter,-0.6881748122750525,5
+Республика Башкортостан,sales_revenue_rub,weighted_price_rub_per_liter,-0.6601678255519412,5
+Республика Башкортостан,fine_count,weighted_price_rub_per_liter,0.3333698735688201,5
+Республика Башкортостан,fined_clients,weighted_price_rub_per_liter,0.47551156858365723,5
+Республика Башкортостан,total_fine_amount_rub,weighted_price_rub_per_liter,0.14032637938871015,5
+Республика Башкортостан,average_fine_amount_rub,weighted_price_rub_per_liter,-0.8631288186707912,5
+Республика Башкортостан,weighted_price_rub_per_liter,sold_volume_liters,-0.6747071105325322,5
+Республика Башкортостан,sold_volume_liters,sold_volume_liters,1.0,5
+Республика Башкортостан,fuel_sale_count,sold_volume_liters,0.9995387500446707,5
+Республика Башкортостан,sales_revenue_rub,sold_volume_liters,0.9996946829618523,5
+Республика Башкортостан,fine_count,sold_volume_liters,-0.5084769639561645,5
+Республика Башкортостан,fined_clients,sold_volume_liters,-0.6266964093572728,5
+Республика Башкортостан,total_fine_amount_rub,sold_volume_liters,-0.3846533799651172,5
+Республика Башкортостан,average_fine_amount_rub,sold_volume_liters,0.5937000268584408,5
+Республика Башкортостан,weighted_price_rub_per_liter,fuel_sale_count,-0.6881748122750525,5
+Республика Башкортостан,sold_volume_liters,fuel_sale_count,0.9995387500446707,5
+Республика Башкортостан,fuel_sale_count,fuel_sale_count,1.0,5
+Республика Башкортостан,sales_revenue_rub,fuel_sale_count,0.9992033124494915,5
+Республика Башкортостан,fine_count,fuel_sale_count,-0.48809701242791237,5
+Республика Башкортостан,fined_clients,fuel_sale_count,-0.6098291063339639,5
+Республика Башкортостан,total_fine_amount_rub,fuel_sale_count,-0.361248991642019,5
+Республика Башкортостан,average_fine_amount_rub,fuel_sale_count,0.6045057329378901,5
+Республика Башкортостан,weighted_price_rub_per_liter,sales_revenue_rub,-0.6601678255519412,5
+Республика Башкортостан,sold_volume_liters,sales_revenue_rub,0.9996946829618523,5
+Республика Башкортостан,fuel_sale_count,sales_revenue_rub,0.9992033124494915,5
+Республика Башкортостан,sales_revenue_rub,sales_revenue_rub,1.0,5
+Республика Башкортостан,fine_count,sales_revenue_rub,-0.4985005108391949,5
+Республика Башкортостан,fined_clients,sales_revenue_rub,-0.6160762765938218,5
+Республика Башкортостан,total_fine_amount_rub,sales_revenue_rub,-0.3781293241742392,5
+Республика Башкортостан,average_fine_amount_rub,sales_revenue_rub,0.5777617022658543,5
+Республика Башкортостан,weighted_price_rub_per_liter,fine_count,0.3333698735688201,5
+Республика Башкортостан,sold_volume_liters,fine_count,-0.5084769639561645,5
+Республика Башкортостан,fuel_sale_count,fine_count,-0.48809701242791237,5
+Республика Башкортостан,sales_revenue_rub,fine_count,-0.4985005108391949,5
+Республика Башкортостан,fine_count,fine_count,1.0,5
+Республика Башкортостан,fined_clients,fine_count,0.9858207670328565,5
+Республика Башкортостан,total_fine_amount_rub,fine_count,0.9750234325044141,5
+Республика Башкортостан,average_fine_amount_rub,fine_count,-0.2011965056201009,5
+Республика Башкортостан,weighted_price_rub_per_liter,fined_clients,0.47551156858365723,5
+Республика Башкортостан,sold_volume_liters,fined_clients,-0.6266964093572728,5
+Республика Башкортостан,fuel_sale_count,fined_clients,-0.6098291063339639,5
+Республика Башкортостан,sales_revenue_rub,fined_clients,-0.6160762765938218,5
+Республика Башкортостан,fine_count,fined_clients,0.9858207670328565,5
+Республика Башкортостан,fined_clients,fined_clients,1.0,5
+Республика Башкортостан,total_fine_amount_rub,fined_clients,0.9305228159347148,5
+Республика Башкортостан,average_fine_amount_rub,fined_clients,-0.33152258408761076,5
+Республика Башкортостан,weighted_price_rub_per_liter,total_fine_amount_rub,0.14032637938871015,5
+Республика Башкортостан,sold_volume_liters,total_fine_amount_rub,-0.3846533799651172,5
+Республика Башкортостан,fuel_sale_count,total_fine_amount_rub,-0.361248991642019,5
+Республика Башкортостан,sales_revenue_rub,total_fine_amount_rub,-0.3781293241742392,5
+Республика Башкортостан,fine_count,total_fine_amount_rub,0.9750234325044141,5
+Республика Башкортостан,fined_clients,total_fine_amount_rub,0.9305228159347148,5
+Республика Башкортостан,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Республика Башкортостан,average_fine_amount_rub,total_fine_amount_rub,0.021181609486599248,5
+Республика Башкортостан,weighted_price_rub_per_liter,average_fine_amount_rub,-0.8631288186707912,5
+Республика Башкортостан,sold_volume_liters,average_fine_amount_rub,0.5937000268584408,5
+Республика Башкортостан,fuel_sale_count,average_fine_amount_rub,0.6045057329378901,5
+Республика Башкортостан,sales_revenue_rub,average_fine_amount_rub,0.5777617022658543,5
+Республика Башкортостан,fine_count,average_fine_amount_rub,-0.2011965056201009,5
+Республика Башкортостан,fined_clients,average_fine_amount_rub,-0.33152258408761076,5
+Республика Башкортостан,total_fine_amount_rub,average_fine_amount_rub,0.021181609486599248,5
+Республика Башкортостан,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Республика Татарстан,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Республика Татарстан,sold_volume_liters,weighted_price_rub_per_liter,-0.9053273991501386,5
+Республика Татарстан,fuel_sale_count,weighted_price_rub_per_liter,-0.9317710417070965,5
+Республика Татарстан,sales_revenue_rub,weighted_price_rub_per_liter,-0.8927759326550677,5
+Республика Татарстан,fine_count,weighted_price_rub_per_liter,-0.15086755093956747,5
+Республика Татарстан,fined_clients,weighted_price_rub_per_liter,-0.23522064573941584,5
+Республика Татарстан,total_fine_amount_rub,weighted_price_rub_per_liter,-0.2560395831443087,5
+Республика Татарстан,average_fine_amount_rub,weighted_price_rub_per_liter,-0.8592355907224353,5
+Республика Татарстан,weighted_price_rub_per_liter,sold_volume_liters,-0.9053273991501386,5
+Республика Татарстан,sold_volume_liters,sold_volume_liters,1.0,5
+Республика Татарстан,fuel_sale_count,sold_volume_liters,0.9958894994611436,5
+Республика Татарстан,sales_revenue_rub,sold_volume_liters,0.9994870887185189,5
+Республика Татарстан,fine_count,sold_volume_liters,0.2780960737670869,5
+Республика Татарстан,fined_clients,sold_volume_liters,0.3786468666232757,5
+Республика Татарстан,total_fine_amount_rub,sold_volume_liters,0.3598443069082849,5
+Республика Татарстан,average_fine_amount_rub,sold_volume_liters,0.7424112181666596,5
+Республика Татарстан,weighted_price_rub_per_liter,fuel_sale_count,-0.9317710417070965,5
+Республика Татарстан,sold_volume_liters,fuel_sale_count,0.9958894994611436,5
+Республика Татарстан,fuel_sale_count,fuel_sale_count,1.0,5
+Республика Татарстан,sales_revenue_rub,fuel_sale_count,0.9941355998280375,5
+Республика Татарстан,fine_count,fuel_sale_count,0.2726807966305529,5
+Республика Татарстан,fined_clients,fuel_sale_count,0.37364678935958867,5
+Республика Татарстан,total_fine_amount_rub,fuel_sale_count,0.36005402123769953,5
+Республика Татарстан,average_fine_amount_rub,fuel_sale_count,0.7852929986392468,5
+Республика Татарстан,weighted_price_rub_per_liter,sales_revenue_rub,-0.8927759326550677,5
+Республика Татарстан,sold_volume_liters,sales_revenue_rub,0.9994870887185189,5
+Республика Татарстан,fuel_sale_count,sales_revenue_rub,0.9941355998280375,5
+Республика Татарстан,sales_revenue_rub,sales_revenue_rub,1.0,5
+Республика Татарстан,fine_count,sales_revenue_rub,0.2833971572919389,5
+Республика Татарстан,fined_clients,sales_revenue_rub,0.3850752829065931,5
+Республика Татарстан,total_fine_amount_rub,sales_revenue_rub,0.36327871272204215,5
+Республика Татарстан,average_fine_amount_rub,sales_revenue_rub,0.7309833082431769,5
+Республика Татарстан,weighted_price_rub_per_liter,fine_count,-0.15086755093956747,5
+Республика Татарстан,sold_volume_liters,fine_count,0.2780960737670869,5
+Республика Татарстан,fuel_sale_count,fine_count,0.2726807966305529,5
+Республика Татарстан,sales_revenue_rub,fine_count,0.2833971572919389,5
+Республика Татарстан,fine_count,fine_count,1.0,5
+Республика Татарстан,fined_clients,fine_count,0.9928937627208738,5
+Республика Татарстан,total_fine_amount_rub,fine_count,0.9937481721208129,5
+Республика Татарстан,average_fine_amount_rub,fine_count,0.5506862981274806,5
+Республика Татарстан,weighted_price_rub_per_liter,fined_clients,-0.23522064573941584,5
+Республика Татарстан,sold_volume_liters,fined_clients,0.3786468666232757,5
+Республика Татарстан,fuel_sale_count,fined_clients,0.37364678935958867,5
+Республика Татарстан,sales_revenue_rub,fined_clients,0.3850752829065931,5
+Республика Татарстан,fine_count,fined_clients,0.9928937627208738,5
+Республика Татарстан,fined_clients,fined_clients,1.0,5
+Республика Татарстан,total_fine_amount_rub,fined_clients,0.9949995155797886,5
+Республика Татарстан,average_fine_amount_rub,fined_clients,0.6051412996398836,5
+Республика Татарстан,weighted_price_rub_per_liter,total_fine_amount_rub,-0.2560395831443087,5
+Республика Татарстан,sold_volume_liters,total_fine_amount_rub,0.3598443069082849,5
+Республика Татарстан,fuel_sale_count,total_fine_amount_rub,0.36005402123769953,5
+Республика Татарстан,sales_revenue_rub,total_fine_amount_rub,0.36327871272204215,5
+Республика Татарстан,fine_count,total_fine_amount_rub,0.9937481721208129,5
+Республика Татарстан,fined_clients,total_fine_amount_rub,0.9949995155797886,5
+Республика Татарстан,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Республика Татарстан,average_fine_amount_rub,total_fine_amount_rub,0.6402168136697629,5
+Республика Татарстан,weighted_price_rub_per_liter,average_fine_amount_rub,-0.8592355907224353,5
+Республика Татарстан,sold_volume_liters,average_fine_amount_rub,0.7424112181666596,5
+Республика Татарстан,fuel_sale_count,average_fine_amount_rub,0.7852929986392468,5
+Республика Татарстан,sales_revenue_rub,average_fine_amount_rub,0.7309833082431769,5
+Республика Татарстан,fine_count,average_fine_amount_rub,0.5506862981274806,5
+Республика Татарстан,fined_clients,average_fine_amount_rub,0.6051412996398836,5
+Республика Татарстан,total_fine_amount_rub,average_fine_amount_rub,0.6402168136697629,5
+Республика Татарстан,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Краснодарский край,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Краснодарский край,sold_volume_liters,weighted_price_rub_per_liter,-0.9457790042773777,5
+Краснодарский край,fuel_sale_count,weighted_price_rub_per_liter,-0.9069147790047953,5
+Краснодарский край,sales_revenue_rub,weighted_price_rub_per_liter,-0.9368601487995664,5
+Краснодарский край,fine_count,weighted_price_rub_per_liter,-0.6021752850091837,5
+Краснодарский край,fined_clients,weighted_price_rub_per_liter,-0.7454834399031326,5
+Краснодарский край,total_fine_amount_rub,weighted_price_rub_per_liter,-0.5710203835959321,5
+Краснодарский край,average_fine_amount_rub,weighted_price_rub_per_liter,-0.426576102925568,5
+Краснодарский край,weighted_price_rub_per_liter,sold_volume_liters,-0.9457790042773777,5
+Краснодарский край,sold_volume_liters,sold_volume_liters,1.0,5
+Краснодарский край,fuel_sale_count,sold_volume_liters,0.98610690211047,5
+Краснодарский край,sales_revenue_rub,sold_volume_liters,0.999606130768462,5
+Краснодарский край,fine_count,sold_volume_liters,0.8081175276318865,5
+Краснодарский край,fined_clients,sold_volume_liters,0.898186722266047,5
+Краснодарский край,total_fine_amount_rub,sold_volume_liters,0.789902454937488,5
+Краснодарский край,average_fine_amount_rub,sold_volume_liters,0.6901004906512136,5
+Краснодарский край,weighted_price_rub_per_liter,fuel_sale_count,-0.9069147790047953,5
+Краснодарский край,sold_volume_liters,fuel_sale_count,0.98610690211047,5
+Краснодарский край,fuel_sale_count,fuel_sale_count,1.0,5
+Краснодарский край,sales_revenue_rub,fuel_sale_count,0.9876725786733943,5
+Краснодарский край,fine_count,fuel_sale_count,0.8332838982727196,5
+Краснодарский край,fined_clients,fuel_sale_count,0.9213262668949378,5
+Краснодарский край,total_fine_amount_rub,fuel_sale_count,0.8116084814099768,5
+Краснодарский край,average_fine_amount_rub,fuel_sale_count,0.7252664794585999,5
+Краснодарский край,weighted_price_rub_per_liter,sales_revenue_rub,-0.9368601487995664,5
+Краснодарский край,sold_volume_liters,sales_revenue_rub,0.999606130768462,5
+Краснодарский край,fuel_sale_count,sales_revenue_rub,0.9876725786733943,5
+Краснодарский край,sales_revenue_rub,sales_revenue_rub,1.0,5
+Краснодарский край,fine_count,sales_revenue_rub,0.8239842960988706,5
+Краснодарский край,fined_clients,sales_revenue_rub,0.9090426323442706,5
+Краснодарский край,total_fine_amount_rub,sales_revenue_rub,0.8066184784603649,5
+Краснодарский край,average_fine_amount_rub,sales_revenue_rub,0.7100037000788885,5
+Краснодарский край,weighted_price_rub_per_liter,fine_count,-0.6021752850091837,5
+Краснодарский край,sold_volume_liters,fine_count,0.8081175276318865,5
+Краснодарский край,fuel_sale_count,fine_count,0.8332838982727196,5
+Краснодарский край,sales_revenue_rub,fine_count,0.8239842960988706,5
+Краснодарский край,fine_count,fine_count,1.0,5
+Краснодарский край,fined_clients,fine_count,0.9755426191834098,5
+Краснодарский край,total_fine_amount_rub,fine_count,0.9971553282099224,5
+Краснодарский край,average_fine_amount_rub,fine_count,0.9643087666581791,5
+Краснодарский край,weighted_price_rub_per_liter,fined_clients,-0.7454834399031326,5
+Краснодарский край,sold_volume_liters,fined_clients,0.898186722266047,5
+Краснодарский край,fuel_sale_count,fined_clients,0.9213262668949378,5
+Краснодарский край,sales_revenue_rub,fined_clients,0.9090426323442706,5
+Краснодарский край,fine_count,fined_clients,0.9755426191834098,5
+Краснодарский край,fined_clients,fined_clients,1.0,5
+Краснодарский край,total_fine_amount_rub,fined_clients,0.959564364207832,5
+Краснодарский край,average_fine_amount_rub,fined_clients,0.8918533083058359,5
+Краснодарский край,weighted_price_rub_per_liter,total_fine_amount_rub,-0.5710203835959321,5
+Краснодарский край,sold_volume_liters,total_fine_amount_rub,0.789902454937488,5
+Краснодарский край,fuel_sale_count,total_fine_amount_rub,0.8116084814099768,5
+Краснодарский край,sales_revenue_rub,total_fine_amount_rub,0.8066184784603649,5
+Краснодарский край,fine_count,total_fine_amount_rub,0.9971553282099224,5
+Краснодарский край,fined_clients,total_fine_amount_rub,0.959564364207832,5
+Краснодарский край,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Краснодарский край,average_fine_amount_rub,total_fine_amount_rub,0.9787868414949896,5
+Краснодарский край,weighted_price_rub_per_liter,average_fine_amount_rub,-0.426576102925568,5
+Краснодарский край,sold_volume_liters,average_fine_amount_rub,0.6901004906512136,5
+Краснодарский край,fuel_sale_count,average_fine_amount_rub,0.7252664794585999,5
+Краснодарский край,sales_revenue_rub,average_fine_amount_rub,0.7100037000788885,5
+Краснодарский край,fine_count,average_fine_amount_rub,0.9643087666581791,5
+Краснодарский край,fined_clients,average_fine_amount_rub,0.8918533083058359,5
+Краснодарский край,total_fine_amount_rub,average_fine_amount_rub,0.9787868414949896,5
+Краснодарский край,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Красноярский край,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Красноярский край,sold_volume_liters,weighted_price_rub_per_liter,0.05877485187841303,5
+Красноярский край,fuel_sale_count,weighted_price_rub_per_liter,0.621502311564002,5
+Красноярский край,sales_revenue_rub,weighted_price_rub_per_liter,0.35660345684617484,5
+Красноярский край,fine_count,weighted_price_rub_per_liter,0.7913192401694589,5
+Красноярский край,fined_clients,weighted_price_rub_per_liter,0.3446163143036156,5
+Красноярский край,total_fine_amount_rub,weighted_price_rub_per_liter,0.15099641192723967,5
+Красноярский край,average_fine_amount_rub,weighted_price_rub_per_liter,-0.8699495134109219,5
+Красноярский край,weighted_price_rub_per_liter,sold_volume_liters,0.05877485187841303,5
+Красноярский край,sold_volume_liters,sold_volume_liters,1.0,5
+Красноярский край,fuel_sale_count,sold_volume_liters,0.3559588805130374,5
+Красноярский край,sales_revenue_rub,sold_volume_liters,0.953540906667738,5
+Красноярский край,fine_count,sold_volume_liters,-0.25979148875769553,5
+Красноярский край,fined_clients,sold_volume_liters,-0.25179840771052797,5
+Красноярский край,total_fine_amount_rub,sold_volume_liters,-0.1796852902857837,5
+Красноярский край,average_fine_amount_rub,sold_volume_liters,0.10611305074815038,5
+Красноярский край,weighted_price_rub_per_liter,fuel_sale_count,0.621502311564002,5
+Красноярский край,sold_volume_liters,fuel_sale_count,0.3559588805130374,5
+Красноярский край,fuel_sale_count,fuel_sale_count,1.0,5
+Красноярский край,sales_revenue_rub,fuel_sale_count,0.5169837773535189,5
+Красноярский край,fine_count,fuel_sale_count,0.44157007022428413,5
+Красноярский край,fined_clients,fuel_sale_count,0.3372086971569014,5
+Красноярский край,total_fine_amount_rub,fuel_sale_count,-0.09457026367805714,5
+Красноярский край,average_fine_amount_rub,fuel_sale_count,-0.6977185761505711,5
+Красноярский край,weighted_price_rub_per_liter,sales_revenue_rub,0.35660345684617484,5
+Красноярский край,sold_volume_liters,sales_revenue_rub,0.953540906667738,5
+Красноярский край,fuel_sale_count,sales_revenue_rub,0.5169837773535189,5
+Красноярский край,sales_revenue_rub,sales_revenue_rub,1.0,5
+Красноярский край,fine_count,sales_revenue_rub,-0.009647041913596072,5
+Красноярский край,fined_clients,sales_revenue_rub,-0.1410303936486252,5
+Красноярский край,total_fine_amount_rub,sales_revenue_rub,-0.13054924462964926,5
+Красноярский край,average_fine_amount_rub,sales_revenue_rub,-0.1650188563594476,5
+Красноярский край,weighted_price_rub_per_liter,fine_count,0.7913192401694589,5
+Красноярский край,sold_volume_liters,fine_count,-0.25979148875769553,5
+Красноярский край,fuel_sale_count,fine_count,0.44157007022428413,5
+Красноярский край,sales_revenue_rub,fine_count,-0.009647041913596072,5
+Красноярский край,fine_count,fine_count,1.0,5
+Красноярский край,fined_clients,fine_count,0.8213097138444114,5
+Красноярский край,total_fine_amount_rub,fine_count,0.6657117348328505,5
+Красноярский край,average_fine_amount_rub,fine_count,-0.5640086654779362,5
+Красноярский край,weighted_price_rub_per_liter,fined_clients,0.3446163143036156,5
+Красноярский край,sold_volume_liters,fined_clients,-0.25179840771052797,5
+Красноярский край,fuel_sale_count,fined_clients,0.3372086971569014,5
+Красноярский край,sales_revenue_rub,fined_clients,-0.1410303936486252,5
+Красноярский край,fine_count,fined_clients,0.8213097138444114,5
+Красноярский край,fined_clients,fined_clients,1.0,5
+Красноярский край,total_fine_amount_rub,fined_clients,0.8604177190369571,5
+Красноярский край,average_fine_amount_rub,fined_clients,-0.1170326524901095,5
+Красноярский край,weighted_price_rub_per_liter,total_fine_amount_rub,0.15099641192723967,5
+Красноярский край,sold_volume_liters,total_fine_amount_rub,-0.1796852902857837,5
+Красноярский край,fuel_sale_count,total_fine_amount_rub,-0.09457026367805714,5
+Красноярский край,sales_revenue_rub,total_fine_amount_rub,-0.13054924462964926,5
+Красноярский край,fine_count,total_fine_amount_rub,0.6657117348328505,5
+Красноярский край,fined_clients,total_fine_amount_rub,0.8604177190369571,5
+Красноярский край,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Красноярский край,average_fine_amount_rub,total_fine_amount_rub,0.240192017659703,5
+Красноярский край,weighted_price_rub_per_liter,average_fine_amount_rub,-0.8699495134109219,5
+Красноярский край,sold_volume_liters,average_fine_amount_rub,0.10611305074815038,5
+Красноярский край,fuel_sale_count,average_fine_amount_rub,-0.6977185761505711,5
+Красноярский край,sales_revenue_rub,average_fine_amount_rub,-0.1650188563594476,5
+Красноярский край,fine_count,average_fine_amount_rub,-0.5640086654779362,5
+Красноярский край,fined_clients,average_fine_amount_rub,-0.1170326524901095,5
+Красноярский край,total_fine_amount_rub,average_fine_amount_rub,0.240192017659703,5
+Красноярский край,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Кемеровская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Кемеровская область,sold_volume_liters,weighted_price_rub_per_liter,-0.2998629018922112,5
+Кемеровская область,fuel_sale_count,weighted_price_rub_per_liter,0.3921033741708808,5
+Кемеровская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.011615926764506675,5
+Кемеровская область,fine_count,weighted_price_rub_per_liter,0.6658579834418135,5
+Кемеровская область,fined_clients,weighted_price_rub_per_liter,0.7386081358446384,5
+Кемеровская область,total_fine_amount_rub,weighted_price_rub_per_liter,0.7981485127200889,5
+Кемеровская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.2806193681949604,5
+Кемеровская область,weighted_price_rub_per_liter,sold_volume_liters,-0.2998629018922112,5
+Кемеровская область,sold_volume_liters,sold_volume_liters,1.0,5
+Кемеровская область,fuel_sale_count,sold_volume_liters,0.4455781642377697,5
+Кемеровская область,sales_revenue_rub,sold_volume_liters,0.9573433066719821,5
+Кемеровская область,fine_count,sold_volume_liters,-0.09157016425268075,5
+Кемеровская область,fined_clients,sold_volume_liters,0.21251142249941019,5
+Кемеровская область,total_fine_amount_rub,sold_volume_liters,-0.05592518139663592,5
+Кемеровская область,average_fine_amount_rub,sold_volume_liters,0.0943761378782758,5
+Кемеровская область,weighted_price_rub_per_liter,fuel_sale_count,0.3921033741708808,5
+Кемеровская область,sold_volume_liters,fuel_sale_count,0.4455781642377697,5
+Кемеровская область,fuel_sale_count,fuel_sale_count,1.0,5
+Кемеровская область,sales_revenue_rub,fuel_sale_count,0.5811982515228743,5
+Кемеровская область,fine_count,fuel_sale_count,0.7879476282467865,5
+Кемеровская область,fined_clients,fuel_sale_count,0.9068717590441169,5
+Кемеровская область,total_fine_amount_rub,fuel_sale_count,0.7611261500635196,5
+Кемеровская область,average_fine_amount_rub,fuel_sale_count,-0.74301536752296,5
+Кемеровская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.011615926764506675,5
+Кемеровская область,sold_volume_liters,sales_revenue_rub,0.9573433066719821,5
+Кемеровская область,fuel_sale_count,sales_revenue_rub,0.5811982515228743,5
+Кемеровская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Кемеровская область,fine_count,sales_revenue_rub,0.1045053721321522,5
+Кемеровская область,fined_clients,sales_revenue_rub,0.44365209304444475,5
+Кемеровская область,total_fine_amount_rub,sales_revenue_rub,0.18279525741943284,5
+Кемеровская область,average_fine_amount_rub,sales_revenue_rub,0.016908958414115594,5
+Кемеровская область,weighted_price_rub_per_liter,fine_count,0.6658579834418135,5
+Кемеровская область,sold_volume_liters,fine_count,-0.09157016425268075,5
+Кемеровская область,fuel_sale_count,fine_count,0.7879476282467865,5
+Кемеровская область,sales_revenue_rub,fine_count,0.1045053721321522,5
+Кемеровская область,fine_count,fine_count,1.0,5
+Кемеровская область,fined_clients,fine_count,0.8851309806999149,5
+Кемеровская область,total_fine_amount_rub,fine_count,0.9720037996698276,5
+Кемеровская область,average_fine_amount_rub,fine_count,-0.8853963885381805,5
+Кемеровская область,weighted_price_rub_per_liter,fined_clients,0.7386081358446384,5
+Кемеровская область,sold_volume_liters,fined_clients,0.21251142249941019,5
+Кемеровская область,fuel_sale_count,fined_clients,0.9068717590441169,5
+Кемеровская область,sales_revenue_rub,fined_clients,0.44365209304444475,5
+Кемеровская область,fine_count,fined_clients,0.8851309806999149,5
+Кемеровская область,fined_clients,fined_clients,1.0,5
+Кемеровская область,total_fine_amount_rub,fined_clients,0.9294602015568889,5
+Кемеровская область,average_fine_amount_rub,fined_clients,-0.6681922108975005,5
+Кемеровская область,weighted_price_rub_per_liter,total_fine_amount_rub,0.7981485127200889,5
+Кемеровская область,sold_volume_liters,total_fine_amount_rub,-0.05592518139663592,5
+Кемеровская область,fuel_sale_count,total_fine_amount_rub,0.7611261500635196,5
+Кемеровская область,sales_revenue_rub,total_fine_amount_rub,0.18279525741943284,5
+Кемеровская область,fine_count,total_fine_amount_rub,0.9720037996698276,5
+Кемеровская область,fined_clients,total_fine_amount_rub,0.9294602015568889,5
+Кемеровская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Кемеровская область,average_fine_amount_rub,total_fine_amount_rub,-0.7522621107662536,5
+Кемеровская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.2806193681949604,5
+Кемеровская область,sold_volume_liters,average_fine_amount_rub,0.0943761378782758,5
+Кемеровская область,fuel_sale_count,average_fine_amount_rub,-0.74301536752296,5
+Кемеровская область,sales_revenue_rub,average_fine_amount_rub,0.016908958414115594,5
+Кемеровская область,fine_count,average_fine_amount_rub,-0.8853963885381805,5
+Кемеровская область,fined_clients,average_fine_amount_rub,-0.6681922108975005,5
+Кемеровская область,total_fine_amount_rub,average_fine_amount_rub,-0.7522621107662536,5
+Кемеровская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Ленинградская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Ленинградская область,sold_volume_liters,weighted_price_rub_per_liter,-0.8623500841204789,5
+Ленинградская область,fuel_sale_count,weighted_price_rub_per_liter,-0.9007839397172039,5
+Ленинградская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.8464671607110412,5
+Ленинградская область,fine_count,weighted_price_rub_per_liter,-0.48072781360626005,5
+Ленинградская область,fined_clients,weighted_price_rub_per_liter,-0.10352452464342028,5
+Ленинградская область,total_fine_amount_rub,weighted_price_rub_per_liter,-0.7845935498254347,5
+Ленинградская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.9503895939810896,5
+Ленинградская область,weighted_price_rub_per_liter,sold_volume_liters,-0.8623500841204789,5
+Ленинградская область,sold_volume_liters,sold_volume_liters,1.0,5
+Ленинградская область,fuel_sale_count,sold_volume_liters,0.9766884272463024,5
+Ленинградская область,sales_revenue_rub,sold_volume_liters,0.9995228555161074,5
+Ленинградская область,fine_count,sold_volume_liters,0.41757183022124095,5
+Ленинградская область,fined_clients,sold_volume_liters,0.07430639445402827,5
+Ленинградская область,total_fine_amount_rub,sold_volume_liters,0.7157062260077741,5
+Ленинградская область,average_fine_amount_rub,sold_volume_liters,0.8693949387695757,5
+Ленинградская область,weighted_price_rub_per_liter,fuel_sale_count,-0.9007839397172039,5
+Ленинградская область,sold_volume_liters,fuel_sale_count,0.9766884272463024,5
+Ленинградская область,fuel_sale_count,fuel_sale_count,1.0,5
+Ленинградская область,sales_revenue_rub,fuel_sale_count,0.9727304461073145,5
+Ленинградская область,fine_count,fuel_sale_count,0.5804315507454237,5
+Ленинградская область,fined_clients,fuel_sale_count,0.2527198529612287,5
+Ленинградская область,total_fine_amount_rub,fuel_sale_count,0.8458586061511396,5
+Ленинградская область,average_fine_amount_rub,fuel_sale_count,0.8804913512613427,5
+Ленинградская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.8464671607110412,5
+Ленинградская область,sold_volume_liters,sales_revenue_rub,0.9995228555161074,5
+Ленинградская область,fuel_sale_count,sales_revenue_rub,0.9727304461073145,5
+Ленинградская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Ленинградская область,fine_count,sales_revenue_rub,0.41186969828997716,5
+Ленинградская область,fined_clients,sales_revenue_rub,0.07347783423254566,5
+Ленинградская область,total_fine_amount_rub,sales_revenue_rub,0.705998663017157,5
+Ленинградская область,average_fine_amount_rub,sales_revenue_rub,0.8555724235170555,5
+Ленинградская область,weighted_price_rub_per_liter,fine_count,-0.48072781360626005,5
+Ленинградская область,sold_volume_liters,fine_count,0.41757183022124095,5
+Ленинградская область,fuel_sale_count,fine_count,0.5804315507454237,5
+Ленинградская область,sales_revenue_rub,fine_count,0.41186969828997716,5
+Ленинградская область,fine_count,fine_count,1.0,5
+Ленинградская область,fined_clients,fine_count,0.9166003684245605,5
+Ленинградская область,total_fine_amount_rub,fine_count,0.9065797709143866,5
+Ленинградская область,average_fine_amount_rub,fine_count,0.2926380264392226,5
+Ленинградская область,weighted_price_rub_per_liter,fined_clients,-0.10352452464342028,5
+Ленинградская область,sold_volume_liters,fined_clients,0.07430639445402827,5
+Ленинградская область,fuel_sale_count,fined_clients,0.2527198529612287,5
+Ленинградская область,sales_revenue_rub,fined_clients,0.07347783423254566,5
+Ленинградская область,fine_count,fined_clients,0.9166003684245605,5
+Ленинградская область,fined_clients,fined_clients,1.0,5
+Ленинградская область,total_fine_amount_rub,fined_clients,0.6878995299757594,5
+Ленинградская область,average_fine_amount_rub,fined_clients,-0.06682822274320337,5
+Ленинградская область,weighted_price_rub_per_liter,total_fine_amount_rub,-0.7845935498254347,5
+Ленинградская область,sold_volume_liters,total_fine_amount_rub,0.7157062260077741,5
+Ленинградская область,fuel_sale_count,total_fine_amount_rub,0.8458586061511396,5
+Ленинградская область,sales_revenue_rub,total_fine_amount_rub,0.705998663017157,5
+Ленинградская область,fine_count,total_fine_amount_rub,0.9065797709143866,5
+Ленинградская область,fined_clients,total_fine_amount_rub,0.6878995299757594,5
+Ленинградская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Ленинградская область,average_fine_amount_rub,total_fine_amount_rub,0.6673223467657632,5
+Ленинградская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.9503895939810896,5
+Ленинградская область,sold_volume_liters,average_fine_amount_rub,0.8693949387695757,5
+Ленинградская область,fuel_sale_count,average_fine_amount_rub,0.8804913512613427,5
+Ленинградская область,sales_revenue_rub,average_fine_amount_rub,0.8555724235170555,5
+Ленинградская область,fine_count,average_fine_amount_rub,0.2926380264392226,5
+Ленинградская область,fined_clients,average_fine_amount_rub,-0.06682822274320337,5
+Ленинградская область,total_fine_amount_rub,average_fine_amount_rub,0.6673223467657632,5
+Ленинградская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Московская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Московская область,sold_volume_liters,weighted_price_rub_per_liter,-0.878743683309135,5
+Московская область,fuel_sale_count,weighted_price_rub_per_liter,-0.8986512972070614,5
+Московская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.8576719107514108,5
+Московская область,fine_count,weighted_price_rub_per_liter,0.05825967227797454,5
+Московская область,fined_clients,weighted_price_rub_per_liter,0.14906219052742414,5
+Московская область,total_fine_amount_rub,weighted_price_rub_per_liter,0.032507849790973056,5
+Московская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.4097760663962914,5
+Московская область,weighted_price_rub_per_liter,sold_volume_liters,-0.878743683309135,5
+Московская область,sold_volume_liters,sold_volume_liters,1.0,5
+Московская область,fuel_sale_count,sold_volume_liters,0.9558369962854584,5
+Московская область,sales_revenue_rub,sold_volume_liters,0.999032799898753,5
+Московская область,fine_count,sold_volume_liters,0.06785551625255977,5
+Московская область,fined_clients,sold_volume_liters,-0.03503795939509965,5
+Московская область,total_fine_amount_rub,sold_volume_liters,0.08149703622617051,5
+Московская область,average_fine_amount_rub,sold_volume_liters,0.28983492038234304,5
+Московская область,weighted_price_rub_per_liter,fuel_sale_count,-0.8986512972070614,5
+Московская область,sold_volume_liters,fuel_sale_count,0.9558369962854584,5
+Московская область,fuel_sale_count,fuel_sale_count,1.0,5
+Московская область,sales_revenue_rub,fuel_sale_count,0.9495726095891761,5
+Московская область,fine_count,fuel_sale_count,0.1757233090453034,5
+Московская область,fined_clients,fuel_sale_count,0.09706430196267929,5
+Московская область,total_fine_amount_rub,fuel_sale_count,0.1876809776708475,5
+Московская область,average_fine_amount_rub,fuel_sale_count,0.35200441417242817,5
+Московская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.8576719107514108,5
+Московская область,sold_volume_liters,sales_revenue_rub,0.999032799898753,5
+Московская область,fuel_sale_count,sales_revenue_rub,0.9495726095891761,5
+Московская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Московская область,fine_count,sales_revenue_rub,0.0875106046842213,5
+Московская область,fined_clients,sales_revenue_rub,-0.015892653851850666,5
+Московская область,total_fine_amount_rub,sales_revenue_rub,0.10013694174158835,5
+Московская область,average_fine_amount_rub,sales_revenue_rub,0.286195964966324,5
+Московская область,weighted_price_rub_per_liter,fine_count,0.05825967227797454,5
+Московская область,sold_volume_liters,fine_count,0.06785551625255977,5
+Московская область,fuel_sale_count,fine_count,0.1757233090453034,5
+Московская область,sales_revenue_rub,fine_count,0.0875106046842213,5
+Московская область,fine_count,fine_count,1.0,5
+Московская область,fined_clients,fine_count,0.9906202820081148,5
+Московская область,total_fine_amount_rub,fine_count,0.999178885255108,5
+Московская область,average_fine_amount_rub,fine_count,0.729247502346745,5
+Московская область,weighted_price_rub_per_liter,fined_clients,0.14906219052742414,5
+Московская область,sold_volume_liters,fined_clients,-0.03503795939509965,5
+Московская область,fuel_sale_count,fined_clients,0.09706430196267929,5
+Московская область,sales_revenue_rub,fined_clients,-0.015892653851850666,5
+Московская область,fine_count,fined_clients,0.9906202820081148,5
+Московская область,fined_clients,fined_clients,1.0,5
+Московская область,total_fine_amount_rub,fined_clients,0.9861559342973117,5
+Московская область,average_fine_amount_rub,fined_clients,0.6628250703682561,5
+Московская область,weighted_price_rub_per_liter,total_fine_amount_rub,0.032507849790973056,5
+Московская область,sold_volume_liters,total_fine_amount_rub,0.08149703622617051,5
+Московская область,fuel_sale_count,total_fine_amount_rub,0.1876809776708475,5
+Московская область,sales_revenue_rub,total_fine_amount_rub,0.10013694174158835,5
+Московская область,fine_count,total_fine_amount_rub,0.999178885255108,5
+Московская область,fined_clients,total_fine_amount_rub,0.9861559342973117,5
+Московская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Московская область,average_fine_amount_rub,total_fine_amount_rub,0.7563217396320202,5
+Московская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.4097760663962914,5
+Московская область,sold_volume_liters,average_fine_amount_rub,0.28983492038234304,5
+Московская область,fuel_sale_count,average_fine_amount_rub,0.35200441417242817,5
+Московская область,sales_revenue_rub,average_fine_amount_rub,0.286195964966324,5
+Московская область,fine_count,average_fine_amount_rub,0.729247502346745,5
+Московская область,fined_clients,average_fine_amount_rub,0.6628250703682561,5
+Московская область,total_fine_amount_rub,average_fine_amount_rub,0.7563217396320202,5
+Московская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Нижегородская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Нижегородская область,sold_volume_liters,weighted_price_rub_per_liter,-0.8904028249973565,5
+Нижегородская область,fuel_sale_count,weighted_price_rub_per_liter,-0.9019669930443359,5
+Нижегородская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.8687765281875451,5
+Нижегородская область,fine_count,weighted_price_rub_per_liter,0.6074906517271389,5
+Нижегородская область,fined_clients,weighted_price_rub_per_liter,0.5399175218663711,5
+Нижегородская область,total_fine_amount_rub,weighted_price_rub_per_liter,0.5747055711325489,5
+Нижегородская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.3716668528909995,5
+Нижегородская область,weighted_price_rub_per_liter,sold_volume_liters,-0.8904028249973565,5
+Нижегородская область,sold_volume_liters,sold_volume_liters,1.0,5
+Нижегородская область,fuel_sale_count,sold_volume_liters,0.9959038385807688,5
+Нижегородская область,sales_revenue_rub,sold_volume_liters,0.9989334555247108,5
+Нижегородская область,fine_count,sold_volume_liters,-0.5538821881378281,5
+Нижегородская область,fined_clients,sold_volume_liters,-0.5288704979081386,5
+Нижегородская область,total_fine_amount_rub,sold_volume_liters,-0.5420602876090536,5
+Нижегородская область,average_fine_amount_rub,sold_volume_liters,0.22280906419860638,5
+Нижегородская область,weighted_price_rub_per_liter,fuel_sale_count,-0.9019669930443359,5
+Нижегородская область,sold_volume_liters,fuel_sale_count,0.9959038385807688,5
+Нижегородская область,fuel_sale_count,fuel_sale_count,1.0,5
+Нижегородская область,sales_revenue_rub,fuel_sale_count,0.9930434736727116,5
+Нижегородская область,fine_count,fuel_sale_count,-0.5272125430913945,5
+Нижегородская область,fined_clients,fuel_sale_count,-0.511390549075357,5
+Нижегородская область,total_fine_amount_rub,fuel_sale_count,-0.5021748262439909,5
+Нижегородская область,average_fine_amount_rub,fuel_sale_count,0.29923651230752746,5
+Нижегородская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.8687765281875451,5
+Нижегородская область,sold_volume_liters,sales_revenue_rub,0.9989334555247108,5
+Нижегородская область,fuel_sale_count,sales_revenue_rub,0.9930434736727116,5
+Нижегородская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Нижегородская область,fine_count,sales_revenue_rub,-0.5379509292317343,5
+Нижегородская область,fined_clients,sales_revenue_rub,-0.5161781390473382,5
+Нижегородская область,total_fine_amount_rub,sales_revenue_rub,-0.5293559294568756,5
+Нижегородская область,average_fine_amount_rub,sales_revenue_rub,0.19921260507706728,5
+Нижегородская область,weighted_price_rub_per_liter,fine_count,0.6074906517271389,5
+Нижегородская область,sold_volume_liters,fine_count,-0.5538821881378281,5
+Нижегородская область,fuel_sale_count,fine_count,-0.5272125430913945,5
+Нижегородская область,sales_revenue_rub,fine_count,-0.5379509292317343,5
+Нижегородская область,fine_count,fine_count,1.0,5
+Нижегородская область,fined_clients,fine_count,0.9780068597439263,5
+Нижегородская область,total_fine_amount_rub,fine_count,0.986690876449389,5
+Нижегородская область,average_fine_amount_rub,fine_count,-0.23849465222845184,5
+Нижегородская область,weighted_price_rub_per_liter,fined_clients,0.5399175218663711,5
+Нижегородская область,sold_volume_liters,fined_clients,-0.5288704979081386,5
+Нижегородская область,fuel_sale_count,fined_clients,-0.511390549075357,5
+Нижегородская область,sales_revenue_rub,fined_clients,-0.5161781390473382,5
+Нижегородская область,fine_count,fined_clients,0.9780068597439263,5
+Нижегородская область,fined_clients,fined_clients,1.0,5
+Нижегородская область,total_fine_amount_rub,fined_clients,0.9418413292869456,5
+Нижегородская область,average_fine_amount_rub,fined_clients,-0.3585346821246233,5
+Нижегородская область,weighted_price_rub_per_liter,total_fine_amount_rub,0.5747055711325489,5
+Нижегородская область,sold_volume_liters,total_fine_amount_rub,-0.5420602876090536,5
+Нижегородская область,fuel_sale_count,total_fine_amount_rub,-0.5021748262439909,5
+Нижегородская область,sales_revenue_rub,total_fine_amount_rub,-0.5293559294568756,5
+Нижегородская область,fine_count,total_fine_amount_rub,0.986690876449389,5
+Нижегородская область,fined_clients,total_fine_amount_rub,0.9418413292869456,5
+Нижегородская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Нижегородская область,average_fine_amount_rub,total_fine_amount_rub,-0.07832093342928671,5
+Нижегородская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.3716668528909995,5
+Нижегородская область,sold_volume_liters,average_fine_amount_rub,0.22280906419860638,5
+Нижегородская область,fuel_sale_count,average_fine_amount_rub,0.29923651230752746,5
+Нижегородская область,sales_revenue_rub,average_fine_amount_rub,0.19921260507706728,5
+Нижегородская область,fine_count,average_fine_amount_rub,-0.23849465222845184,5
+Нижегородская область,fined_clients,average_fine_amount_rub,-0.3585346821246233,5
+Нижегородская область,total_fine_amount_rub,average_fine_amount_rub,-0.07832093342928671,5
+Нижегородская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Новосибирская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Новосибирская область,sold_volume_liters,weighted_price_rub_per_liter,-0.2795469292749571,5
+Новосибирская область,fuel_sale_count,weighted_price_rub_per_liter,0.31531217846541687,5
+Новосибирская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.15057070563286404,5
+Новосибирская область,fine_count,weighted_price_rub_per_liter,0.3612643104973069,5
+Новосибирская область,fined_clients,weighted_price_rub_per_liter,0.28246544718154887,5
+Новосибирская область,total_fine_amount_rub,weighted_price_rub_per_liter,0.32905936891008697,5
+Новосибирская область,average_fine_amount_rub,weighted_price_rub_per_liter,0.20137562350739438,5
+Новосибирская область,weighted_price_rub_per_liter,sold_volume_liters,-0.2795469292749571,5
+Новосибирская область,sold_volume_liters,sold_volume_liters,1.0,5
+Новосибирская область,fuel_sale_count,sold_volume_liters,0.7957631231110864,5
+Новосибирская область,sales_revenue_rub,sold_volume_liters,0.9912390924399783,5
+Новосибирская область,fine_count,sold_volume_liters,0.36927708707757095,5
+Новосибирская область,fined_clients,sold_volume_liters,0.2609871700770124,5
+Новосибирская область,total_fine_amount_rub,sold_volume_liters,0.3440254528253831,5
+Новосибирская область,average_fine_amount_rub,sold_volume_liters,0.17205441197997123,5
+Новосибирская область,weighted_price_rub_per_liter,fuel_sale_count,0.31531217846541687,5
+Новосибирская область,sold_volume_liters,fuel_sale_count,0.7957631231110864,5
+Новосибирская область,fuel_sale_count,fuel_sale_count,1.0,5
+Новосибирская область,sales_revenue_rub,fuel_sale_count,0.8632212558343207,5
+Новосибирская область,fine_count,fuel_sale_count,0.3848085272850169,5
+Новосибирская область,fined_clients,fuel_sale_count,0.21404423841569936,5
+Новосибирская область,total_fine_amount_rub,fuel_sale_count,0.3321228422055068,5
+Новосибирская область,average_fine_amount_rub,fuel_sale_count,0.0638897094621844,5
+Новосибирская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.15057070563286404,5
+Новосибирская область,sold_volume_liters,sales_revenue_rub,0.9912390924399783,5
+Новосибирская область,fuel_sale_count,sales_revenue_rub,0.8632212558343207,5
+Новосибирская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Новосибирская область,fine_count,sales_revenue_rub,0.426531519199383,5
+Новосибирская область,fined_clients,sales_revenue_rub,0.30358631047299806,5
+Новосибирская область,total_fine_amount_rub,sales_revenue_rub,0.39644053160087583,5
+Новосибирская область,average_fine_amount_rub,sales_revenue_rub,0.20266223947639755,5
+Новосибирская область,weighted_price_rub_per_liter,fine_count,0.3612643104973069,5
+Новосибирская область,sold_volume_liters,fine_count,0.36927708707757095,5
+Новосибирская область,fuel_sale_count,fine_count,0.3848085272850169,5
+Новосибирская область,sales_revenue_rub,fine_count,0.426531519199383,5
+Новосибирская область,fine_count,fine_count,1.0,5
+Новосибирская область,fined_clients,fine_count,0.9824866427205354,5
+Новосибирская область,total_fine_amount_rub,fine_count,0.9965982481600277,5
+Новосибирская область,average_fine_amount_rub,fine_count,0.9238580507443916,5
+Новосибирская область,weighted_price_rub_per_liter,fined_clients,0.28246544718154887,5
+Новосибирская область,sold_volume_liters,fined_clients,0.2609871700770124,5
+Новосибирская область,fuel_sale_count,fined_clients,0.21404423841569936,5
+Новосибирская область,sales_revenue_rub,fined_clients,0.30358631047299806,5
+Новосибирская область,fine_count,fined_clients,0.9824866427205354,5
+Новосибирская область,fined_clients,fined_clients,1.0,5
+Новосибирская область,total_fine_amount_rub,fined_clients,0.9878942304176154,5
+Новосибирская область,average_fine_amount_rub,fined_clients,0.9597485740109498,5
+Новосибирская область,weighted_price_rub_per_liter,total_fine_amount_rub,0.32905936891008697,5
+Новосибирская область,sold_volume_liters,total_fine_amount_rub,0.3440254528253831,5
+Новосибирская область,fuel_sale_count,total_fine_amount_rub,0.3321228422055068,5
+Новосибирская область,sales_revenue_rub,total_fine_amount_rub,0.39644053160087583,5
+Новосибирская область,fine_count,total_fine_amount_rub,0.9965982481600277,5
+Новосибирская область,fined_clients,total_fine_amount_rub,0.9878942304176154,5
+Новосибирская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Новосибирская область,average_fine_amount_rub,total_fine_amount_rub,0.951430246270248,5
+Новосибирская область,weighted_price_rub_per_liter,average_fine_amount_rub,0.20137562350739438,5
+Новосибирская область,sold_volume_liters,average_fine_amount_rub,0.17205441197997123,5
+Новосибирская область,fuel_sale_count,average_fine_amount_rub,0.0638897094621844,5
+Новосибирская область,sales_revenue_rub,average_fine_amount_rub,0.20266223947639755,5
+Новосибирская область,fine_count,average_fine_amount_rub,0.9238580507443916,5
+Новосибирская область,fined_clients,average_fine_amount_rub,0.9597485740109498,5
+Новосибирская область,total_fine_amount_rub,average_fine_amount_rub,0.951430246270248,5
+Новосибирская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Омская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Омская область,sold_volume_liters,weighted_price_rub_per_liter,-0.6531518130090351,5
+Омская область,fuel_sale_count,weighted_price_rub_per_liter,-0.4951029239081148,5
+Омская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.5185856138369389,5
+Омская область,fine_count,weighted_price_rub_per_liter,-0.4851513878215913,5
+Омская область,fined_clients,weighted_price_rub_per_liter,-0.5946342610233997,5
+Омская область,total_fine_amount_rub,weighted_price_rub_per_liter,-0.47365840309398644,5
+Омская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.5107400588511605,5
+Омская область,weighted_price_rub_per_liter,sold_volume_liters,-0.6531518130090351,5
+Омская область,sold_volume_liters,sold_volume_liters,1.0,5
+Омская область,fuel_sale_count,sold_volume_liters,0.883357041886398,5
+Омская область,sales_revenue_rub,sold_volume_liters,0.9861511279000102,5
+Омская область,fine_count,sold_volume_liters,0.7096181618342445,5
+Омская область,fined_clients,sold_volume_liters,0.6799246470674782,5
+Омская область,total_fine_amount_rub,sold_volume_liters,0.7365965483788207,5
+Омская область,average_fine_amount_rub,sold_volume_liters,0.7959658461652177,5
+Омская область,weighted_price_rub_per_liter,fuel_sale_count,-0.4951029239081148,5
+Омская область,sold_volume_liters,fuel_sale_count,0.883357041886398,5
+Омская область,fuel_sale_count,fuel_sale_count,1.0,5
+Омская область,sales_revenue_rub,fuel_sale_count,0.8883869664847259,5
+Омская область,fine_count,fuel_sale_count,0.9324165322790988,5
+Омская область,fined_clients,fuel_sale_count,0.8899329123714319,5
+Омская область,total_fine_amount_rub,fuel_sale_count,0.9494030270019072,5
+Омская область,average_fine_amount_rub,fuel_sale_count,0.9715552928749269,5
+Омская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.5185856138369389,5
+Омская область,sold_volume_liters,sales_revenue_rub,0.9861511279000102,5
+Омская область,fuel_sale_count,sales_revenue_rub,0.8883869664847259,5
+Омская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Омская область,fine_count,sales_revenue_rub,0.6950663799382277,5
+Омская область,fined_clients,sales_revenue_rub,0.6375128461403177,5
+Омская область,total_fine_amount_rub,sales_revenue_rub,0.7279932208581265,5
+Омская область,average_fine_amount_rub,sales_revenue_rub,0.7868816009524834,5
+Омская область,weighted_price_rub_per_liter,fine_count,-0.4851513878215913,5
+Омская область,sold_volume_liters,fine_count,0.7096181618342445,5
+Омская область,fuel_sale_count,fine_count,0.9324165322790988,5
+Омская область,sales_revenue_rub,fine_count,0.6950663799382277,5
+Омская область,fine_count,fine_count,1.0,5
+Омская область,fined_clients,fine_count,0.9850130310559319,5
+Омская область,total_fine_amount_rub,fine_count,0.9984651667040485,5
+Омская область,average_fine_amount_rub,fine_count,0.9904382762539483,5
+Омская область,weighted_price_rub_per_liter,fined_clients,-0.5946342610233997,5
+Омская область,sold_volume_liters,fined_clients,0.6799246470674782,5
+Омская область,fuel_sale_count,fined_clients,0.8899329123714319,5
+Омская область,sales_revenue_rub,fined_clients,0.6375128461403177,5
+Омская область,fine_count,fined_clients,0.9850130310559319,5
+Омская область,fined_clients,fined_clients,1.0,5
+Омская область,total_fine_amount_rub,fined_clients,0.9761904334188192,5
+Омская область,average_fine_amount_rub,fined_clients,0.9659551430067199,5
+Омская область,weighted_price_rub_per_liter,total_fine_amount_rub,-0.47365840309398644,5
+Омская область,sold_volume_liters,total_fine_amount_rub,0.7365965483788207,5
+Омская область,fuel_sale_count,total_fine_amount_rub,0.9494030270019072,5
+Омская область,sales_revenue_rub,total_fine_amount_rub,0.7279932208581265,5
+Омская область,fine_count,total_fine_amount_rub,0.9984651667040485,5
+Омская область,fined_clients,total_fine_amount_rub,0.9761904334188192,5
+Омская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Омская область,average_fine_amount_rub,total_fine_amount_rub,0.9956898221448723,5
+Омская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.5107400588511605,5
+Омская область,sold_volume_liters,average_fine_amount_rub,0.7959658461652177,5
+Омская область,fuel_sale_count,average_fine_amount_rub,0.9715552928749269,5
+Омская область,sales_revenue_rub,average_fine_amount_rub,0.7868816009524834,5
+Омская область,fine_count,average_fine_amount_rub,0.9904382762539483,5
+Омская область,fined_clients,average_fine_amount_rub,0.9659551430067199,5
+Омская область,total_fine_amount_rub,average_fine_amount_rub,0.9956898221448723,5
+Омская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Самарская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Самарская область,sold_volume_liters,weighted_price_rub_per_liter,-0.6452601045720187,5
+Самарская область,fuel_sale_count,weighted_price_rub_per_liter,-0.6631528553698631,5
+Самарская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.6037129550762919,5
+Самарская область,fine_count,weighted_price_rub_per_liter,-0.3083237838721604,5
+Самарская область,fined_clients,weighted_price_rub_per_liter,0.034379948342570986,5
+Самарская область,total_fine_amount_rub,weighted_price_rub_per_liter,-0.387084220036949,5
+Самарская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.3848783042791457,5
+Самарская область,weighted_price_rub_per_liter,sold_volume_liters,-0.6452601045720187,5
+Самарская область,sold_volume_liters,sold_volume_liters,1.0,5
+Самарская область,fuel_sale_count,sold_volume_liters,0.9991950354566582,5
+Самарская область,sales_revenue_rub,sold_volume_liters,0.9984975002768038,5
+Самарская область,fine_count,sold_volume_liters,-0.015691772565579448,5
+Самарская область,fined_clients,sold_volume_liters,-0.4453241855644061,5
+Самарская область,total_fine_amount_rub,sold_volume_liters,0.10147259135596988,5
+Самарская область,average_fine_amount_rub,sold_volume_liters,0.6896499551901051,5
+Самарская область,weighted_price_rub_per_liter,fuel_sale_count,-0.6631528553698631,5
+Самарская область,sold_volume_liters,fuel_sale_count,0.9991950354566582,5
+Самарская область,fuel_sale_count,fuel_sale_count,1.0,5
+Самарская область,sales_revenue_rub,fuel_sale_count,0.9964605395387041,5
+Самарская область,fine_count,fuel_sale_count,0.018072037284932327,5
+Самарская область,fined_clients,fuel_sale_count,-0.4128726293970591,5
+Самарская область,total_fine_amount_rub,fuel_sale_count,0.13314952329349097,5
+Самарская область,average_fine_amount_rub,fuel_sale_count,0.6641973923767108,5
+Самарская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.6037129550762919,5
+Самарская область,sold_volume_liters,sales_revenue_rub,0.9984975002768038,5
+Самарская область,fuel_sale_count,sales_revenue_rub,0.9964605395387041,5
+Самарская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Самарская область,fine_count,sales_revenue_rub,-0.02964418774060245,5
+Самарская область,fined_clients,sales_revenue_rub,-0.4563752143681326,5
+Самарская область,total_fine_amount_rub,sales_revenue_rub,0.08796396608707883,5
+Самарская область,average_fine_amount_rub,sales_revenue_rub,0.6925689983678637,5
+Самарская область,weighted_price_rub_per_liter,fine_count,-0.3083237838721604,5
+Самарская область,sold_volume_liters,fine_count,-0.015691772565579448,5
+Самарская область,fuel_sale_count,fine_count,0.018072037284932327,5
+Самарская область,sales_revenue_rub,fine_count,-0.02964418774060245,5
+Самарская область,fine_count,fine_count,1.0,5
+Самарская область,fined_clients,fine_count,0.8890182295822671,5
+Самарская область,total_fine_amount_rub,fine_count,0.9885640996738797,5
+Самарская область,average_fine_amount_rub,fine_count,-0.5412583094186936,5
+Самарская область,weighted_price_rub_per_liter,fined_clients,0.034379948342570986,5
+Самарская область,sold_volume_liters,fined_clients,-0.4453241855644061,5
+Самарская область,fuel_sale_count,fined_clients,-0.4128726293970591,5
+Самарская область,sales_revenue_rub,fined_clients,-0.4563752143681326,5
+Самарская область,fine_count,fined_clients,0.8890182295822671,5
+Самарская область,fined_clients,fined_clients,1.0,5
+Самарская область,total_fine_amount_rub,fined_clients,0.8139987578841826,5
+Самарская область,average_fine_amount_rub,fined_clients,-0.8505562541559138,5
+Самарская область,weighted_price_rub_per_liter,total_fine_amount_rub,-0.387084220036949,5
+Самарская область,sold_volume_liters,total_fine_amount_rub,0.10147259135596988,5
+Самарская область,fuel_sale_count,total_fine_amount_rub,0.13314952329349097,5
+Самарская область,sales_revenue_rub,total_fine_amount_rub,0.08796396608707883,5
+Самарская область,fine_count,total_fine_amount_rub,0.9885640996738797,5
+Самарская область,fined_clients,total_fine_amount_rub,0.8139987578841826,5
+Самарская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Самарская область,average_fine_amount_rub,total_fine_amount_rub,-0.4096960174598737,5
+Самарская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.3848783042791457,5
+Самарская область,sold_volume_liters,average_fine_amount_rub,0.6896499551901051,5
+Самарская область,fuel_sale_count,average_fine_amount_rub,0.6641973923767108,5
+Самарская область,sales_revenue_rub,average_fine_amount_rub,0.6925689983678637,5
+Самарская область,fine_count,average_fine_amount_rub,-0.5412583094186936,5
+Самарская область,fined_clients,average_fine_amount_rub,-0.8505562541559138,5
+Самарская область,total_fine_amount_rub,average_fine_amount_rub,-0.4096960174598737,5
+Самарская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Свердловская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Свердловская область,sold_volume_liters,weighted_price_rub_per_liter,-0.41845082132091643,5
+Свердловская область,fuel_sale_count,weighted_price_rub_per_liter,-0.2705471717732761,5
+Свердловская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.20587599468469486,5
+Свердловская область,fine_count,weighted_price_rub_per_liter,0.8331185185496972,5
+Свердловская область,fined_clients,weighted_price_rub_per_liter,0.8449963535064724,5
+Свердловская область,total_fine_amount_rub,weighted_price_rub_per_liter,0.7578179476805944,5
+Свердловская область,average_fine_amount_rub,weighted_price_rub_per_liter,0.48121786681858336,5
+Свердловская область,weighted_price_rub_per_liter,sold_volume_liters,-0.41845082132091643,5
+Свердловская область,sold_volume_liters,sold_volume_liters,1.0,5
+Свердловская область,fuel_sale_count,sold_volume_liters,0.6927294832474088,5
+Свердловская область,sales_revenue_rub,sold_volume_liters,0.9749211112367135,5
+Свердловская область,fine_count,sold_volume_liters,-0.2344129963711421,5
+Свердловская область,fined_clients,sold_volume_liters,-0.42180073075691515,5
+Свердловская область,total_fine_amount_rub,sold_volume_liters,-0.16188271963619294,5
+Свердловская область,average_fine_amount_rub,sold_volume_liters,0.045259718601115995,5
+Свердловская область,weighted_price_rub_per_liter,fuel_sale_count,-0.2705471717732761,5
+Свердловская область,sold_volume_liters,fuel_sale_count,0.6927294832474088,5
+Свердловская область,fuel_sale_count,fuel_sale_count,1.0,5
+Свердловская область,sales_revenue_rub,fuel_sale_count,0.6770002665844265,5
+Свердловская область,fine_count,fuel_sale_count,0.10629403107607316,5
+Свердловская область,fined_clients,fuel_sale_count,-0.03908034380797057,5
+Свердловская область,total_fine_amount_rub,fuel_sale_count,0.2701081089428321,5
+Свердловская область,average_fine_amount_rub,fuel_sale_count,0.619426820249521,5
+Свердловская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.20587599468469486,5
+Свердловская область,sold_volume_liters,sales_revenue_rub,0.9749211112367135,5
+Свердловская область,fuel_sale_count,sales_revenue_rub,0.6770002665844265,5
+Свердловская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Свердловская область,fine_count,sales_revenue_rub,-0.050930813115190265,5
+Свердловская область,fined_clients,sales_revenue_rub,-0.24984492724924853,5
+Свердловская область,total_fine_amount_rub,sales_revenue_rub,0.008176627659601803,5
+Свердловская область,average_fine_amount_rub,sales_revenue_rub,0.16266919911920505,5
+Свердловская область,weighted_price_rub_per_liter,fine_count,0.8331185185496972,5
+Свердловская область,sold_volume_liters,fine_count,-0.2344129963711421,5
+Свердловская область,fuel_sale_count,fine_count,0.10629403107607316,5
+Свердловская область,sales_revenue_rub,fine_count,-0.050930813115190265,5
+Свердловская область,fine_count,fine_count,1.0,5
+Свердловская область,fined_clients,fine_count,0.9795623069744183,5
+Свердловская область,total_fine_amount_rub,fine_count,0.9827786074902638,5
+Свердловская область,average_fine_amount_rub,fine_count,0.8106015018039233,5
+Свердловская область,weighted_price_rub_per_liter,fined_clients,0.8449963535064724,5
+Свердловская область,sold_volume_liters,fined_clients,-0.42180073075691515,5
+Свердловская область,fuel_sale_count,fined_clients,-0.03908034380797057,5
+Свердловская область,sales_revenue_rub,fined_clients,-0.24984492724924853,5
+Свердловская область,fine_count,fined_clients,0.9795623069744183,5
+Свердловская область,fined_clients,fined_clients,1.0,5
+Свердловская область,total_fine_amount_rub,fined_clients,0.9491281026509626,5
+Свердловская область,average_fine_amount_rub,fined_clients,0.7472197734422767,5
+Свердловская область,weighted_price_rub_per_liter,total_fine_amount_rub,0.7578179476805944,5
+Свердловская область,sold_volume_liters,total_fine_amount_rub,-0.16188271963619294,5
+Свердловская область,fuel_sale_count,total_fine_amount_rub,0.2701081089428321,5
+Свердловская область,sales_revenue_rub,total_fine_amount_rub,0.008176627659601803,5
+Свердловская область,fine_count,total_fine_amount_rub,0.9827786074902638,5
+Свердловская область,fined_clients,total_fine_amount_rub,0.9491281026509626,5
+Свердловская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Свердловская область,average_fine_amount_rub,total_fine_amount_rub,0.9047856050594218,5
+Свердловская область,weighted_price_rub_per_liter,average_fine_amount_rub,0.48121786681858336,5
+Свердловская область,sold_volume_liters,average_fine_amount_rub,0.045259718601115995,5
+Свердловская область,fuel_sale_count,average_fine_amount_rub,0.619426820249521,5
+Свердловская область,sales_revenue_rub,average_fine_amount_rub,0.16266919911920505,5
+Свердловская область,fine_count,average_fine_amount_rub,0.8106015018039233,5
+Свердловская область,fined_clients,average_fine_amount_rub,0.7472197734422767,5
+Свердловская область,total_fine_amount_rub,average_fine_amount_rub,0.9047856050594218,5
+Свердловская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Тюменская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Тюменская область,sold_volume_liters,weighted_price_rub_per_liter,-0.41923392024717926,5
+Тюменская область,fuel_sale_count,weighted_price_rub_per_liter,-0.41332842471995884,5
+Тюменская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.36461493570986137,5
+Тюменская область,fine_count,weighted_price_rub_per_liter,-0.833004684516161,5
+Тюменская область,fined_clients,weighted_price_rub_per_liter,-0.8664434788505011,5
+Тюменская область,total_fine_amount_rub,weighted_price_rub_per_liter,-0.6692413433871268,5
+Тюменская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.3280949947794745,5
+Тюменская область,weighted_price_rub_per_liter,sold_volume_liters,-0.41923392024717926,5
+Тюменская область,sold_volume_liters,sold_volume_liters,1.0,5
+Тюменская область,fuel_sale_count,sold_volume_liters,0.9837999296277513,5
+Тюменская область,sales_revenue_rub,sold_volume_liters,0.9982283492619425,5
+Тюменская область,fine_count,sold_volume_liters,0.6486787233541382,5
+Тюменская область,fined_clients,sold_volume_liters,0.6034188445843431,5
+Тюменская область,total_fine_amount_rub,sold_volume_liters,0.6383974073338271,5
+Тюменская область,average_fine_amount_rub,sold_volume_liters,0.4568461542343533,5
+Тюменская область,weighted_price_rub_per_liter,fuel_sale_count,-0.41332842471995884,5
+Тюменская область,sold_volume_liters,fuel_sale_count,0.9837999296277513,5
+Тюменская область,fuel_sale_count,fuel_sale_count,1.0,5
+Тюменская область,sales_revenue_rub,fuel_sale_count,0.9827374068459291,5
+Тюменская область,fine_count,fuel_sale_count,0.7183389103369481,5
+Тюменская область,fined_clients,fuel_sale_count,0.6702037352492735,5
+Тюменская область,total_fine_amount_rub,fuel_sale_count,0.7410070239187702,5
+Тюменская область,average_fine_amount_rub,fuel_sale_count,0.6050625310423459,5
+Тюменская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.36461493570986137,5
+Тюменская область,sold_volume_liters,sales_revenue_rub,0.9982283492619425,5
+Тюменская область,fuel_sale_count,sales_revenue_rub,0.9827374068459291,5
+Тюменская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Тюменская область,fine_count,sales_revenue_rub,0.6127068483789287,5
+Тюменская область,fined_clients,sales_revenue_rub,0.5640011238841988,5
+Тюменская область,total_fine_amount_rub,sales_revenue_rub,0.6136680292379825,5
+Тюменская область,average_fine_amount_rub,sales_revenue_rub,0.45084475610295416,5
+Тюменская область,weighted_price_rub_per_liter,fine_count,-0.833004684516161,5
+Тюменская область,sold_volume_liters,fine_count,0.6486787233541382,5
+Тюменская область,fuel_sale_count,fine_count,0.7183389103369481,5
+Тюменская область,sales_revenue_rub,fine_count,0.6127068483789287,5
+Тюменская область,fine_count,fine_count,1.0,5
+Тюменская область,fined_clients,fine_count,0.9970218916502666,5
+Тюменская область,total_fine_amount_rub,fine_count,0.9670078315967578,5
+Тюменская область,average_fine_amount_rub,fine_count,0.7765157067102159,5
+Тюменская область,weighted_price_rub_per_liter,fined_clients,-0.8664434788505011,5
+Тюменская область,sold_volume_liters,fined_clients,0.6034188445843431,5
+Тюменская область,fuel_sale_count,fined_clients,0.6702037352492735,5
+Тюменская область,sales_revenue_rub,fined_clients,0.5640011238841988,5
+Тюменская область,fine_count,fined_clients,0.9970218916502666,5
+Тюменская область,fined_clients,fined_clients,1.0,5
+Тюменская область,total_fine_amount_rub,fined_clients,0.9501564966107859,5
+Тюменская область,average_fine_amount_rub,fined_clients,0.745183108347692,5
+Тюменская область,weighted_price_rub_per_liter,total_fine_amount_rub,-0.6692413433871268,5
+Тюменская область,sold_volume_liters,total_fine_amount_rub,0.6383974073338271,5
+Тюменская область,fuel_sale_count,total_fine_amount_rub,0.7410070239187702,5
+Тюменская область,sales_revenue_rub,total_fine_amount_rub,0.6136680292379825,5
+Тюменская область,fine_count,total_fine_amount_rub,0.9670078315967578,5
+Тюменская область,fined_clients,total_fine_amount_rub,0.9501564966107859,5
+Тюменская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Тюменская область,average_fine_amount_rub,total_fine_amount_rub,0.9093504382543169,5
+Тюменская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.3280949947794745,5
+Тюменская область,sold_volume_liters,average_fine_amount_rub,0.4568461542343533,5
+Тюменская область,fuel_sale_count,average_fine_amount_rub,0.6050625310423459,5
+Тюменская область,sales_revenue_rub,average_fine_amount_rub,0.45084475610295416,5
+Тюменская область,fine_count,average_fine_amount_rub,0.7765157067102159,5
+Тюменская область,fined_clients,average_fine_amount_rub,0.745183108347692,5
+Тюменская область,total_fine_amount_rub,average_fine_amount_rub,0.9093504382543169,5
+Тюменская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Челябинская область,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Челябинская область,sold_volume_liters,weighted_price_rub_per_liter,-0.8084924977465718,5
+Челябинская область,fuel_sale_count,weighted_price_rub_per_liter,-0.851819518844502,5
+Челябинская область,sales_revenue_rub,weighted_price_rub_per_liter,-0.7632827760650451,5
+Челябинская область,fine_count,weighted_price_rub_per_liter,-0.8977577342774768,5
+Челябинская область,fined_clients,weighted_price_rub_per_liter,-0.8136777889665364,5
+Челябинская область,total_fine_amount_rub,weighted_price_rub_per_liter,-0.7794700612666137,5
+Челябинская область,average_fine_amount_rub,weighted_price_rub_per_liter,-0.34191956903176973,5
+Челябинская область,weighted_price_rub_per_liter,sold_volume_liters,-0.8084924977465718,5
+Челябинская область,sold_volume_liters,sold_volume_liters,1.0,5
+Челябинская область,fuel_sale_count,sold_volume_liters,0.9791429267027951,5
+Челябинская область,sales_revenue_rub,sold_volume_liters,0.9972485582101587,5
+Челябинская область,fine_count,sold_volume_liters,0.9006447401469143,5
+Челябинская область,fined_clients,sold_volume_liters,0.843516585398718,5
+Челябинская область,total_fine_amount_rub,sold_volume_liters,0.8079302126217086,5
+Челябинская область,average_fine_amount_rub,sold_volume_liters,0.34475027591465596,5
+Челябинская область,weighted_price_rub_per_liter,fuel_sale_count,-0.851819518844502,5
+Челябинская область,sold_volume_liters,fuel_sale_count,0.9791429267027951,5
+Челябинская область,fuel_sale_count,fuel_sale_count,1.0,5
+Челябинская область,sales_revenue_rub,fuel_sale_count,0.9709662843319592,5
+Челябинская область,fine_count,fuel_sale_count,0.9113167687624706,5
+Челябинская область,fined_clients,fuel_sale_count,0.827340132407386,5
+Челябинская область,total_fine_amount_rub,fuel_sale_count,0.8730982552595739,5
+Челябинская область,average_fine_amount_rub,fuel_sale_count,0.4982552880226436,5
+Челябинская область,weighted_price_rub_per_liter,sales_revenue_rub,-0.7632827760650451,5
+Челябинская область,sold_volume_liters,sales_revenue_rub,0.9972485582101587,5
+Челябинская область,fuel_sale_count,sales_revenue_rub,0.9709662843319592,5
+Челябинская область,sales_revenue_rub,sales_revenue_rub,1.0,5
+Челябинская область,fine_count,sales_revenue_rub,0.8789596522690464,5
+Челябинская область,fined_clients,sales_revenue_rub,0.826143094178343,5
+Челябинская область,total_fine_amount_rub,sales_revenue_rub,0.7963418472588614,5
+Челябинская область,average_fine_amount_rub,sales_revenue_rub,0.34775234899213675,5
+Челябинская область,weighted_price_rub_per_liter,fine_count,-0.8977577342774768,5
+Челябинская область,sold_volume_liters,fine_count,0.9006447401469143,5
+Челябинская область,fuel_sale_count,fine_count,0.9113167687624706,5
+Челябинская область,sales_revenue_rub,fine_count,0.8789596522690464,5
+Челябинская область,fine_count,fine_count,1.0,5
+Челябинская область,fined_clients,fine_count,0.9779589350023189,5
+Челябинская область,total_fine_amount_rub,fine_count,0.9290167574120705,5
+Челябинская область,average_fine_amount_rub,fine_count,0.464070560990907,5
+Челябинская область,weighted_price_rub_per_liter,fined_clients,-0.8136777889665364,5
+Челябинская область,sold_volume_liters,fined_clients,0.843516585398718,5
+Челябинская область,fuel_sale_count,fined_clients,0.827340132407386,5
+Челябинская область,sales_revenue_rub,fined_clients,0.826143094178343,5
+Челябинская область,fine_count,fined_clients,0.9779589350023189,5
+Челябинская область,fined_clients,fined_clients,1.0,5
+Челябинская область,total_fine_amount_rub,fined_clients,0.8904857902211732,5
+Челябинская область,average_fine_amount_rub,fined_clients,0.38885990373201884,5
+Челябинская область,weighted_price_rub_per_liter,total_fine_amount_rub,-0.7794700612666137,5
+Челябинская область,sold_volume_liters,total_fine_amount_rub,0.8079302126217086,5
+Челябинская область,fuel_sale_count,total_fine_amount_rub,0.8730982552595739,5
+Челябинская область,sales_revenue_rub,total_fine_amount_rub,0.7963418472588614,5
+Челябинская область,fine_count,total_fine_amount_rub,0.9290167574120705,5
+Челябинская область,fined_clients,total_fine_amount_rub,0.8904857902211732,5
+Челябинская область,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Челябинская область,average_fine_amount_rub,total_fine_amount_rub,0.7552893777040108,5
+Челябинская область,weighted_price_rub_per_liter,average_fine_amount_rub,-0.34191956903176973,5
+Челябинская область,sold_volume_liters,average_fine_amount_rub,0.34475027591465596,5
+Челябинская область,fuel_sale_count,average_fine_amount_rub,0.4982552880226436,5
+Челябинская область,sales_revenue_rub,average_fine_amount_rub,0.34775234899213675,5
+Челябинская область,fine_count,average_fine_amount_rub,0.464070560990907,5
+Челябинская область,fined_clients,average_fine_amount_rub,0.38885990373201884,5
+Челябинская область,total_fine_amount_rub,average_fine_amount_rub,0.7552893777040108,5
+Челябинская область,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Москва,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Москва,sold_volume_liters,weighted_price_rub_per_liter,-0.745886928198145,5
+Москва,fuel_sale_count,weighted_price_rub_per_liter,-0.7195245070065686,5
+Москва,sales_revenue_rub,weighted_price_rub_per_liter,-0.7158952594477651,5
+Москва,fine_count,weighted_price_rub_per_liter,-0.26927596899697925,5
+Москва,fined_clients,weighted_price_rub_per_liter,-0.4238504702468325,5
+Москва,total_fine_amount_rub,weighted_price_rub_per_liter,-0.27989138142319403,5
+Москва,average_fine_amount_rub,weighted_price_rub_per_liter,0.6627759341412366,5
+Москва,weighted_price_rub_per_liter,sold_volume_liters,-0.745886928198145,5
+Москва,sold_volume_liters,sold_volume_liters,1.0,5
+Москва,fuel_sale_count,sold_volume_liters,0.8977941056116219,5
+Москва,sales_revenue_rub,sold_volume_liters,0.9990200523278682,5
+Москва,fine_count,sold_volume_liters,0.05007282033145423,5
+Москва,fined_clients,sold_volume_liters,0.18833000534730757,5
+Москва,total_fine_amount_rub,sold_volume_liters,0.04689962962087615,5
+Москва,average_fine_amount_rub,sold_volume_liters,-0.42497249534629467,5
+Москва,weighted_price_rub_per_liter,fuel_sale_count,-0.7195245070065686,5
+Москва,sold_volume_liters,fuel_sale_count,0.8977941056116219,5
+Москва,fuel_sale_count,fuel_sale_count,1.0,5
+Москва,sales_revenue_rub,fuel_sale_count,0.8943614914171721,5
+Москва,fine_count,fuel_sale_count,0.13053963489807255,5
+Москва,fined_clients,fuel_sale_count,0.27497599652358073,5
+Москва,total_fine_amount_rub,fuel_sale_count,0.12728503042960318,5
+Москва,average_fine_amount_rub,fuel_sale_count,-0.5079821660271389,5
+Москва,weighted_price_rub_per_liter,sales_revenue_rub,-0.7158952594477651,5
+Москва,sold_volume_liters,sales_revenue_rub,0.9990200523278682,5
+Москва,fuel_sale_count,sales_revenue_rub,0.8943614914171721,5
+Москва,sales_revenue_rub,sales_revenue_rub,1.0,5
+Москва,fine_count,sales_revenue_rub,0.03969855928579908,5
+Москва,fined_clients,sales_revenue_rub,0.174189913426103,5
+Москва,total_fine_amount_rub,sales_revenue_rub,0.03563032547426039,5
+Москва,average_fine_amount_rub,sales_revenue_rub,-0.4057434484131798,5
+Москва,weighted_price_rub_per_liter,fine_count,-0.26927596899697925,5
+Москва,sold_volume_liters,fine_count,0.05007282033145423,5
+Москва,fuel_sale_count,fine_count,0.13053963489807255,5
+Москва,sales_revenue_rub,fine_count,0.03969855928579908,5
+Москва,fine_count,fine_count,1.0,5
+Москва,fined_clients,fine_count,0.9852512252368937,5
+Москва,total_fine_amount_rub,fine_count,0.999772894458435,5
+Москва,average_fine_amount_rub,fine_count,-0.8904599208689902,5
+Москва,weighted_price_rub_per_liter,fined_clients,-0.4238504702468325,5
+Москва,sold_volume_liters,fined_clients,0.18833000534730757,5
+Москва,fuel_sale_count,fined_clients,0.27497599652358073,5
+Москва,sales_revenue_rub,fined_clients,0.174189913426103,5
+Москва,fine_count,fined_clients,0.9852512252368937,5
+Москва,fined_clients,fined_clients,1.0,5
+Москва,total_fine_amount_rub,fined_clients,0.9863355585739872,5
+Москва,average_fine_amount_rub,fined_clients,-0.9551076482676232,5
+Москва,weighted_price_rub_per_liter,total_fine_amount_rub,-0.27989138142319403,5
+Москва,sold_volume_liters,total_fine_amount_rub,0.04689962962087615,5
+Москва,fuel_sale_count,total_fine_amount_rub,0.12728503042960318,5
+Москва,sales_revenue_rub,total_fine_amount_rub,0.03563032547426039,5
+Москва,fine_count,total_fine_amount_rub,0.999772894458435,5
+Москва,fined_clients,total_fine_amount_rub,0.9863355585739872,5
+Москва,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Москва,average_fine_amount_rub,total_fine_amount_rub,-0.893534732895396,5
+Москва,weighted_price_rub_per_liter,average_fine_amount_rub,0.6627759341412366,5
+Москва,sold_volume_liters,average_fine_amount_rub,-0.42497249534629467,5
+Москва,fuel_sale_count,average_fine_amount_rub,-0.5079821660271389,5
+Москва,sales_revenue_rub,average_fine_amount_rub,-0.4057434484131798,5
+Москва,fine_count,average_fine_amount_rub,-0.8904599208689902,5
+Москва,fined_clients,average_fine_amount_rub,-0.9551076482676232,5
+Москва,total_fine_amount_rub,average_fine_amount_rub,-0.893534732895396,5
+Москва,average_fine_amount_rub,average_fine_amount_rub,1.0,5
+Санкт-Петербург,weighted_price_rub_per_liter,weighted_price_rub_per_liter,1.0,5
+Санкт-Петербург,sold_volume_liters,weighted_price_rub_per_liter,-0.44764892535765166,5
+Санкт-Петербург,fuel_sale_count,weighted_price_rub_per_liter,-0.3713056500353846,5
+Санкт-Петербург,sales_revenue_rub,weighted_price_rub_per_liter,-0.37880475765303456,5
+Санкт-Петербург,fine_count,weighted_price_rub_per_liter,0.04274452766251375,5
+Санкт-Петербург,fined_clients,weighted_price_rub_per_liter,0.3366827662374103,5
+Санкт-Петербург,total_fine_amount_rub,weighted_price_rub_per_liter,-0.03010250427059801,5
+Санкт-Петербург,average_fine_amount_rub,weighted_price_rub_per_liter,-0.4168185022997449,5
+Санкт-Петербург,weighted_price_rub_per_liter,sold_volume_liters,-0.44764892535765166,5
+Санкт-Петербург,sold_volume_liters,sold_volume_liters,1.0,5
+Санкт-Петербург,fuel_sale_count,sold_volume_liters,0.9954644855410811,5
+Санкт-Петербург,sales_revenue_rub,sold_volume_liters,0.9971350832976222,5
+Санкт-Петербург,fine_count,sold_volume_liters,0.04396709350111837,5
+Санкт-Петербург,fined_clients,sold_volume_liters,-0.22527898721875345,5
+Санкт-Петербург,total_fine_amount_rub,sold_volume_liters,0.13129880342053293,5
+Санкт-Петербург,average_fine_amount_rub,sold_volume_liters,0.5085853835367719,5
+Санкт-Петербург,weighted_price_rub_per_liter,fuel_sale_count,-0.3713056500353846,5
+Санкт-Петербург,sold_volume_liters,fuel_sale_count,0.9954644855410811,5
+Санкт-Петербург,fuel_sale_count,fuel_sale_count,1.0,5
+Санкт-Петербург,sales_revenue_rub,fuel_sale_count,0.9987468443109574,5
+Санкт-Петербург,fine_count,fuel_sale_count,0.017511043938335268,5
+Санкт-Петербург,fined_clients,fuel_sale_count,-0.23423329449721708,5
+Санкт-Петербург,total_fine_amount_rub,fuel_sale_count,0.1009465225796696,5
+Санкт-Петербург,average_fine_amount_rub,fuel_sale_count,0.4579317325147265,5
+Санкт-Петербург,weighted_price_rub_per_liter,sales_revenue_rub,-0.37880475765303456,5
+Санкт-Петербург,sold_volume_liters,sales_revenue_rub,0.9971350832976222,5
+Санкт-Петербург,fuel_sale_count,sales_revenue_rub,0.9987468443109574,5
+Санкт-Петербург,sales_revenue_rub,sales_revenue_rub,1.0,5
+Санкт-Петербург,fine_count,sales_revenue_rub,0.05259229855995478,5
+Санкт-Петербург,fined_clients,sales_revenue_rub,-0.20138852028363588,5
+Санкт-Петербург,total_fine_amount_rub,sales_revenue_rub,0.1368174809649457,5
+Санкт-Петербург,average_fine_amount_rub,sales_revenue_rub,0.4941477618427395,5
+Санкт-Петербург,weighted_price_rub_per_liter,fine_count,0.04274452766251375,5
+Санкт-Петербург,sold_volume_liters,fine_count,0.04396709350111837,5
+Санкт-Петербург,fuel_sale_count,fine_count,0.017511043938335268,5
+Санкт-Петербург,sales_revenue_rub,fine_count,0.05259229855995478,5
+Санкт-Петербург,fine_count,fine_count,1.0,5
+Санкт-Петербург,fined_clients,fine_count,0.9417242152591682,5
+Санкт-Петербург,total_fine_amount_rub,fine_count,0.9953188029993293,5
+Санкт-Петербург,average_fine_amount_rub,fine_count,0.829672323857629,5
+Санкт-Петербург,weighted_price_rub_per_liter,fined_clients,0.3366827662374103,5
+Санкт-Петербург,sold_volume_liters,fined_clients,-0.22527898721875345,5
+Санкт-Петербург,fuel_sale_count,fined_clients,-0.23423329449721708,5
+Санкт-Петербург,sales_revenue_rub,fined_clients,-0.20138852028363588,5
+Санкт-Петербург,fine_count,fined_clients,0.9417242152591682,5
+Санкт-Петербург,fined_clients,fined_clients,1.0,5
+Санкт-Петербург,total_fine_amount_rub,fined_clients,0.9074482123094879,5
+Санкт-Петербург,average_fine_amount_rub,fined_clients,0.6088335174166605,5
+Санкт-Петербург,weighted_price_rub_per_liter,total_fine_amount_rub,-0.03010250427059801,5
+Санкт-Петербург,sold_volume_liters,total_fine_amount_rub,0.13129880342053293,5
+Санкт-Петербург,fuel_sale_count,total_fine_amount_rub,0.1009465225796696,5
+Санкт-Петербург,sales_revenue_rub,total_fine_amount_rub,0.1368174809649457,5
+Санкт-Петербург,fine_count,total_fine_amount_rub,0.9953188029993293,5
+Санкт-Петербург,fined_clients,total_fine_amount_rub,0.9074482123094879,5
+Санкт-Петербург,total_fine_amount_rub,total_fine_amount_rub,1.0,5
+Санкт-Петербург,average_fine_amount_rub,total_fine_amount_rub,0.8793116497234195,5
+Санкт-Петербург,weighted_price_rub_per_liter,average_fine_amount_rub,-0.4168185022997449,5
+Санкт-Петербург,sold_volume_liters,average_fine_amount_rub,0.5085853835367719,5
+Санкт-Петербург,fuel_sale_count,average_fine_amount_rub,0.4579317325147265,5
+Санкт-Петербург,sales_revenue_rub,average_fine_amount_rub,0.4941477618427395,5
+Санкт-Петербург,fine_count,average_fine_amount_rub,0.829672323857629,5
+Санкт-Петербург,fined_clients,average_fine_amount_rub,0.6088335174166605,5
+Санкт-Петербург,total_fine_amount_rub,average_fine_amount_rub,0.8793116497234195,5
+Санкт-Петербург,average_fine_amount_rub,average_fine_amount_rub,1.0,5

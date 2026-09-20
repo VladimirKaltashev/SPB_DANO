@@ -1,0 +1,14 @@
+[
+  {
+    "name": "economy",
+    "liters_per_100km": 6.5
+  },
+  {
+    "name": "base",
+    "liters_per_100km": 8.0
+  },
+  {
+    "name": "high",
+    "liters_per_100km": 10.0
+  }
+]

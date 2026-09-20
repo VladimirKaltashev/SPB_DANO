@@ -1,0 +1,14 @@
+{
+  "raw_dir": "/Users/vlad/DANO/SPB/data/raw",
+  "output_dir": "/Users/vlad/DANO/SPB/data/processed",
+  "period": [
+    "2026-04-01",
+    "2026-08-31"
+  ],
+  "clients": 25675,
+  "fines": 72959,
+  "fuel_rows": 379699,
+  "panel_rows": 590525,
+  "reference_panel": "/Users/vlad/DANO/SPB/data/reference/client_week_panel_v2.csv",
+  "reference_matches_on_27_base_columns": true
+}

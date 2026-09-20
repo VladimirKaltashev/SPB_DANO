@@ -1,0 +1,146 @@
+{
+  "status": "PASS",
+  "charts": [
+    {
+      "stem": "01_fuel_before_after",
+      "png_bytes": 46844,
+      "svg_bytes": 3473,
+      "width": 1692,
+      "height": 1344,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "02_fines_tost",
+      "png_bytes": 19528,
+      "svg_bytes": 4695,
+      "width": 2360,
+      "height": 680,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "03_fines_actual_vs_proportional",
+      "png_bytes": 57171,
+      "svg_bytes": 3397,
+      "width": 1976,
+      "height": 1464,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "04_main_result",
+      "png_bytes": 81451,
+      "svg_bytes": 7173,
+      "width": 3211,
+      "height": 1237,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "05_robustness",
+      "png_bytes": 169718,
+      "svg_bytes": 14424,
+      "width": 2808,
+      "height": 2184,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "05a_robustness_specifications",
+      "png_bytes": 95796,
+      "svg_bytes": 8434,
+      "width": 2531,
+      "height": 1384,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "05b_robustness_regions",
+      "png_bytes": 81371,
+      "svg_bytes": 7792,
+      "width": 2421,
+      "height": 1384,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "05c_tost_sensitivity",
+      "png_bytes": 48408,
+      "svg_bytes": 6758,
+      "width": 2360,
+      "height": 1048,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "06_weekly_dynamics",
+      "png_bytes": 225964,
+      "svg_bytes": 19139,
+      "width": 2871,
+      "height": 1776,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "07_regression_price_fines",
+      "png_bytes": 505707,
+      "svg_bytes": 85989,
+      "width": 2232,
+      "height": 1765,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "07_regression_price_fines_full_range",
+      "png_bytes": 413845,
+      "svg_bytes": 73317,
+      "width": 2232,
+      "height": 1776,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "07_regression_price_fuel",
+      "png_bytes": 872917,
+      "svg_bytes": 146183,
+      "width": 2232,
+      "height": 1704,
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "stem": "07_regression_price_fuel_full_range",
+      "png_bytes": 338240,
+      "svg_bytes": 60566,
+      "width": 2232,
+      "height": 1704,
+      "alpha_min": 0,
+      "alpha_max": 255
+    }
+  ],
+  "robustness_content": [
+    {
+      "stem": "05a_robustness_specifications",
+      "labels": [
+        "Основная модель · 1 июня",
+        "Начало post · 18 мая",
+        "Начало post · 15 июня",
+        "Без верхнего 1% по топливу",
+        "Без верхнего 1% по штрафам"
+      ],
+      "forbidden_text_absent": true
+    },
+    {
+      "stem": "05b_robustness_regions",
+      "labels": [
+        "Москва",
+        "Московская область",
+        "Санкт-Петербург",
+        "Свердловская область",
+        "Татарстан"
+      ],
+      "forbidden_text_absent": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "n_observations": 539175,
+  "n_clients": 25675,
+  "n_weeks": 21,
+  "share_zero_fines": 0.9098956739463069,
+  "share_zero_fuel": 0.5818389205730978,
+  "mean_weekly_fines": 0.1305568692910465,
+  "mean_weekly_fuel_liters": 22.225992358696157,
+  "include_controls": true,
+  "fits": [
+    {
+      "cluster": "client",
+      "n_clusters": 25675,
+      "r_squared": 0.0781219677408419,
+      "condition_number": 1685.1098591454936
+    },
+    {
+      "cluster": "region",
+      "n_clusters": 16,
+      "r_squared": 0.0781219677408419,
+      "condition_number": 1685.1098591454936
+    }
+  ]
+}

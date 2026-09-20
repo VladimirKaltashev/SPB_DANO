@@ -1,0 +1,5 @@
+﻿metric,pre,post,absolute_change,relative_change,ci_low,ci_high,p_value,test,n,unit,notes
+ObservedPrice,69.26656466734451,71.18907295821725,1.922508290872746,0.0277552135017185,1.8267227080937116,2.01829387365178,0.0,"paired one-sided t-test, increase",18617,RUB/liter,clients with positive fuel purchases in both periods
+FuelRate,114.4482766833669,83.97033079418983,-30.47794588917709,-0.2663032312273035,-31.870313086967247,-29.08557869138693,0.0,"paired one-sided t-test, decrease",23467,liters/client/30d,fixed cohort; complete weeks
+FineRate,0.5647976794160797,0.5774814949400537,0.012683815523974101,0.02245727273009912,0.001327726057555918,0.024039904990392283,3.268115740614328e-08,TOST equivalence; 90% CI,23467,fines/client/30d,equivalence margin ±0.05
+FineRate_actual_vs_proportional,0.414390232397895,0.5774814949400537,0.1630912625421588,0.393569273094158,0.15114935862587833,0.17503316645843928,8.084677456954198e-156,"paired one-sided t-test, actual above proportional scenario",23467,fines/client/30d,"pre column is proportional scenario, not observed pre"

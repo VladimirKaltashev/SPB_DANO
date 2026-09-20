@@ -1,0 +1,4 @@
+scenario_left,scenario_right,clients_compared,adjusted_rand_index,same_driver_type_share
+economy,base,22294,0.9702558472596641,0.9945725307257558
+economy,high,22294,0.9202933329773609,0.9850183905983673
+base,high,22294,0.9484290558090542,0.9902664394007357

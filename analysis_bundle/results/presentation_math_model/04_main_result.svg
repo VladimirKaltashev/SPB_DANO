@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="722.52pt" height="278.450344pt" viewBox="0 0 722.52 278.450344" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-20T15:11:16.836808</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 278.450344 
+L 722.52 278.450344 
+L 722.52 0 
+L 0 0 
+L 0 278.450344 
+z
+" style="fill: none; opacity: 0"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 2.16 228.6 
+L 269.812174 228.6 
+L 269.812174 2.16 
+L 2.16 2.16 
+L 2.16 228.6 
+z
+" style="fill: none; opacity: 0"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 14.326008 228.6 
+L 100.665419 228.6 
+L 100.665419 50.300787 
+L 14.326008 50.300787 
+z
+" clip-path="url(#pc96c20c4d5)" style="fill: #ab599b"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 171.306755 228.6 
+L 257.646166 228.6 
+L 257.646166 97.782444 
+L 171.306755 97.782444 
+z
+" clip-path="url(#pc96c20c4d5)" style="fill: #461b6f"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="57.495713" y="241.217187" transform="rotate(-0 57.495713 241.217187)">До</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="214.476461" y="241.217187" transform="rotate(-0 214.476461 241.217187)">После</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1e0853" x="7.513043" y="16.565753" transform="rotate(-0 7.513043 16.565753)">ТОПЛИВО</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 21px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #461b6f" x="264.45913" y="22.643878" transform="rotate(-0 264.45913 22.643878)">-26,6%</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="57.495713" y="45.627081" transform="rotate(-0 57.495713 45.627081)">114,45</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="214.476461" y="93.108737" transform="rotate(-0 214.476461 93.108737)">83,97</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="135.986087" y="273.888" transform="rotate(-0 135.986087 273.888)">л на клиента за 30 дней</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 363.490435 228.6 
+L 720.36 228.6 
+L 720.36 2.16 
+L 363.490435 2.16 
+L 363.490435 228.6 
+z
+" style="fill: none; opacity: 0"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 379.711779 228.6 
+L 452.644953 228.6 
+L 452.644953 60.822373 
+L 379.711779 60.822373 
+z
+" clip-path="url(#pe1722d53f6)" style="fill: #ab599b"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 505.45863 228.6 
+L 578.391804 228.6 
+L 578.391804 57.054545 
+L 505.45863 57.054545 
+z
+" clip-path="url(#pe1722d53f6)" style="fill: #461b6f"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 631.205482 228.6 
+L 704.138656 228.6 
+L 704.138656 105.502097 
+L 631.205482 105.502097 
+z
+" clip-path="url(#pe1722d53f6)" style="fill: #9a4a88"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="416.178366" y="239.697656" transform="rotate(-0 416.178366 239.697656)">До</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_9">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="541.925217" y="239.697656" transform="rotate(-0 541.925217 239.697656)">После</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #1e0853" transform="translate(615.52285 240.698633)">Пропорциональный</text>
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #1e0853" transform="translate(642.437694 252.700586)">сценарий</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4"/>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1e0853" x="370.627826" y="16.565753" transform="rotate(-0 370.627826 16.565753)">ШТРАФЫ</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; fill: #461b6f" transform="translate(609.937609 18.726886)">практически</text>
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; fill: #461b6f" transform="translate(626.335109 35.987902)">стабильны</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="416.178366" y="55.475331" transform="rotate(-0 416.178366 55.475331)">0,565</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="541.925217" y="51.707503" transform="rotate(-0 541.925217 51.707503)">0,577</text>
+   </g>
+   <g id="text_15">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="667.672069" y="100.155055" transform="rotate(-0 667.672069 100.155055)">0,414</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1e0853" x="541.925217" y="273.888" transform="rotate(-0 541.925217 273.888)">штрафа на клиента за 30 дней</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc96c20c4d5">
+   <rect x="2.16" y="2.16" width="267.652174" height="226.44"/>
+  </clipPath>
+  <clipPath id="pe1722d53f6">
+   <rect x="363.490435" y="2.16" width="356.869565" height="226.44"/>
+  </clipPath>
+ </defs>
+</svg>
