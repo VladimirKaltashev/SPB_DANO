@@ -235,60 +235,30 @@ def chart_tost(stats: dict[str, object], output: Path) -> None:
     low = stats["fine_change_90"]["ci_low"]
     high = stats["fine_change_90"]["ci_high"]
     margin = stats["margin"]
-    tost_p = float(stats["tests"].loc["fine_rate_equivalence", "p_value"])
-    fig, axis = plt.subplots(figsize=(7.0, 3.35))
-    axis.axvspan(-margin, margin, color=LIGHT_PINK, alpha=0.95, zorder=0)
-    axis.axvline(0, color=MAUVE, linewidth=1.1, linestyle="--", zorder=1)
-    axis.axvline(-margin, color=ROSE, linewidth=1.0, zorder=1)
-    axis.axvline(margin, color=ROSE, linewidth=1.0, zorder=1)
-    axis.hlines(0, low, high, color=DARK_TEXT, linewidth=4, zorder=3)
-    axis.plot([low, high], [0, 0], "|", color=DARK_TEXT, markersize=15, mew=2, zorder=4)
-    axis.scatter([estimate], [0], s=120, color=DEEP_PURPLE, zorder=5)
+    fig, axis = plt.subplots(figsize=(7.4, 2.15), constrained_layout=True)
+    axis.axvspan(-margin, margin, color=LIGHT_PINK, alpha=0.72, zorder=0)
+    axis.axvline(0, color=DARK_TEXT, linewidth=1.5, linestyle="--", zorder=1)
+    axis.axvline(-margin, color=DARK_TEXT, linewidth=1.2, zorder=1)
+    axis.axvline(margin, color=DARK_TEXT, linewidth=1.2, zorder=1)
+    axis.hlines(0, low, high, color=DARK_TEXT, linewidth=3.5, zorder=3)
+    axis.plot([low, high], [0, 0], "|", color=DARK_TEXT, markersize=19, mew=2.5, zorder=4)
+    axis.scatter([estimate], [0], s=230, facecolor=LIGHT_PINK, edgecolor=DARK_TEXT, linewidth=1.8, zorder=5)
     axis.set_xlim(-0.065, 0.065)
-    axis.set_ylim(-0.72, 0.72)
+    axis.set_ylim(-0.34, 0.34)
     axis.set_yticks([])
-    axis.set_xticks([-margin, 0, margin], ["−0,05", "0", "+0,05"], fontsize=12)
-    axis.set_xlabel("изменение числа штрафов на клиента за 30 дней", fontsize=11)
+    axis.set_xticks([-margin, 0, margin], ["−0,05", "0", "+0,05"], fontsize=16)
     clean_axis(axis)
-    axis.text(
-        estimate,
-        0.25,
-        "Δ = " + fmt(estimate, 3, signed=True),
-        ha="center",
-        fontsize=19,
-        fontweight="bold",
-        color=DEEP_PURPLE,
-    )
-    axis.text(0, 0.58, "практически малое изменение", ha="center", fontsize=12)
-    axis.text(
-        0,
-        -0.38,
-        "90% ДИ полностью внутри ±0,05",
-        ha="center",
-        fontsize=12,
-        color=DARK_TEXT,
-    )
-    axis.text(
-        0,
-        -0.57,
-        f"±0,05 = 1 штраф на 20 клиентов за 30 дней  ·  TOST, {p_text(tost_p)}",
-        ha="center",
-        fontsize=9.5,
-        color=MAUVE,
-    )
-    fig.tight_layout()
     save_figure(fig, output, "02_fines_tost")
 
 
 def chart_actual_vs_proportional(stats: dict[str, object], output: Path) -> None:
     values = [stats["proportional"], stats["fine_post"]]
-    gap = stats["gap"]
-    fig, axis = plt.subplots(figsize=(5.8, 4.5))
-    bars = axis.bar([0, 1], values, width=0.56, color=[MAUVE, DEEP_PURPLE])
-    top = max(values) * 1.30
+    fig, axis = plt.subplots(figsize=(6.2, 4.6), constrained_layout=True)
+    bars = axis.bar([0, 1], values, width=0.72, color=[ROSE, DEEP_PURPLE])
+    top = max(values) * 1.20
     axis.set_ylim(0, top)
-    axis.set_xticks([0, 1], ["Пропорциональный\nсценарий", "Фактически"], fontsize=12)
-    axis.set_ylabel("штрафа на клиента за 30 дней", fontsize=11)
+    axis.set_xticks([0, 1], ["Пропорциональный\nсценарий", "Фактически"], fontsize=16)
+    axis.set_ylabel("штрафа на клиента за 30 дней", fontsize=15)
     axis.set_yticks([])
     clean_axis(axis)
     for bar, value in zip(bars, values, strict=True):
@@ -297,29 +267,9 @@ def chart_actual_vs_proportional(stats: dict[str, object], output: Path) -> None
             value + top * 0.025,
             fmt(value, 3),
             ha="center",
-            fontsize=20,
+            fontsize=26,
             fontweight="bold",
         )
-    bracket_y = max(values) + top * 0.11
-    axis.plot([0, 0, 1, 1], [bracket_y - 0.012, bracket_y, bracket_y, bracket_y - 0.012], color=DARK_TEXT, lw=1.4)
-    axis.text(
-        0.5,
-        bracket_y + top * 0.02,
-        "+" + fmt(gap["estimate"], 3),
-        ha="center",
-        fontsize=21,
-        fontweight="bold",
-        color=DEEP_PURPLE,
-    )
-    axis.text(
-        0.5,
-        bracket_y - top * 0.10,
-        "95% ДИ разницы " + f"[{fmt(gap['ci_low'], 3)}; {fmt(gap['ci_high'], 3)}]",
-        ha="center",
-        fontsize=9.5,
-        color=MAUVE,
-    )
-    fig.tight_layout()
     save_figure(fig, output, "03_fines_actual_vs_proportional")
 
 
@@ -513,62 +463,38 @@ def calculate_robustness(
 
 def chart_robustness(robustness: pd.DataFrame, output: Path, margin: float) -> None:
     display = robustness.iloc[::-1].reset_index(drop=True)
-    fig_height = max(5.7, 0.48 * len(display) + 1.3)
-    fig, axis = plt.subplots(figsize=(8.2, fig_height))
-    axis.axvspan(-margin, margin, color=LIGHT_PINK, alpha=0.75, zorder=0)
-    axis.axvline(0, color=DARK_TEXT, linewidth=1.0, linestyle="--", zorder=1)
+    fig_height = max(6.2, 0.55 * len(display) + 0.8)
+    fig, axis = plt.subplots(figsize=(8.8, fig_height), constrained_layout=True)
+    axis.axvspan(-margin, margin, color=LIGHT_PINK, alpha=0.68, zorder=0)
+    axis.axvline(0, color=DARK_TEXT, linewidth=1.6, linestyle="--", zorder=1)
     for index, row in display.iterrows():
-        color = DEEP_PURPLE if row["kind"] == "main" else ROSE if row["kind"] == "seasonal_did" else MAUVE
-        axis.hlines(index, row.ci_low, row.ci_high, color=color, linewidth=2.2, zorder=2)
-        axis.scatter(row.estimate, index, s=60 if row["kind"] == "main" else 38, color=color, zorder=3)
-    axis.set_yticks(range(len(display)), display["label"], fontsize=10.5)
-    axis.set_xlabel("изменение частоты штрафов на клиента за 30 дней", fontsize=11)
-    low = min(float(display.ci_low.min()), -margin) - 0.025
-    high = max(float(display.ci_high.max()), margin) + 0.025
+        interval_color = DEEP_PURPLE if row["kind"] == "main" else DARK_TEXT
+        point_fill = DEEP_PURPLE if row["kind"] == "main" else LIGHT_PINK
+        axis.hlines(index, row.ci_low, row.ci_high, color=interval_color, linewidth=3.2, zorder=2)
+        axis.scatter(row.estimate, index, s=125 if row["kind"] == "main" else 92, facecolor=point_fill, edgecolor=DARK_TEXT, linewidth=1.2, zorder=3)
+    axis.set_yticks(range(len(display)), display["label"], fontsize=13)
+    axis.set_xlabel("изменение частоты штрафов на клиента за 30 дней", fontsize=14)
+    axis.tick_params(axis="x", labelsize=12)
+    low = min(float(display.ci_low.min()), -margin) - 0.012
+    high = max(float(display.ci_high.max()), margin) + 0.012
     axis.set_xlim(low, high)
     clean_axis(axis, "x")
-    axis.text(
-        0,
-        len(display) - 0.28,
-        "зона ±0,05",
-        ha="center",
-        va="bottom",
-        fontsize=9.5,
-        color=MAUVE,
-    )
-    axis.text(
-        0.01,
-        -0.13,
-        "Точки и линии: среднее изменение и 95% ДИ. DiD — отдельная сезонно скорректированная оценка.",
-        transform=axis.transAxes,
-        fontsize=9,
-        color=MAUVE,
-    )
-    fig.tight_layout()
     save_figure(fig, output, "05_robustness")
 
 
 def chart_tost_sensitivity(sensitivity: pd.DataFrame, output: Path) -> None:
     display = sensitivity.sort_values("margin", ascending=False).reset_index(drop=True)
-    fig, axis = plt.subplots(figsize=(7.4, 3.8))
+    fig, axis = plt.subplots(figsize=(7.4, 3.3), constrained_layout=True)
     for index, row in display.iterrows():
         axis.barh(index, 2 * row.margin, left=-row.margin, height=0.46, color=LIGHT_PINK, alpha=0.95)
-        axis.hlines(index, row.ci90_low, row.ci90_high, color=DARK_TEXT, linewidth=3)
-        axis.scatter(row.estimate, index, color=DEEP_PURPLE, s=65, zorder=3)
-        axis.text(
-            row.margin + 0.006,
-            index,
-            "эквивалентность: да" if row.equivalent else "эквивалентность: нет",
-            va="center",
-            fontsize=10.5,
-            color=DEEP_PURPLE if row.equivalent else ROSE,
-        )
+        axis.hlines(index, row.ci90_low, row.ci90_high, color=DARK_TEXT, linewidth=3.5)
+        axis.scatter(row.estimate, index, facecolor=LIGHT_PINK, edgecolor=DARK_TEXT, linewidth=1.2, s=105, zorder=3)
     axis.axvline(0, color=MAUVE, linestyle="--", linewidth=1)
-    axis.set_yticks(range(len(display)), [f"±{fmt(x, 2)}" for x in display.margin], fontsize=11)
-    axis.set_xlabel("изменение штрафов на клиента за 30 дней · 90% ДИ", fontsize=11)
-    axis.set_xlim(-0.12, 0.20)
+    axis.set_yticks(range(len(display)), [f"±{fmt(x, 2)}" for x in display.margin], fontsize=14)
+    axis.set_xlabel("изменение штрафов на клиента за 30 дней", fontsize=14)
+    axis.tick_params(axis="x", labelsize=12)
+    axis.set_xlim(-0.115, 0.115)
     clean_axis(axis)
-    fig.tight_layout()
     save_figure(fig, output, "05b_tost_sensitivity")
 
 
@@ -625,55 +551,40 @@ def chart_regression(
     stem: str,
     x_label: str,
     y_label: str,
+    full_range: bool = False,
 ) -> dict[str, float]:
     sample = data[[dependent, independent]].dropna().astype(float)
     result = regression(sample, dependent, independent)
     x_low, x_high = sample[independent].quantile([0.01, 0.99])
     y_low, y_high = sample[dependent].quantile([0.01, 0.99])
-    visible = sample[independent].between(x_low, x_high) & sample[dependent].between(y_low, y_high)
-    fig, axis = plt.subplots(figsize=(6.4, 5.0))
+    if full_range:
+        plot_x_low, plot_x_high = float(sample[independent].min()), float(sample[independent].max())
+        plot_y_low, plot_y_high = float(sample[dependent].min()), float(sample[dependent].max())
+        visible = pd.Series(True, index=sample.index)
+    else:
+        plot_x_low, plot_x_high = float(x_low), float(x_high)
+        plot_y_low, plot_y_high = float(y_low), float(y_high)
+        visible = sample[independent].between(x_low, x_high) & sample[dependent].between(y_low, y_high)
+    fig, axis = plt.subplots(figsize=(7.0, 5.35), constrained_layout=True)
     axis.scatter(
         sample.loc[visible, independent],
         sample.loc[visible, dependent],
-        s=8,
-        alpha=0.09,
-        color=ROSE,
-        linewidths=0,
+        s=24,
+        alpha=0.52,
+        facecolor=LIGHT_PINK,
+        edgecolor=DARK_TEXT,
+        linewidths=0.4,
         rasterized=True,
     )
-    bins = pd.qcut(sample[independent], q=12, duplicates="drop")
-    binned = sample.groupby(bins, observed=True).agg(
-        x=(independent, "mean"), y=(dependent, "mean"), n=(dependent, "size")
-    )
-    axis.scatter(binned.x, binned.y, s=34, color=DEEP_PURPLE, zorder=4)
-    line_x = np.linspace(x_low, x_high, 100)
-    axis.plot(line_x, result["b0"] + result["b1"] * line_x, color=DARK_TEXT, linewidth=2.3)
-    axis.axhline(0, color=LIGHT_PINK, linewidth=1.0)
-    axis.set_xlim(x_low, x_high)
-    axis.set_ylim(y_low, y_high)
-    axis.set_xlabel(x_label, fontsize=11)
-    axis.set_ylabel(y_label, fontsize=11)
+    line_x = np.linspace(plot_x_low, plot_x_high, 100)
+    axis.plot(line_x, result["b0"] + result["b1"] * line_x, color=DEEP_PURPLE, linewidth=3.6, zorder=4)
+    axis.axhline(0, color=DARK_TEXT, linewidth=1.2, alpha=0.5)
+    axis.set_xlim(plot_x_low, plot_x_high)
+    axis.set_ylim(plot_y_low, plot_y_high)
+    axis.set_xlabel(x_label, fontsize=15, labelpad=8)
+    axis.set_ylabel(y_label, fontsize=15, labelpad=8)
+    axis.tick_params(axis="both", labelsize=12)
     clean_axis(axis, "both")
-    axis.text(
-        0.03,
-        0.97,
-        "β = " + fmt(result["b1"], 5, signed=True)
-        + "\n95% ДИ ["
-        + fmt(result["ci_low"], 5)
-        + "; "
-        + fmt(result["ci_high"], 5)
-        + "]\n"
-        + p_text(result["p_value"])
-        + "\nR² = "
-        + fmt(result["r_squared"], 5)
-        + "\nn = "
-        + f"{result['n']:,}".replace(",", " "),
-        transform=axis.transAxes,
-        va="top",
-        fontsize=10.5,
-        bbox={"boxstyle": "round,pad=0.45", "facecolor": LIGHT_PINK, "alpha": 0.92, "edgecolor": "none"},
-    )
-    fig.tight_layout()
     save_figure(fig, output, stem)
     return result
 
@@ -801,13 +712,16 @@ def write_manifest(
         ("06_weekly_dynamics", "Недельная динамика", "Полные недели фиксированной когорты", "21 неделя", "Описательные недельные частоты + 3-недельное среднее", "Диагностика / основной", "Результат не формируется одной аномальной неделей."),
         ("07_regression_price_fuel", "ΔPrice и ΔFuel", "Клиенты с покупками в обоих периодах", f"β={regressions[0]['b1']:.5f}; R²={regressions[0]['r_squared']:.5f}", "OLS, HC3", "Backup / Q&A", "Индивидуальное изменение цены слабо связано с изменением топливной активности."),
         ("07_regression_price_fines", "ΔPrice и ΔFines", "Клиенты с покупками в обоих периодах", f"β={regressions[1]['b1']:.5f}; p={regressions[1]['p_value']:.3f}", "OLS, HC3", "Backup / Q&A", "Статистически различимой линейной связи не обнаружено."),
+        ("07_regression_price_fuel_full_range", "ΔPrice и ΔFuel — полный диапазон", "Та же полная выборка", "Без визуального ограничения осей", "OLS, HC3", "Backup / проверка выбросов", "Полный диапазон сохранён, чтобы явно показать влияние экстремальных наблюдений на масштаб."),
+        ("07_regression_price_fines_full_range", "ΔPrice и ΔFines — полный диапазон", "Та же полная выборка", "Без визуального ограничения осей", "OLS, HC3", "Backup / проверка выбросов", "Полный диапазон сохранён, чтобы явно показать влияние экстремальных наблюдений на масштаб."),
     ]
     header = "| Файл | Что показывает | Источник данных | Основные числа | Метод | Слайд | Главная устная интерпретация |\n|---|---|---|---|---|---|---|\n"
     body = "\n".join("| " + " | ".join(map(str, row)) + " |" for row in rows)
     notes = (
         "\n\n## Методические примечания\n\n"
         "- Все PNG имеют прозрачный фон и экспортированы с 320 dpi; для каждого есть SVG.\n"
-        "- На regression-графиках визуально показаны 1–99 процентили, но OLS рассчитана по полной выборке.\n"
+        "- Для презентации оси ограничены 1–99 перцентилями; модель оценена на полной выборке.\n"
+        "- Версии `*_full_range` показывают полный диапазон тех же данных и используют те же коэффициенты модели.\n"
         "- `Сезонная поправка 2025 (DiD)` имеет ту же единицу измерения, но другой estimand: изменение 2026 относительно сезонного изменения 2025.\n"
         "- Наблюдаемая цена и покупки через сервис не идентифицируют причинный эффект кризиса.\n"
     )
@@ -906,6 +820,26 @@ def run(args: argparse.Namespace) -> Path:
         "изменение наблюдаемой цены, ₽/л",
         "изменение штрафов на клиента за 30 дней",
     )
+    chart_regression(
+        regression_data,
+        "fuel_change",
+        "price_change",
+        output,
+        "07_regression_price_fuel_full_range",
+        "изменение наблюдаемой цены, ₽/л",
+        "изменение топлива, л/30 дней",
+        full_range=True,
+    )
+    chart_regression(
+        regression_data,
+        "fine_change",
+        "price_change",
+        output,
+        "07_regression_price_fines_full_range",
+        "изменение наблюдаемой цены, ₽/л",
+        "изменение штрафов на клиента за 30 дней",
+        full_range=True,
+    )
     pd.DataFrame([reg_fuel, reg_fines]).to_csv(
         output / "regression_results.csv", index=False, encoding="utf-8-sig"
     )
@@ -923,6 +857,8 @@ def run(args: argparse.Namespace) -> Path:
         "06_weekly_dynamics",
         "07_regression_price_fuel",
         "07_regression_price_fines",
+        "07_regression_price_fuel_full_range",
+        "07_regression_price_fines_full_range",
     ]
     validation = validate_outputs(output, stems)
     print(f"Создано {len(stems)} пар PNG/SVG: {output}")
