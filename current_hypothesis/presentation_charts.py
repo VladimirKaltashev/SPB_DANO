@@ -111,12 +111,24 @@ def clean_axis(axis, grid: str | None = None) -> None:
         axis.set_axisbelow(True)
 
 
-def save_figure(fig, output: Path, stem: str) -> None:
+def save_figure(fig, output: Path, stem: str, preserve_axis_facecolor: bool = False) -> None:
     fig.patch.set_alpha(0)
-    for axis in fig.axes:
-        axis.patch.set_alpha(0)
-    fig.savefig(output / f"{stem}.png", dpi=320, transparent=True, bbox_inches="tight")
-    fig.savefig(output / f"{stem}.svg", transparent=True, bbox_inches="tight")
+    if not preserve_axis_facecolor:
+        for axis in fig.axes:
+            axis.patch.set_alpha(0)
+    fig.savefig(
+        output / f"{stem}.png",
+        dpi=320,
+        transparent=not preserve_axis_facecolor,
+        bbox_inches="tight",
+        pad_inches=0.03,
+    )
+    fig.savefig(
+        output / f"{stem}.svg",
+        transparent=not preserve_axis_facecolor,
+        bbox_inches="tight",
+        pad_inches=0.03,
+    )
     plt.close(fig)
 
 
@@ -552,39 +564,65 @@ def chart_regression(
     x_label: str,
     y_label: str,
     full_range: bool = False,
+    max_display: int | None = 3000,
 ) -> dict[str, float]:
     sample = data[[dependent, independent]].dropna().astype(float)
     result = regression(sample, dependent, independent)
-    x_low, x_high = sample[independent].quantile([0.01, 0.99])
-    y_low, y_high = sample[dependent].quantile([0.01, 0.99])
     if full_range:
         plot_x_low, plot_x_high = float(sample[independent].min()), float(sample[independent].max())
         plot_y_low, plot_y_high = float(sample[dependent].min()), float(sample[dependent].max())
         visible = pd.Series(True, index=sample.index)
+        display_sample = sample.loc[visible]
     else:
+        x_low, x_high = sample[independent].quantile([0.01, 0.99])
+        y_low, y_high = sample[dependent].quantile([0.01, 0.99])
         plot_x_low, plot_x_high = float(x_low), float(x_high)
         plot_y_low, plot_y_high = float(y_low), float(y_high)
         visible = sample[independent].between(x_low, x_high) & sample[dependent].between(y_low, y_high)
+        visible_sample = sample.loc[visible]
+        display_sample = (
+            visible_sample.sample(n=max_display, random_state=42)
+            if max_display is not None and len(visible_sample) > max_display
+            else visible_sample
+        )
     fig, axis = plt.subplots(figsize=(7.0, 5.35), constrained_layout=True)
     axis.scatter(
-        sample.loc[visible, independent],
-        sample.loc[visible, dependent],
-        s=24,
-        alpha=0.52,
-        facecolor=LIGHT_PINK,
-        edgecolor=DARK_TEXT,
-        linewidths=0.4,
+        display_sample[independent],
+        display_sample[dependent],
+        s=24 if full_range else 22,
+        alpha=0.52 if full_range else 0.55,
+        facecolor=LIGHT_PINK if full_range else DEEP_PURPLE,
+        edgecolor=DARK_TEXT if full_range else LIGHT_PINK,
+        linewidths=0.4 if full_range else 0.35,
         rasterized=True,
+        zorder=2,
     )
     line_x = np.linspace(plot_x_low, plot_x_high, 100)
-    axis.plot(line_x, result["b0"] + result["b1"] * line_x, color=DEEP_PURPLE, linewidth=3.6, zorder=4)
-    axis.axhline(0, color=DARK_TEXT, linewidth=1.2, alpha=0.5)
+    axis.plot(
+        line_x,
+        result["b0"] + result["b1"] * line_x,
+        color=DEEP_PURPLE if full_range else DARK_TEXT,
+        linewidth=3.6 if full_range else 3.5,
+        zorder=5,
+    )
+    axis.axhline(0, color=DARK_TEXT, linewidth=1.5, alpha=0.75, linestyle="--", zorder=2)
     axis.set_xlim(plot_x_low, plot_x_high)
     axis.set_ylim(plot_y_low, plot_y_high)
-    axis.set_xlabel(x_label, fontsize=15, labelpad=8)
-    axis.set_ylabel(y_label, fontsize=15, labelpad=8)
-    axis.tick_params(axis="both", labelsize=12)
+    axis.set_xlabel(x_label, fontsize=16, color=DARK_TEXT, labelpad=8)
+    axis.set_ylabel(y_label, fontsize=16, color=DARK_TEXT, labelpad=8)
+    axis.tick_params(axis="both", labelsize=14, colors=DARK_TEXT)
     clean_axis(axis, "both")
+    if not full_range:
+        axis.grid(
+            True,
+            which="major",
+            axis="both",
+            color=LIGHT_PINK,
+            linewidth=1.1,
+            alpha=0.75,
+            linestyle="-",
+        )
+        axis.set_axisbelow(True)
     save_figure(fig, output, stem)
     return result
 
@@ -721,6 +759,7 @@ def write_manifest(
         "\n\n## Методические примечания\n\n"
         "- Все PNG имеют прозрачный фон и экспортированы с 320 dpi; для каждого есть SVG.\n"
         "- Для презентации оси ограничены 1–99 перцентилями; модель оценена на полной выборке.\n"
+        "- Scatter визуально прорежен до 3000 наблюдений; модель оценена на полной выборке.\n"
         "- Версии `*_full_range` показывают полный диапазон тех же данных и используют те же коэффициенты модели.\n"
         "- `Сезонная поправка 2025 (DiD)` имеет ту же единицу измерения, но другой estimand: изменение 2026 относительно сезонного изменения 2025.\n"
         "- Наблюдаемая цена и покупки через сервис не идентифицируют причинный эффект кризиса.\n"
