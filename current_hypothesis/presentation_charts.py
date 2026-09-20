@@ -68,6 +68,21 @@ REGION_NAMES = {
     "24": "Красноярский край",
 }
 
+ROBUSTNESS_SPECIFICATION_LABELS = [
+    "Основная модель · 1 июня",
+    "Начало post: 18 мая",
+    "Начало post: 15 июня",
+    "Без верхнего 1% по топливу",
+    "Без верхнего 1% по штрафам",
+]
+ROBUSTNESS_REGION_LABELS = [
+    "Москва",
+    "Московская область",
+    "Санкт-Петербург",
+    "Свердловская область",
+    "Татарстан",
+]
+
 
 def _font_family() -> str:
     available = {item.name for item in font_manager.fontManager.ttflist}
@@ -494,6 +509,47 @@ def chart_robustness(robustness: pd.DataFrame, output: Path, margin: float) -> N
     save_figure(fig, output, "05_robustness")
 
 
+def chart_robustness_subset(
+    robustness: pd.DataFrame,
+    labels: list[str],
+    output: Path,
+    stem: str,
+    margin: float,
+    x_limits: tuple[float, float],
+) -> None:
+    """Render one presentation-sized, comparable subset of robustness estimates."""
+    indexed = robustness.set_index("label")
+    if not indexed.index.is_unique:
+        duplicates = indexed.index[indexed.index.duplicated()].unique().tolist()
+        raise ValueError(f"В robustness повторяются подписи: {duplicates}")
+    missing = [label for label in labels if label not in indexed.index]
+    if missing:
+        raise ValueError(f"Для {stem} отсутствуют строки robustness: {missing}")
+    display = indexed.loc[labels].reset_index().iloc[::-1].reset_index(drop=True)
+    display["label"] = display["label"].str.replace("Начало post:", "Начало post ·", regex=False)
+    fig, axis = plt.subplots(figsize=(7.5, 4.35), constrained_layout=True)
+    axis.axvspan(-margin, margin, color=LIGHT_PINK, alpha=0.60, zorder=0)
+    axis.axvline(0, color=DARK_TEXT, linewidth=1.6, linestyle="--", zorder=1)
+    for index, row in display.iterrows():
+        is_main = row["kind"] == "main"
+        axis.hlines(index, row.ci_low, row.ci_high, color=DARK_TEXT, linewidth=3.2, zorder=2)
+        axis.scatter(
+            row.estimate,
+            index,
+            s=120 if is_main else 100,
+            facecolor=DEEP_PURPLE if is_main else LIGHT_PINK,
+            edgecolor=DARK_TEXT,
+            linewidth=1.25,
+            zorder=3,
+        )
+    axis.set_yticks(range(len(display)), display["label"], fontsize=13)
+    axis.set_xlabel("изменение частоты штрафов на клиента за 30 дней", fontsize=14)
+    axis.tick_params(axis="x", labelsize=12, colors=DARK_TEXT)
+    axis.set_xlim(*x_limits)
+    clean_axis(axis)
+    save_figure(fig, output, stem)
+
+
 def chart_tost_sensitivity(sensitivity: pd.DataFrame, output: Path) -> None:
     display = sensitivity.sort_values("margin", ascending=False).reset_index(drop=True)
     fig, axis = plt.subplots(figsize=(7.4, 3.3), constrained_layout=True)
@@ -507,7 +563,7 @@ def chart_tost_sensitivity(sensitivity: pd.DataFrame, output: Path) -> None:
     axis.tick_params(axis="x", labelsize=12)
     axis.set_xlim(-0.115, 0.115)
     clean_axis(axis)
-    save_figure(fig, output, "05b_tost_sensitivity")
+    save_figure(fig, output, "05c_tost_sensitivity")
 
 
 def chart_weekly(panel: pd.DataFrame, output: Path) -> pd.DataFrame:
@@ -745,8 +801,10 @@ def write_manifest(
         ("02_fines_tost", "Практическая стабильность FineRate", "client_week_panel.csv → клиентские pre/post частоты", f"Δ={fmt(stats['fine_change']['estimate'],3,signed=True)}; 90% ДИ [{fmt(stats['fine_change_90']['ci_low'],3)}; {fmt(stats['fine_change_90']['ci_high'],3)}]", "TOST, margin ±0,05", "Основной", "Изменение штрафов полностью лежит в заранее заданной зоне практически малого изменения."),
         ("03_fines_actual_vs_proportional", "Факт против пропорционального сценария", "FineRate и агрегатное отношение FuelRate post/pre", f"{fmt(stats['proportional'],3)} vs {fmt(stats['fine_post'],3)}; gap {fmt(stats['gap']['estimate'],3,signed=True)}", "Парный односторонний t-тест разницы", "Основной", "Штрафы не повторили пропорциональное падение топлива."),
         ("04_main_result", "Весь основной вывод", "Те же проверенные показатели", "Fuel −26,6%; fines практически стабильны; сценарий 0,414", "Сводка четырёх тестов", "Главный слайд", "Топливная активность снизилась, а штрафная активность осталась на прежнем уровне."),
-        ("05_robustness", "Устойчивость ΔFineRate", "Альтернативные даты, trims, регионы, 2025 DiD", f"{len(robustness)} спецификаций", "Среднее изменение + 95% ДИ; TOST отдельно", "Устойчивость", "Вывод устойчив к удалению выбросов, но зависит от даты отсечения и региона; сезонная DiD отвечает на отдельный вопрос."),
-        ("05b_tost_sensitivity", "Чувствительность к margin", "Основная фиксированная когорта", "±0,03 / ±0,05 / ±0,10", "TOST", "Устойчивость", "Эквивалентность проверяется при нескольких заранее показанных границах."),
+        ("05_robustness", "Полный robustness ΔFineRate", "Альтернативные даты, trims, регионы, 2025 DiD", f"{len(robustness)} спецификаций", "Среднее изменение + 95% ДИ; TOST отдельно", "Backup", "Полная диагностическая версия; сезонная DiD имеет другой estimand."),
+        ("05a_robustness_specifications", "Устойчивость к спецификации", "Основная модель, альтернативные даты и два варианта удаления выбросов", "5 сопоставимых спецификаций", "Среднее изменение + 95% ДИ", "Основной robustness", "Вывод устойчив к удалению выбросов, но чувствителен к выбору даты начала post-периода."),
+        ("05b_robustness_regions", "Региональная устойчивость", "Пять крупнейших регионов когорты", "5 регионов", "Среднее изменение + 95% ДИ", "Основной robustness", "Изменение частоты штрафов неоднородно между крупнейшими регионами."),
+        ("05c_tost_sensitivity", "Чувствительность к margin", "Основная фиксированная когорта", "±0,03 / ±0,05 / ±0,10", "TOST", "Устойчивость", "Эквивалентность проверяется при нескольких заранее показанных границах."),
         ("06_weekly_dynamics", "Недельная динамика", "Полные недели фиксированной когорты", "21 неделя", "Описательные недельные частоты + 3-недельное среднее", "Диагностика / основной", "Результат не формируется одной аномальной неделей."),
         ("07_regression_price_fuel", "ΔPrice и ΔFuel", "Клиенты с покупками в обоих периодах", f"β={regressions[0]['b1']:.5f}; R²={regressions[0]['r_squared']:.5f}", "OLS, HC3", "Backup / Q&A", "Индивидуальное изменение цены слабо связано с изменением топливной активности."),
         ("07_regression_price_fines", "ΔPrice и ΔFines", "Клиенты с покупками в обоих периодах", f"β={regressions[1]['b1']:.5f}; p={regressions[1]['p_value']:.3f}", "OLS, HC3", "Backup / Q&A", "Статистически различимой линейной связи не обнаружено."),
@@ -767,7 +825,11 @@ def write_manifest(
     (output / "chart_manifest.md").write_text(header + body + notes, encoding="utf-8")
 
 
-def validate_outputs(output: Path, stems: list[str]) -> dict[str, object]:
+def validate_outputs(
+    output: Path,
+    stems: list[str],
+    robustness: pd.DataFrame,
+) -> dict[str, object]:
     from PIL import Image
 
     checks = []
@@ -795,7 +857,29 @@ def validate_outputs(output: Path, stems: list[str]) -> dict[str, object]:
                     "alpha_max": alpha_max,
                 }
             )
-    result = {"status": "PASS", "charts": checks}
+    expected = {
+        "05a_robustness_specifications": ROBUSTNESS_SPECIFICATION_LABELS,
+        "05b_robustness_regions": ROBUSTNESS_REGION_LABELS,
+    }
+    available_labels = set(robustness["label"])
+    semantic_checks = []
+    for stem, labels in expected.items():
+        missing = [label for label in labels if label not in available_labels]
+        if missing:
+            raise ValueError(f"Для {stem} отсутствуют строки robustness: {missing}")
+        svg_text = (output / f"{stem}.svg").read_text(encoding="utf-8")
+        rendered_labels = [label.replace("Начало post:", "Начало post ·") for label in labels]
+        absent_from_svg = [label for label in rendered_labels if label not in svg_text]
+        if absent_from_svg:
+            raise ValueError(f"В {stem}.svg не найдены подписи: {absent_from_svg}")
+        forbidden = ["Сезонная поправка 2025 (DiD)", "p-value", "TOST"]
+        present_forbidden = [text for text in forbidden if text in svg_text]
+        if present_forbidden:
+            raise ValueError(f"В {stem}.svg найден запрещённый текст: {present_forbidden}")
+        semantic_checks.append(
+            {"stem": stem, "labels": rendered_labels, "forbidden_text_absent": True}
+        )
+    result = {"status": "PASS", "charts": checks, "robustness_content": semantic_checks}
     (output / "validation.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -833,6 +917,30 @@ def run(args: argparse.Namespace) -> Path:
     robustness.to_csv(output / "robustness_results.csv", index=False, encoding="utf-8-sig")
     sensitivity.to_csv(output / "tost_sensitivity.csv", index=False, encoding="utf-8-sig")
     chart_robustness(robustness, output, args.margin)
+    presentation_labels = ROBUSTNESS_SPECIFICATION_LABELS + ROBUSTNESS_REGION_LABELS
+    presentation_robustness = robustness.set_index("label").loc[presentation_labels]
+    shared_bound = max(
+        abs(float(presentation_robustness["ci_low"].min())),
+        abs(float(presentation_robustness["ci_high"].max())),
+        args.margin,
+    ) + 0.015
+    shared_limits = (-shared_bound, shared_bound)
+    chart_robustness_subset(
+        robustness,
+        ROBUSTNESS_SPECIFICATION_LABELS,
+        output,
+        "05a_robustness_specifications",
+        args.margin,
+        shared_limits,
+    )
+    chart_robustness_subset(
+        robustness,
+        ROBUSTNESS_REGION_LABELS,
+        output,
+        "05b_robustness_regions",
+        args.margin,
+        shared_limits,
+    )
     chart_tost_sensitivity(sensitivity, output)
     weekly = chart_weekly(panel, output)
     weekly.to_csv(output / "weekly_dynamics.csv", index=False, encoding="utf-8-sig")
@@ -892,14 +1000,16 @@ def run(args: argparse.Namespace) -> Path:
         "03_fines_actual_vs_proportional",
         "04_main_result",
         "05_robustness",
-        "05b_tost_sensitivity",
+        "05a_robustness_specifications",
+        "05b_robustness_regions",
+        "05c_tost_sensitivity",
         "06_weekly_dynamics",
         "07_regression_price_fuel",
         "07_regression_price_fines",
         "07_regression_price_fuel_full_range",
         "07_regression_price_fines_full_range",
     ]
-    validation = validate_outputs(output, stems)
+    validation = validate_outputs(output, stems, robustness)
     print(f"Создано {len(stems)} пар PNG/SVG: {output}")
     print(f"Проверка файлов: {validation['status']}")
     print(f"Расхождения с sanity check: {len(discrepancies)}")
