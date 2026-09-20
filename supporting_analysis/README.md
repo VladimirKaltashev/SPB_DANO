@@ -1,15 +1,15 @@
 # Штрафы по месяцам и категориям
 
-После очистки и основного расчёта (`uv run python main.py --source processed`):
+Помесячный отчёт входит в полный запуск `uv run python main.py`. Отдельный запуск:
 
 ```bash
-uv run python monthly_offences.py
+uv run python -m supporting_analysis.monthly_offences
 ```
 
 Параметры:
 
 ```bash
-uv run python monthly_offences.py --data-dir /path/to/SPB --output-dir outputs/monthly_offences --start 2026-04-01 --crisis-start 2026-06-01 --end 2026-09-01 --top-n 5
+uv run python -m supporting_analysis.monthly_offences --data-dir /path/to/SPB --output-dir outputs/monthly_offences --start 2026-04-01 --crisis-start 2026-06-01 --end 2026-09-01 --top-n 5
 ```
 
 `--end` исключается. Начало и конец должны ограничивать полные месяцы.
@@ -81,7 +81,7 @@ uv run python monthly_offences.py --data-dir /path/to/SPB --output-dir outputs/m
 Presentations. Python-расчёт и PNG работают независимо от этой среды.
 
 ```bash
-node build_monthly_deck.mjs outputs/monthly_offences/deck_data.json outputs/monthly_offences/monthly_fines.pptx
+node supporting_analysis/build_monthly_deck.mjs outputs/monthly_offences/deck_data.json outputs/monthly_offences/monthly_fines.pptx
 ```
 
 Среде сборки нужны `PRESENTATIONS_SKILL_DIR`, `RUNTIME_NODE_MODULES`,
@@ -95,7 +95,7 @@ node build_monthly_deck.mjs outputs/monthly_offences/deck_data.json outputs/mont
 ## Тесты
 
 ```bash
-uv run --with pytest python -m pytest test_monthly_offences.py -q
+uv run python -m pytest tests/test_monthly_offences.py -q
 ```
 
 Проверяются дубли постановлений, конфликты, неизвестные клиенты, нулевые

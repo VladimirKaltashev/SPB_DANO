@@ -48,7 +48,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--panel", type=Path,
-        default=Path(__file__).resolve().parents[1] / "client_week_panel_v2.csv",
+        default=Path(__file__).resolve().parents[1]
+        / "data/reference/client_week_panel_v2.csv",
     )
     parser.add_argument(
         "--output-dir", type=Path, default=Path("outputs/insurance_clustering")

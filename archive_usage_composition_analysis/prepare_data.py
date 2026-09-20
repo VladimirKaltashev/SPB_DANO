@@ -43,7 +43,7 @@ def prepare_data(root: Path, tables: Path, baseline_month="2026-04"):
         "driver_month": previous / "tables/driver_month.csv",
         "prices": previous / "tables/region_month_prices.csv",
         "client_attributes": archive / "tables/driver_region_month.csv",
-        "panel_v2": root / "client_week_panel_v2.csv",
+        "panel_v2": root / "data/reference/client_week_panel_v2.csv",
         "fines": root / "data/processed/fines_clean.csv",
         "fuel": root / "data/processed/fuel_clean.csv",
         "vehicles": root / "data/processed/clients_demographics_clean.csv",

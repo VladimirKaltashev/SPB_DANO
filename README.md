@@ -28,19 +28,18 @@
 ```bash
 git clone https://github.com/VladimirKaltashev/SPB_DANO.git
 cd SPB_DANO
+git lfs install
+git lfs pull
 uv sync --locked
-uv run jupyter nbconvert --to notebook --execute ochistka.ipynb --output ochistka.executed.ipynb --ExecutePreprocessor.timeout=600
-uv run python main.py --source processed
+uv run python main.py
 ```
 
-Очистка читает исходные `clients_demographics.csv`, `fines_2026.csv` и
-`fuel_transaction.csv` из корня репозитория и создаёт `data/processed/`.
-Исходный ноутбук сохраняется; выполненная копия — `ochistka.executed.ipynb`.
-После расчёта откройте `outputs/behavior_cluster_analysis/index.html`
-двойным щелчком в файловом менеджере.
+Это единственная основная команда. Она выполняет очистку, строит недельную
+панель, назначает группы, проверяет текущую гипотезу и создаёт дополнительный
+помесячный отчёт.
 
 Если репозиторий закрытый, владелец должен сначала предоставить доступ на GitHub.
-Скачанные отдельно исходные CSV нужно положить в корень проекта с теми же именами.
+Скачанные отдельно исходные CSV нужно положить в `data/raw/` с исходными именами.
 
 ## Запуск с готовыми очищенными данными
 
@@ -52,18 +51,18 @@ uv run python main.py --source processed
 git lfs install
 git lfs pull
 uv sync --locked
-uv run python main.py --source processed
+uv run python main.py --skip-cleaning
 ```
 
-Повторная очистка через `ochistka.ipynb` из первого примера также создаёт эти таблицы
-и не требует загружать их из LFS.
+Флаг оставляет существующие файлы `data/processed/`, но заново строит группы и
+отчёты. Без флага очистка всегда воспроизводится из `data/raw/`.
 
 ## Повторный запуск
 
 Из папки проекта, когда очищенные данные уже есть:
 
 ```bash
-uv run python main.py --source processed
+uv run python main.py
 ```
 
 Откройте `outputs/behavior_cluster_analysis/index.html`: там все общие графики,
@@ -75,34 +74,19 @@ PNG также сохраняются отдельно. Графики сохр�
 `behavior_cluster_analysis` и `behavior_clustering` вместе, сохраняя их
 расположение: HTML ссылается на соседние PNG.
 
-## Что делает код
+## Порядок основного пайплайна
 
-1. `ochistka.ipynb` и `preprocessing.py` очищают данные и сохраняют
-   `data/processed/clients_demographics_clean.csv`, `fines_clean.csv`,
-   `fuel_clean.csv` и `client_week_panel.csv`.
-2. `data_sources.py` выбирает очищенные таблицы. В режиме `auto`, если их
-   нет, используются raw CSV; фактический источник печатается при запуске.
-   `--source processed` запрещает такой переход к raw.
-3. `current_hypothesis/prepare_clients.py` агрегирует данные до одной строки на клиента.
-   Это подготовка признаков, а не кластеризация.
-4. `current_hypothesis/define_groups.py` присваивает группы по нарушениям до 1 июня 2026.
-   Автомобили используются только для описания и дополнительных тегов.
-5. `current_hypothesis/check_hypothesis.py` сравнивает фиксированные группы до/после кризиса,
-   строит месячную динамику, сравнение 2025/2026 и детализацию типов нарушений.
-6. `report_gallery.py` проверяет созданные изображения и собирает HTML-отчёт.
+1. `pipeline/clean_data.py` читает три файла из `data/raw/`.
+2. `pipeline/preprocessing.py` разрешает дубли автомобилей и возвраты топлива.
+3. Очищенные события и расширенная недельная панель сохраняются в
+   `data/processed/`.
+4. `current_hypothesis/run_analysis.py` создаёт докризисные группы и вызывает
+   статистическую проверку до/после.
+5. `supporting_analysis/monthly_offences.py` создаёт дополнительную детализацию
+   типов штрафов.
 
-## Структура проекта
-
-В активном контуре оставлены только файлы, которые вызываются из `main.py` или
-нужны помесячному отчёту:
-
-- `main.py` — единая точка запуска;
-- `current_hypothesis/` — вся текущая гипотеза: подготовка, группы и проверка;
-- `monthly_offences.py` — отдельный вспомогательный описательный анализ;
-- `data_sources.py`, `plotting.py`, `report_gallery.py` — общая инфраструктура;
-- `preprocessing.py`, `ochistka.ipynb` — воспроизводимая очистка;
-- `tests/` — тесты активного контура;
-- `notebooks/behavior_clustering.ipynb` — необязательная оболочка над `main.py`.
+Полный список оставшихся Python-файлов и ноутбуков с объяснением их роли:
+[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md).
 
 Неподтверждённые и остановленные исследовательские ветки находятся в папках
 `archive_*`. Их статус и причина архивации перечислены в [ARCHIVE.md](ARCHIVE.md).
@@ -140,18 +124,18 @@ PNG также сохраняются отдельно. Графики сохр�
 - `analysis_metadata.json` — источники, периоды, пороги и список проверенных PNG.
 
 ```bash
-uv run python main.py --source processed
-uv run python main.py --skip-clustering
-uv run python main.py --skip-behavior-analysis
+uv run python main.py
+uv run python main.py --skip-cleaning
+uv run python main.py --skip-monthly-offences
+uv run python -m current_hypothesis.run_analysis --source processed
 uv run python -m current_hypothesis.define_groups
 uv run python -m current_hypothesis.check_hypothesis
-uv run --with pytest python -m pytest tests -q
+uv run python -m pytest -q
 ```
 
-`--skip-clustering` использует сохранённые поведенческие группы.
-При отсутствии файла анализ завершается понятной ошибкой.
-`--skip-behavior-analysis` создаёт только группы и их два графика.
-Другие пути: `--data-dir /path/to/data --output-dir /path/to/outputs`.
+Для запуска только текущей гипотезы без очистки используется модуль
+`current_hypothesis.run_analysis`. Корневой `main.py` всегда является полной
+точкой входа.
 
 ## Почему раньше было две схемы и пропадали графики
 

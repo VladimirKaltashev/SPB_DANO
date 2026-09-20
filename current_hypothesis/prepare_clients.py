@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data_sources import (
+from pipeline.data_sources import (
     DataSources,
     SourceMode,
     read_csv_detected,

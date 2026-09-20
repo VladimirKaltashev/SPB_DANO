@@ -20,9 +20,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data_sources import resolve_data_sources
-from plotting import plt
-from report_gallery import write_gallery
+from pipeline.data_sources import resolve_data_sources
+from pipeline.plotting import plt
+from pipeline.report_gallery import write_gallery
 
 try:
     from scipy.stats import ttest_1samp

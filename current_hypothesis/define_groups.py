@@ -15,8 +15,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data_sources import DataSources, read_csv_detected, resolve_data_sources
-from plotting import plt
+from pipeline.data_sources import DataSources, read_csv_detected, resolve_data_sources
+from pipeline.plotting import plt
 from current_hypothesis.prepare_clients import (
     CRISIS_START,
     PRE_START,

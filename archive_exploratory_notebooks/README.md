@@ -2,7 +2,7 @@
 
 - `check_def.ipynb` — ранний анализ цен топлива и штрафов; его расчёты позднее
   были разложены на проверяемые Python-пайплайны.
-- `ochistka_local_before_main.ipynb` — локальный предшественник актуального
-  `ochistka.ipynb`.
+- `ochistka_local_before_main.ipynb` — локальный предшественник старого
+  ноутбука очистки. Текущая очистка находится в `pipeline/clean_data.py`.
 
 Для текущего запуска эти notebooks не нужны.

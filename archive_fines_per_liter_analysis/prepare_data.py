@@ -41,7 +41,7 @@ def prepare_data(root: Path, archive: Path, tables: Path):
         "archived_prices": archive / "outputs/tables/region_month_prices.csv",
         "risk_no_liters": archive / "outputs/tables/driver_clusters_no_liters.csv",
         "archive_metadata": meta_path,
-        "panel_v2": root / "client_week_panel_v2.csv",
+        "panel_v2": root / "data/reference/client_week_panel_v2.csv",
         "fines": root / "data/processed/fines_clean.csv",
         "fuel": root / "data/processed/fuel_clean.csv",
         "vehicles": root / "data/processed/clients_demographics_clean.csv",

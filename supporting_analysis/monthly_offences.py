@@ -14,7 +14,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import ttest_1samp, t
 
-from plotting import plt
+from pipeline.plotting import plt
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 MONTH_NAMES = {1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь", 7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"}
 COLORS = ["#2B6CA3", "#EF8D32", "#20988E", "#B46393", "#8666B1", "#9CA9B3"]
@@ -317,7 +319,7 @@ def run(args):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir",type=Path,default=Path(__file__).resolve().parent)
+    parser.add_argument("--data-dir",type=Path,default=PROJECT_ROOT)
     parser.add_argument("--output-dir",type=Path)
     parser.add_argument("--clients-file",type=Path)
     parser.add_argument("--start",default="2026-04-01")

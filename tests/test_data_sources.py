@@ -4,7 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from data_sources import export_clustered_weekly_panel, resolve_data_sources
+from pipeline.data_sources import export_clustered_weekly_panel, resolve_data_sources
+from pipeline.clean_data import build_weekly_panel
 from current_hypothesis.prepare_clients import build_fuel_features
 
 
@@ -101,3 +102,54 @@ def test_weekly_panel_receives_behavior_groups(tmp_path: Path) -> None:
         "unmatched_rows": 0,
     }
     assert result["cluster_id"].tolist() == [2, 2, 4]
+
+
+def test_weekly_panel_contains_reproducible_v2_fields() -> None:
+    clients = pd.DataFrame(
+        {
+            "client_id": ["c1"],
+            "subscription_creation_date": pd.to_datetime(["2026-04-03"]),
+            "car_count": [2],
+        }
+    )
+    fines = pd.DataFrame(
+        {
+            "client_id": ["c1"],
+            "bill_id": ["f1"],
+            "bill_offence_date": pd.to_datetime(["2026-04-04"]),
+            "total_fine_amount": [100_00],
+        }
+    )
+    fuel = pd.DataFrame(
+        {
+            "client_id": ["c1", "c1"],
+            "order_id": ["positive", "refund"],
+            "order_datetime": pd.to_datetime(
+                ["2026-04-04 10:00:00", "2026-04-04 10:05:00"]
+            ),
+            "order_fuel_volume": [50.0, -10.0],
+            "order_fuel_price_1liter": [70.0, 70.0],
+            "physical_fuel_transaction_main": [1, 0],
+            "physical_fuel_volume_main": [40.0, 0.0],
+            "fuel_volume_positive_only": [50.0, 0.0],
+            "fuel_volume_signed_net": [50.0, -10.0],
+            "fuel_cost_rub": [2800.0, 0.0],
+        }
+    )
+
+    panel = build_weekly_panel(
+        clients,
+        fines,
+        fuel,
+        start=pd.Timestamp("2026-04-01"),
+        end_exclusive=pd.Timestamp("2026-04-08"),
+        crisis_start=pd.Timestamp("2026-04-06"),
+    )
+    row = panel.iloc[0]
+
+    assert row["fuel_all_transaction_count"] == 2
+    assert row["fuel_positive_transaction_count"] == 1
+    assert row["fuel_volume_physical_teammate"] == 40
+    assert row["fuel_price_weighted"] == 70
+    assert bool(row["client_has_multiple_autos"])
+    assert bool(row["is_after_subscription"])

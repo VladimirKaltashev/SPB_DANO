@@ -6,7 +6,7 @@ import pytest
 
 from current_hypothesis.define_groups import assign_behavior_clusters
 from current_hypothesis.check_hypothesis import METRICS, load_clusters, summarize_cluster_changes
-from data_sources import read_csv_detected
+from pipeline.data_sources import read_csv_detected
 
 
 def test_zero_history_is_not_chronic_and_missing_car_data_is_not_expensive():

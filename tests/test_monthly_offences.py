@@ -2,7 +2,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from monthly_offences import bh_adjust, prepare_events, monthly_cube, category_changes
+from supporting_analysis.monthly_offences import (
+    bh_adjust,
+    category_changes,
+    monthly_cube,
+    prepare_events,
+)
 
 
 def test_bh_keeps_untested_missing():

@@ -17,7 +17,8 @@ Archived analysis. This approach tested whether fuel price growth changes the sh
 для каждого региона долю high-risk NO_LITERS и изменение цены к апрелю на одном поле.
 Корневой `.gitignore` исключает папки `outputs/` из Git; результаты воспроизводятся командой выше.
 
-Когорта, регион и окно наблюдения берутся из `client_week_panel_v2.csv`.
+Когорта, регион и окно наблюдения берутся из контрольного снимка
+`data/reference/client_week_panel_v2.csv`.
 Операции читаются из `data/processed/fines_clean.csv` и `fuel_clean.csv`.
 Перед месячной агрегацией каждый клиент-неделя сверяется с v2 по штрафам и
 `fuel_volume_physical_teammate`. Несоответствие останавливает запуск.

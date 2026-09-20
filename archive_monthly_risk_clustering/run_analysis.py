@@ -18,7 +18,11 @@ from .regression import add_price_shock, fit_regression
 def main():
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--panel", type=Path, default=root / "client_week_panel_v2.csv")
+    parser.add_argument(
+        "--panel",
+        type=Path,
+        default=root / "data/reference/client_week_panel_v2.csv",
+    )
     parser.add_argument("--data-root", type=Path, default=root)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).parent / "outputs")
     parser.add_argument("--baseline-month", default="2026-04")
