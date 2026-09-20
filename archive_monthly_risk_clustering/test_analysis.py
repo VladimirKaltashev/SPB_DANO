@@ -9,6 +9,7 @@ from pandas.testing import assert_frame_equal
 from .clustering import fit_cells
 from .prepare_monthly_data import aggregate_calendar_months, parse_engines, reconcile_weekly
 from .regression import add_price_shock
+from .visualization import summarize_no_liters_regions
 
 
 def sample_cell(region="77", month="2026-04"):
@@ -95,6 +96,20 @@ class MethodologyTests(unittest.TestCase):
         result = add_price_shock(prices, "2026-04")
         np.testing.assert_allclose(result.price_shock.iloc[:4], [0, 0.1, 0, 0.2])
         self.assertTrue(pd.isna(result.price_shock.iloc[4]))
+
+    def test_regional_change_summary_uses_first_and_last_month(self):
+        sample = pd.DataFrame({
+            "region": ["77", "77", "77"],
+            "region_name": ["Москва"] * 3,
+            "month": ["2026-05", "2026-04", "2026-06"],
+            "share_high_risk": [0.22, 0.20, 0.25],
+            "avg_fuel_price": [55.0, 50.0, 60.0],
+        })
+        result = summarize_no_liters_regions(sample).iloc[0]
+        self.assertEqual(result.start_month, "2026-04")
+        self.assertEqual(result.end_month, "2026-06")
+        self.assertAlmostEqual(result.risk_change_pp, 5.0)
+        self.assertAlmostEqual(result.price_change_pct, 20.0)
 
 
 if __name__ == "__main__":

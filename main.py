@@ -6,12 +6,12 @@ import argparse
 import logging
 from pathlib import Path
 
-from behavior_clusters import run_behavior_clustering
-from cluster_analys import (
+from current_hypothesis.define_groups import run_behavior_clustering
+from current_hypothesis.check_hypothesis import (
     DEFAULT_ANALYSIS_END,
     DEFAULT_CRISIS_START,
 )
-from cluster_analys import (
+from current_hypothesis.check_hypothesis import (
     run as run_cluster_analysis,
 )
 from data_sources import export_clustered_weekly_panel, resolve_data_sources

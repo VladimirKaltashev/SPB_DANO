@@ -30,7 +30,7 @@ def main():
     tables.mkdir(parents=True, exist_ok=True)
     figures.mkdir(parents=True, exist_ok=True)
     os.environ.setdefault("MPLCONFIGDIR", str(output / ".matplotlib"))
-    from .visualization import draw_figures, write_report
+    from .visualization import draw_figures, summarize_no_liters_regions, write_report
 
     print("Preparing calendar-month data and reconciling to v2...", flush=True)
     monthly, prices, metadata = prepare_data(args.data_root, args.panel, tables)
@@ -73,12 +73,15 @@ def main():
     comparison.to_csv(tables / "model_agreement.csv", index=False)
     all_monthly, all_profiles, all_cells = map(pd.concat, [monthly_summaries, profiles, cell_summaries])
     all_cells.to_csv(tables / "cell_diagnostics.csv", index=False)
+    regional_changes = summarize_no_liters_regions(samples["no_liters"])
+    regional_changes.to_csv(tables / "no_liters_region_changes.csv", index=False)
     metadata["regression_omitted_cells"] = {
         model: int(len(all_cells[all_cells.model.eq(model)]) - len(samples[model])) for model in FEATURES}
     (output / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2,
         default=lambda x: x.item() if isinstance(x, np.generic) else str(x)), encoding="utf-8")
     draw_figures(samples, regression, all_monthly, figures)
-    write_report(output, metadata, regression, all_profiles, all_monthly, all_cells, comparison)
+    write_report(output, metadata, regression, all_profiles, all_monthly, all_cells,
+                 comparison, regional_changes)
     print(regression[["model", "beta", "p_value", "R_squared", "N"]].to_string(index=False))
     print(f"Report: {output / 'index.html'}")
 

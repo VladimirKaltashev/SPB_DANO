@@ -1,4 +1,4 @@
-"""Поиск очищенных источников и связывание недельной панели с кластерами."""
+"""Поиск очищенных источников и связывание недельной панели с группами."""
 
 from __future__ import annotations
 
@@ -140,7 +140,7 @@ def resolve_data_sources(
         else [*PROCESSED_FILENAMES.values(), *RAW_FILENAMES.values()]
     )
     raise FileNotFoundError(
-        "Не найдены таблицы для кластеризации. Ожидаются файлы: "
+        "Не найдены таблицы для анализа. Ожидаются файлы: "
         f"{', '.join(expected)}. Проверены каталоги:\n- {searched}"
     )
 
@@ -149,10 +149,9 @@ def export_clustered_weekly_panel(
     panel_path: Path,
     clusters_path: Path,
     output_path: Path,
-    behavior_clusters_path: Path | None = None,
     chunksize: int = 250_000,
 ) -> dict[str, int]:
-    """Добавить обе схемы кластеров к панели, не загружая её целиком в память."""
+    """Добавить поведенческие группы к панели, не загружая её целиком в память."""
     clusters = read_csv_detected(clusters_path)
     required = {"client_id", "cluster_id"}
     missing = sorted(required - set(clusters.columns))
@@ -167,40 +166,10 @@ def export_clustered_weekly_panel(
     ]
     assignments = clusters[cluster_columns].copy()
 
-    if behavior_clusters_path is not None:
-        behavior = read_csv_detected(behavior_clusters_path)
-        behavior_missing = sorted(required - set(behavior.columns))
-        if behavior_missing:
-            raise ValueError(
-                f"В {behavior_clusters_path.name} отсутствуют колонки: {behavior_missing}"
-            )
-        if behavior["client_id"].duplicated().any():
-            raise ValueError(
-                f"В {behavior_clusters_path.name} client_id должен быть уникальным"
-            )
-        behavior_columns = [
-            column
-            for column in ("client_id", "cluster_id", "cluster_label")
-            if column in behavior.columns
-        ]
-        behavior = behavior[behavior_columns].rename(
-            columns={
-                "cluster_id": "behavior_cluster_id",
-                "cluster_label": "behavior_cluster_label",
-            }
-        )
-        assignments = assignments.merge(
-            behavior,
-            on="client_id",
-            how="left",
-            validate="one_to_one",
-        )
-
     output_path.parent.mkdir(parents=True, exist_ok=True)
     temporary_path = output_path.with_suffix(output_path.suffix + ".tmp")
     total_rows = 0
-    unmatched_primary = 0
-    unmatched_behavior = 0
+    unmatched = 0
     first_chunk = True
     try:
         for panel in pd.read_csv(
@@ -218,9 +187,7 @@ def export_clustered_weekly_panel(
                 validate="many_to_one",
             )
             total_rows += len(merged)
-            unmatched_primary += int(merged["cluster_id"].isna().sum())
-            if "behavior_cluster_id" in merged:
-                unmatched_behavior += int(merged["behavior_cluster_id"].isna().sum())
+            unmatched += int(merged["cluster_id"].isna().sum())
             merged.to_csv(
                 temporary_path,
                 mode="w" if first_chunk else "a",
@@ -238,6 +205,5 @@ def export_clustered_weekly_panel(
 
     return {
         "rows": total_rows,
-        "unmatched_primary_rows": unmatched_primary,
-        "unmatched_behavior_rows": unmatched_behavior,
+        "unmatched_rows": unmatched,
     }
